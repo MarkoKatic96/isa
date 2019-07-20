@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.isa.hoteli.hoteliservice.dto.RezervacijeDTO;
+
 @Entity
 public class Rezervacije {
 	
@@ -18,6 +20,7 @@ public class Rezervacije {
 	
 	private Date datumOd;
 	private Date datumDo;
+	private float ukupnaCena;
 	
 	@ManyToOne
     @JoinColumn(name="hotelskaSoba_id", nullable=false)
@@ -31,14 +34,24 @@ public class Rezervacije {
 
 	}
 
+	public Rezervacije(RezervacijeDTO rezervacija) {
+		super();
+		this.id = rezervacija.getId();
+		this.datumOd = rezervacija.getDatumOd();
+		this.datumDo = rezervacija.getDatumDo();
+		this.ukupnaCena = rezervacija.getUkupnaCena();
+		this.hotelskaSoba = rezervacija.getHotelskaSoba();
+		this.korisnik = rezervacija.getKorisnik();
+	}
 	
-	public Rezervacije(Long id, Date datumOd, Date datumDo, HotelskaSoba hotelskaSoba, Korisnik korisnik) {
+	public Rezervacije(Long id, Date datumOd, Date datumDo, float ukupnaCena, HotelskaSoba hotelskaSoba, Korisnik korisnik) {
 		super();
 		this.id = id;
 		this.datumOd = datumOd;
 		this.datumDo = datumDo;
 		this.hotelskaSoba = hotelskaSoba;
 		this.korisnik = korisnik;
+		this.ukupnaCena = ukupnaCena;
 	}
 
 	public Long getId() {
@@ -79,6 +92,14 @@ public class Rezervacije {
 
 	public void setKorisnik(Korisnik korisnik) {
 		this.korisnik = korisnik;
+	}
+
+	public float getUkupnaCena() {
+		return ukupnaCena;
+	}
+
+	public void setUkupnaCena(float ukupnaCena) {
+		this.ukupnaCena = ukupnaCena;
 	}
 	
 	

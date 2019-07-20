@@ -7,6 +7,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.isa.hoteli.hoteliservice.dto.DodatnaUslugaDTO;
+
+/*
+{
+    "naziv": "r",
+    "cena": 20,
+    "popust": 2,
+    "hotel": {
+        "id": 1
+    }
+}*/
+
 @Entity
 public class DodatnaUsluga {
 	
@@ -23,6 +35,15 @@ public class DodatnaUsluga {
     private Hotel hotel;
 
 	public DodatnaUsluga() {
+	}
+	
+	public DodatnaUsluga(DodatnaUslugaDTO usluga) {
+		super();
+		this.id = usluga.getId();
+		this.naziv = usluga.getNaziv();
+		this.cena = usluga.getCena();
+		this.popust = usluga.getPopust();
+		this.hotel = usluga.getHotel();
 	}
 	
 	public DodatnaUsluga(Long id, String naziv, float cena, float popust, Hotel hotel) {

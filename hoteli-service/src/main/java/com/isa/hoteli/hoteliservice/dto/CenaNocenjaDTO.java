@@ -2,6 +2,7 @@ package com.isa.hoteli.hoteliservice.dto;
 
 import java.sql.Date;
 
+import com.isa.hoteli.hoteliservice.model.CenaNocenja;
 import com.isa.hoteli.hoteliservice.model.HotelskaSoba;
 
 public class CenaNocenjaDTO {
@@ -14,6 +15,15 @@ public class CenaNocenjaDTO {
     
 	public CenaNocenjaDTO() {
 
+	}
+	
+	public CenaNocenjaDTO(CenaNocenja cena) {
+		super();
+		this.id = cena.getId();
+		this.cenaNocenja = cena.getCenaNocenja();
+		this.datumOd = cena.getDatumOd();
+		this.datumDo = cena.getDatumDo();
+		this.hotelskaSoba = cena.getHotelskaSoba();
 	}
     
 	public CenaNocenjaDTO(Long id, float cenaNocenja, Date datumOd, Date datumDo, HotelskaSoba hotelskaSoba) {

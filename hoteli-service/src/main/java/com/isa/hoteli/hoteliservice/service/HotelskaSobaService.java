@@ -1,0 +1,74 @@
+package com.isa.hoteli.hoteliservice.service;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.isa.hoteli.hoteliservice.dto.HotelskaSobaDTO;
+import com.isa.hoteli.hoteliservice.model.HotelskaSoba;
+import com.isa.hoteli.hoteliservice.model.Rezervacije;
+import com.isa.hoteli.hoteliservice.repository.HotelskaSobaRepository;
+import com.isa.hoteli.hoteliservice.repository.RezervacijeRepository;
+
+@Component
+public class HotelskaSobaService {
+	
+	@Autowired
+	private HotelskaSobaRepository hotelskaSobaRepository;
+	
+	@Autowired
+	private RezervacijeRepository rezervacijeRepository;
+	
+	public List<HotelskaSoba> getRooms(){
+		return hotelskaSobaRepository.findAll();
+	}
+	
+	public List<HotelskaSoba> getRoomsFromHotel(Long id){
+		return hotelskaSobaRepository.getAllFromHotel(id);
+	}
+	
+	public List<HotelskaSoba> getFreeRoomsFromHotel(Long id, Date datumOd, Date datumDo){
+		List<HotelskaSoba> sobe = hotelskaSobaRepository.getAllFromHotel(id);
+		List<HotelskaSoba> returnList = new ArrayList<>();
+		for (HotelskaSoba hotelskaSoba : sobe) {
+			if(rezervacijeRepository.findKonfliktRezervacije(hotelskaSoba.getId(), datumOd, datumDo).isEmpty()) {
+				returnList.add(hotelskaSoba);
+			}
+		}
+		return returnList;
+
+	}
+	
+	public HotelskaSoba getRoomById(Long id){
+		return hotelskaSobaRepository.getOne(id);
+	}
+	
+	public HotelskaSobaDTO createRoom(HotelskaSoba soba) {
+		return new HotelskaSobaDTO(hotelskaSobaRepository.save(soba));
+	}
+	
+	public String deleteRoom(Long id) {
+		hotelskaSobaRepository.deleteById(id);
+		return "Uspesno obrisana soba sa id: " + id;
+	}
+	
+	public HotelskaSobaDTO updateRoom(HotelskaSoba soba, Long id) {
+		Optional<HotelskaSoba> soba1 = hotelskaSobaRepository.findById(id);
+		if(soba1.isPresent()) {
+			soba1.get().setBrojKreveta(soba.getBrojKreveta());
+			soba1.get().setBrojSobe(soba.getBrojSobe());
+			soba1.get().setSprat(soba.getSprat());
+			soba1.get().setOriginalnaCena(soba.getOriginalnaCena());
+			soba1.get().setTipSobe(soba.getTipSobe());
+			soba1.get().setHotel(soba.getHotel());
+			hotelskaSobaRepository.save(soba1.get());
+			return new HotelskaSobaDTO(soba1.get());
+		}
+		return null;
+	}
+
+}

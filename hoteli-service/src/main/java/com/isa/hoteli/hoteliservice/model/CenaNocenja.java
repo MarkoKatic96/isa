@@ -9,6 +9,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.isa.hoteli.hoteliservice.dto.CenaNocenjaDTO;
+
+/*{
+    "cenaNocenja": 30,
+    "datumOd": "2005-02-02",
+    "datumDo": "2005-03-03",
+    "hotelskaSoba": {
+        "id": 2
+    }
+}*/
+
 @Entity
 public class CenaNocenja {
 
@@ -26,6 +37,15 @@ public class CenaNocenja {
 
 	public CenaNocenja() {
 
+	}
+	
+	public CenaNocenja(CenaNocenjaDTO cena) {
+		super();
+		this.id = cena.getId();
+		this.cenaNocenja = cena.getCenaNocenja();
+		this.datumOd = cena.getDatumOd();
+		this.datumDo = cena.getDatumDo();
+		this.hotelskaSoba = cena.getHotelskaSoba();
 	}
 	
 	public CenaNocenja(Long id, float cenaNocenja, Date datumOd, Date datumDo, HotelskaSoba hotelskaSoba) {

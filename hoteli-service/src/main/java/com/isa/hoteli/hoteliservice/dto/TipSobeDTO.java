@@ -12,7 +12,7 @@ public class TipSobeDTO {
 	private Long id;
 	private String naziv;
     private Hotel hotel;
-	private List<HotelskaSoba> hotelskaSobaList;
+    private List<HotelskaSoba> hotelskaSobaList;
 	
 	public TipSobeDTO() {
 
@@ -23,15 +23,15 @@ public class TipSobeDTO {
 		this.id = ts.getId();
 		this.naziv = ts.getNaziv();
 		this.hotel = ts.getHotel();
-		this.hotelskaSobaList = ts.getHotelskaSobaList();
+		//this.hotelskaSobaList = ts.getHotelskaSobaList();
 	}
 	
-	public TipSobeDTO(Long id, String naziv, Hotel hotel, List<HotelskaSoba> hotelskaSobaList) {
+	public TipSobeDTO(Long id, String naziv, Hotel hotel/*, List<HotelskaSoba> hotelskaSobaList*/) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
 		this.hotel = hotel;
-		this.hotelskaSobaList = hotelskaSobaList;
+		//this.hotelskaSobaList = hotelskaSobaList;
 	}
 	
 	public Long getId() {
@@ -46,17 +46,17 @@ public class TipSobeDTO {
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
-	//@JsonIgnore
 	public Hotel getHotel() {
 		return hotel;
 	}
-	//@JsonIgnore
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
 	}
+	@JsonIgnore
 	public List<HotelskaSoba> getHotelskaSobaList() {
 		return hotelskaSobaList;
 	}
+	@JsonIgnore
 	public void setHotelskaSobaList(List<HotelskaSoba> hotelskaSobaList) {
 		this.hotelskaSobaList = hotelskaSobaList;
 	}

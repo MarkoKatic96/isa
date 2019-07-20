@@ -2,6 +2,7 @@ package com.isa.hoteli.hoteliservice.dto;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.hoteli.hoteliservice.model.Cenovnik;
 import com.isa.hoteli.hoteliservice.model.DodatnaUsluga;
 import com.isa.hoteli.hoteliservice.model.Hotel;
@@ -17,7 +18,7 @@ public class HotelDTO {
 	private List<Cenovnik> cenovnikList;
 	private List<HotelskaSoba> hotelskaSobaList;
 	private List<DodatnaUsluga> dodatnaUslugaList;
-	//private List<TipSobe> tipSobeList;	
+	private List<TipSobe> tipSobeList;
 	private String konfiguracija;
 	
 	public HotelDTO() {
@@ -30,25 +31,25 @@ public class HotelDTO {
 		this.naziv = hotel.getNaziv();
 		this.adresa = hotel.getAdresa();
 		this.opis = hotel.getOpis();
-		this.cenovnikList = hotel.getCenovnikList();
+		/*this.cenovnikList = hotel.getCenovnikList();
 		this.hotelskaSobaList = hotel.getHotelskaSobaList();
 		this.dodatnaUslugaList = hotel.getDodatnaUslugaList();
-		//this.tipSobeList = hotel.getTipSobeList();
+		//this.tipSobeList = hotel.getTipSobeList();*/
 		this.konfiguracija = hotel.getKonfiguracija();
 	}
 	
-	public HotelDTO(Long id, String naziv, String adresa, String opis, List<Cenovnik> cenovnikList,
-			List<HotelskaSoba> hotelskaSobaList, List<DodatnaUsluga> dodatnaUslugaList/*, List<TipSobe> tipSobeList*/,
+	public HotelDTO(Long id, String naziv, String adresa, String opis/*, List<Cenovnik> cenovnikList,
+			List<HotelskaSoba> hotelskaSobaList, List<DodatnaUsluga> dodatnaUslugaList, List<TipSobe> tipSobeList*/,
 			String konfiguracija) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.opis = opis;
-		this.cenovnikList = cenovnikList;
+		/*this.cenovnikList = cenovnikList;
 		this.hotelskaSobaList = hotelskaSobaList;
 		this.dodatnaUslugaList = dodatnaUslugaList;
-		//this.tipSobeList = tipSobeList;
+		//this.tipSobeList = tipSobeList;*/
 		this.konfiguracija = konfiguracija;
 	}
 	
@@ -76,30 +77,38 @@ public class HotelDTO {
 	public void setOpis(String opis) {
 		this.opis = opis;
 	}
+	@JsonIgnore
 	public List<Cenovnik> getCenovnikList() {
 		return cenovnikList;
 	}
+	@JsonIgnore
 	public void setCenovnikList(List<Cenovnik> cenovnikList) {
 		this.cenovnikList = cenovnikList;
 	}
+	@JsonIgnore
 	public List<HotelskaSoba> getHotelskaSobaList() {
 		return hotelskaSobaList;
 	}
+	@JsonIgnore
 	public void setHotelskaSobaList(List<HotelskaSoba> hotelskaSobaList) {
 		this.hotelskaSobaList = hotelskaSobaList;
 	}
+	@JsonIgnore
 	public List<DodatnaUsluga> getDodatnaUslugaList() {
 		return dodatnaUslugaList;
 	}
+	@JsonIgnore
 	public void setDodatnaUslugaList(List<DodatnaUsluga> dodatnaUslugaList) {
 		this.dodatnaUslugaList = dodatnaUslugaList;
 	}
-	/*public List<TipSobe> getTipSobeList() {
+	@JsonIgnore
+	public List<TipSobe> getTipSobeList() {
 		return tipSobeList;
 	}
+	@JsonIgnore
 	public void setTipSobeList(List<TipSobe> tipSobeList) {
 		this.tipSobeList = tipSobeList;
-	}*/
+	}
 	public String getKonfiguracija() {
 		return konfiguracija;
 	}

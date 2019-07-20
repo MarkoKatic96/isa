@@ -8,6 +8,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.isa.hoteli.hoteliservice.dto.KorisnikDTO;
+
+/*
+     {
+        "email": "z",
+        "lozinka": "z",
+        "ime": "z",
+        "prezime": "z",
+        "grad": "z",
+        "telefon": "z",
+        "aktiviran": true,
+        "rola": "MASTER_ADMIN",
+        "rezervacijeList": null
+    }
+ */
+
 @Entity
 public class Korisnik {
 	
@@ -28,6 +45,19 @@ public class Korisnik {
 	
 	public Korisnik() {
 
+	}
+	
+	public Korisnik(KorisnikDTO korisnik) {
+		super();
+		this.id = korisnik.getId();
+		this.email = korisnik.getEmail();
+		this.lozinka = korisnik.getLozinka();
+		this.ime = korisnik.getIme();
+		this.prezime = korisnik.getPrezime();
+		this.grad = korisnik.getGrad();
+		this.telefon = korisnik.getTelefon();
+		this.aktiviran = korisnik.isAktiviran();
+		this.rola = korisnik.getRola();
 	}
 	
 	public Korisnik(Long id, String email, String lozinka, String ime, String prezime, String grad, String telefon,
@@ -99,9 +129,12 @@ public class Korisnik {
 	public void setRola(Rola rola) {
 		this.rola = rola;
 	}
+	
+	@JsonIgnore
 	public List<Rezervacije> getRezervacijeList() {
 		return rezervacijeList;
 	}
+	@JsonIgnore
 	public void setRezervacijeList(List<Rezervacije> rezervacijeList) {
 		this.rezervacijeList = rezervacijeList;
 	}

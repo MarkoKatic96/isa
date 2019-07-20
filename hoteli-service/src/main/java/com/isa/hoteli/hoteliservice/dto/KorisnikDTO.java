@@ -2,6 +2,7 @@ package com.isa.hoteli.hoteliservice.dto;
 
 import java.util.List;
 
+import com.isa.hoteli.hoteliservice.model.Korisnik;
 import com.isa.hoteli.hoteliservice.model.Rezervacije;
 import com.isa.hoteli.hoteliservice.model.Rola;
 
@@ -20,6 +21,19 @@ public class KorisnikDTO {
 	
 	public KorisnikDTO() {
 
+	}
+	
+	public KorisnikDTO(Korisnik korisnik) {
+		super();
+		this.id = korisnik.getId();
+		this.email = korisnik.getEmail();
+		this.lozinka = korisnik.getLozinka();
+		this.ime = korisnik.getIme();
+		this.prezime = korisnik.getPrezime();
+		this.grad = korisnik.getGrad();
+		this.telefon = korisnik.getTelefon();
+		this.aktiviran = korisnik.isAktiviran();
+		this.rola = korisnik.getRola();
 	}
 	
 	public KorisnikDTO(Long id, String email, String lozinka, String ime, String prezime, String grad, String telefon,

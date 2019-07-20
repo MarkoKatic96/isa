@@ -1,5 +1,6 @@
 package com.isa.hoteli.hoteliservice.dto;
 
+import com.isa.hoteli.hoteliservice.model.DodatnaUsluga;
 import com.isa.hoteli.hoteliservice.model.Hotel;
 
 public class DodatnaUslugaDTO {
@@ -14,6 +15,15 @@ public class DodatnaUslugaDTO {
 
 	}
     
+	public DodatnaUslugaDTO(DodatnaUsluga usluga) {
+		super();
+		this.id = usluga.getId();
+		this.naziv = usluga.getNaziv();
+		this.cena = usluga.getCena();
+		this.popust = usluga.getPopust();
+		this.hotel = usluga.getHotel();
+	}
+	
 	public DodatnaUslugaDTO(Long id, String naziv, float cena, float popust, Hotel hotel) {
 		super();
 		this.id = id;

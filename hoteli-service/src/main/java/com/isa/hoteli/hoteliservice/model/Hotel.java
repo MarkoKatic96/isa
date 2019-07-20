@@ -2,12 +2,14 @@ package com.isa.hoteli.hoteliservice.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.hoteli.hoteliservice.dto.HotelDTO;
 /*
  {
@@ -31,17 +33,17 @@ public class Hotel {
 	
 	private String opis;
 	
-	@OneToMany(mappedBy="hotel")
+	@OneToMany(mappedBy="hotel", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<Cenovnik> cenovnikList;
 	
-	@OneToMany(mappedBy="hotel")
+	@OneToMany(mappedBy="hotel", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<HotelskaSoba> hotelskaSobaList;
 	
-	@OneToMany(mappedBy="hotel")
+	@OneToMany(mappedBy="hotel", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<DodatnaUsluga> dodatnaUslugaList;
 	
-	/*@OneToMany(mappedBy="hotel")
-	private List<TipSobe> tipSobeList;*/
+	@OneToMany(mappedBy="hotel", orphanRemoval = true, cascade = CascadeType.PERSIST)
+	private List<TipSobe> tipSobeList;
 	
 	private String konfiguracija;
 	
@@ -55,25 +57,25 @@ public class Hotel {
 		this.naziv = hotel.getNaziv();
 		this.adresa = hotel.getAdresa();
 		this.opis = hotel.getOpis();
-		this.cenovnikList = hotel.getCenovnikList();
+		/*this.cenovnikList = hotel.getCenovnikList();
 		this.hotelskaSobaList = hotel.getHotelskaSobaList();
 		this.dodatnaUslugaList = hotel.getDodatnaUslugaList();
-		//this.tipSobeList = hotel.getTipSobeList();
+		this.tipSobeList = hotel.getTipSobeList();*/
 		this.konfiguracija = hotel.getKonfiguracija();
 	}
 
-	public Hotel(Long id, String naziv, String adresa, String opis, List<Cenovnik> cenovnikList,
-			List<HotelskaSoba> hotelskaSobaList, List<DodatnaUsluga> dodatnaUslugaList/*, List<TipSobe> tipSobeList*/,
+	public Hotel(Long id, String naziv, String adresa, String opis/*, List<Cenovnik> cenovnikList,
+			List<HotelskaSoba> hotelskaSobaList, List<DodatnaUsluga> dodatnaUslugaList, List<TipSobe> tipSobeList*/,
 			String konfiguracija) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.opis = opis;
-		this.cenovnikList = cenovnikList;
+		/*this.cenovnikList = cenovnikList;
 		this.hotelskaSobaList = hotelskaSobaList;
 		this.dodatnaUslugaList = dodatnaUslugaList;
-		//this.tipSobeList = tipSobeList;
+		//this.tipSobeList = tipSobeList;*/
 		this.konfiguracija = konfiguracija;
 	}
 
@@ -125,38 +127,38 @@ public class Hotel {
 	public void setKonfiguracija(String konfiguracija) {
 		this.konfiguracija = konfiguracija;
 	}
-
+	@JsonIgnore
 	public List<Cenovnik> getCenovnikList() {
 		return cenovnikList;
 	}
-
+	@JsonIgnore
 	public void setCenovnikList(List<Cenovnik> cenovnikList) {
 		this.cenovnikList = cenovnikList;
 	}
-
+	@JsonIgnore
 	public List<HotelskaSoba> getHotelskaSobaList() {
 		return hotelskaSobaList;
 	}
-
+	@JsonIgnore
 	public void setHotelskaSobaList(List<HotelskaSoba> hotelskaSobaList) {
 		this.hotelskaSobaList = hotelskaSobaList;
 	}
-
+	@JsonIgnore
 	public List<DodatnaUsluga> getDodatnaUslugaList() {
 		return dodatnaUslugaList;
 	}
-
+	@JsonIgnore
 	public void setDodatnaUslugaList(List<DodatnaUsluga> dodatnaUslugaList) {
 		this.dodatnaUslugaList = dodatnaUslugaList;
 	}
-
-	/*public List<TipSobe> getTipSobeList() {
+	@JsonIgnore
+	public List<TipSobe> getTipSobeList() {
 		return tipSobeList;
 	}
-
+	@JsonIgnore
 	public void setTipSobeList(List<TipSobe> tipSobeList) {
 		this.tipSobeList = tipSobeList;
-	}*/
+	}
 	
 	
 	
