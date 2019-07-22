@@ -61,13 +61,21 @@ public class OcenaService {
 	}
 	
 	public float getMeanHotelRating(Long id) {
-		float mean = ocenaHotelRepository.prosek(id);
-		return mean;
+		if(!ocenaHotelRepository.ocene(id).isEmpty()) {
+			float mean = ocenaHotelRepository.prosek(id);
+			return mean;
+		}else {
+			return (float) 0.0;
+		}
 	}
 	
 	public float getMeanRoomRating(Long id) {
-		float mean = ocenaHotelskaSobaRepository.prosek(id);
-		return mean;
+		if(!ocenaHotelskaSobaRepository.ocene(id).isEmpty()) {
+			float mean = ocenaHotelskaSobaRepository.prosek(id);
+			return mean;
+		}else {
+			return (float) 0.0;
+		}
 	}
 
 }

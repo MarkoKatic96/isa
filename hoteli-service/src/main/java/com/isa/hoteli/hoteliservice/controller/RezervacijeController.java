@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.isa.hoteli.hoteliservice.dto.CenaNocenjaDTO;
 import com.isa.hoteli.hoteliservice.dto.RezervacijeDTO;
 import com.isa.hoteli.hoteliservice.model.CenaNocenja;
+import com.isa.hoteli.hoteliservice.model.Posecenost;
 import com.isa.hoteli.hoteliservice.model.Rezervacije;
 import com.isa.hoteli.hoteliservice.service.RezervacijeService;
 
@@ -74,12 +75,18 @@ public class RezervacijeController {
 	@RequestMapping(value="/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<RezervacijeDTO> updateReservationById(@PathVariable("id") Long id, @RequestBody RezervacijeDTO dto){
 		Rezervacije obj = new Rezervacije(dto);
-		RezervacijeDTO returnTip = rezervacijeService.updatePrice(obj, id);
+		RezervacijeDTO returnTip = rezervacijeService.updateReservation(obj, id);
 		if(returnTip!=null) {
 			return new ResponseEntity<>(returnTip, HttpStatus.OK);
 		}
 		
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	@RequestMapping(value="/posecenost/dnevna", method = RequestMethod.POST)
+	public int dnevnaPosecenost(@RequestBody Posecenost posecenost){
+		int brojOsoba = rezervacijeService.dnevnaPosecenost(posecenost.getId(), posecenost.getDate());
+		return brojOsoba;
 	}
 	
 }

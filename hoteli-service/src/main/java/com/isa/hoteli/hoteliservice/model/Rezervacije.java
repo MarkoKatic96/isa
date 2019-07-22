@@ -21,6 +21,7 @@ public class Rezervacije {
 	private Date datumOd;
 	private Date datumDo;
 	private float ukupnaCena;
+	private int brojOsoba;
 	
 	@ManyToOne
     @JoinColumn(name="hotelskaSoba_id", nullable=false)
@@ -29,6 +30,10 @@ public class Rezervacije {
 	@ManyToOne
     @JoinColumn(name="korisnik_id", nullable=false)
     private Korisnik korisnik;
+	
+	@ManyToOne
+    @JoinColumn(name="hotel_id", nullable=false)
+    private Hotel hotel;
 
 	public Rezervacije() {
 
@@ -41,17 +46,21 @@ public class Rezervacije {
 		this.datumDo = rezervacija.getDatumDo();
 		this.ukupnaCena = rezervacija.getUkupnaCena();
 		this.hotelskaSoba = rezervacija.getHotelskaSoba();
+		this.brojOsoba = rezervacija.getBrojOsoba();
 		this.korisnik = rezervacija.getKorisnik();
+		this.hotel = rezervacija.getHotel();
 	}
 	
-	public Rezervacije(Long id, Date datumOd, Date datumDo, float ukupnaCena, HotelskaSoba hotelskaSoba, Korisnik korisnik) {
+	public Rezervacije(Long id, Date datumOd, Date datumDo, float ukupnaCena, int brojOsoba, HotelskaSoba hotelskaSoba, Korisnik korisnik, Hotel hotel) {
 		super();
 		this.id = id;
 		this.datumOd = datumOd;
 		this.datumDo = datumDo;
 		this.hotelskaSoba = hotelskaSoba;
+		this.brojOsoba = brojOsoba;
 		this.korisnik = korisnik;
 		this.ukupnaCena = ukupnaCena;
+		this.hotel = hotel;
 	}
 
 	public Long getId() {
@@ -100,6 +109,22 @@ public class Rezervacije {
 
 	public void setUkupnaCena(float ukupnaCena) {
 		this.ukupnaCena = ukupnaCena;
+	}
+
+	public int getBrojOsoba() {
+		return brojOsoba;
+	}
+
+	public void setBrojOsoba(int brojOsoba) {
+		this.brojOsoba = brojOsoba;
+	}
+
+	public Hotel getHotel() {
+		return hotel;
+	}
+
+	public void setHotel(Hotel hotel) {
+		this.hotel = hotel;
 	}
 	
 	

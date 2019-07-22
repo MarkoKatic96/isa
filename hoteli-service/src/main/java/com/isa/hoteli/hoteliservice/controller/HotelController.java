@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isa.hoteli.hoteliservice.dto.HotelDTO;
+import com.isa.hoteli.hoteliservice.dto.HotelInfoDTO;
 import com.isa.hoteli.hoteliservice.model.Hotel;
 import com.isa.hoteli.hoteliservice.service.HotelService;
+import com.isa.hoteli.hoteliservice.service.OcenaService;
 
 @RestController
 @RequestMapping("/hotel")
@@ -23,7 +25,10 @@ public class HotelController {
 	@Autowired
 	private HotelService hotelService;
 	
-	@RequestMapping(value="/all", method = RequestMethod.GET)
+	@Autowired
+	private OcenaService ocenaService;
+	
+	@RequestMapping(value="/test/all", method = RequestMethod.GET)
 	public ResponseEntity<List<HotelDTO>> getHotels(){
 		List<HotelDTO> hoteliDTO = new ArrayList<>();
 		List<Hotel> hoteli = hotelService.getHotels();
@@ -31,6 +36,16 @@ public class HotelController {
 			hoteliDTO.add(new HotelDTO(hotel));
 		}
 		return new ResponseEntity<List<HotelDTO>>(hoteliDTO, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/all", method = RequestMethod.GET)
+	public ResponseEntity<List<HotelInfoDTO>> getHotelsInfo(){
+		List<HotelInfoDTO> hoteliDTO = new ArrayList<>();
+		List<Hotel> hoteli = hotelService.getHotels();
+		for (Hotel hotel : hoteli) {
+			hoteliDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), ocenaService.getMeanHotelRating(hotel.getId())));
+		}
+		return new ResponseEntity<List<HotelInfoDTO>>(hoteliDTO, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)

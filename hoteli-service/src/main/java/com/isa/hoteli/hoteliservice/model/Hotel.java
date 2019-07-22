@@ -45,6 +45,9 @@ public class Hotel {
 	@OneToMany(mappedBy="hotel", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<TipSobe> tipSobeList;
 	
+	@OneToMany(mappedBy="hotel", orphanRemoval = true, cascade = CascadeType.PERSIST)
+	private List<Rezervacije> rezervacijeList;
+	
 	private String konfiguracija;
 	
 	public Hotel() {

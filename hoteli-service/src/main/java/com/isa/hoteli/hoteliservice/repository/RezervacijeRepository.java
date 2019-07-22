@@ -20,4 +20,7 @@ public interface RezervacijeRepository extends JpaRepository<Rezervacije, Long>{
 	@Query(value= "SELECT * FROM rezervacije WHERE (hotelska_soba_id = ?1) AND ((datum_od <= ?2 AND datum_do >= ?2) OR (datum_od <= ?3 AND datum_do >= ?3) OR (datum_od >= ?2 AND datum_do <= ?3))", nativeQuery=true)
 	List<Rezervacije> findKonfliktRezervacije(Long id, Date datumOd, Date datumDo);
 	
+	@Query(value = "SELECT SUM(broj_osoba) FROM rezervacije WHERE hotel_id = ?1 AND datum_od <= ?2 AND datum_do >= ?2", nativeQuery=true)
+	int dnevnaPosecenost(Long id, Date date);
+	
 }
