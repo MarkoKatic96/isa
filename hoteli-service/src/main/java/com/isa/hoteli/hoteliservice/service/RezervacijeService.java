@@ -1,6 +1,7 @@
 package com.isa.hoteli.hoteliservice.service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,7 +68,60 @@ public class RezervacijeService {
 	}
 	
 	public int dnevnaPosecenost(Long id, Date date) {
-		return rezervacijeRepository.dnevnaPosecenost(id, date);
+		if( rezervacijeRepository.dnevnaPosecenost(id, date)!=null) {
+			return rezervacijeRepository.dnevnaPosecenost(id, date);
+		}
+		return 0;
+	}
+	
+	public int nedeljnaPosecenost(Long id, Date date) {
+		LocalDate ld = date.toLocalDate();
+		LocalDate nedeljaKasnije = ld.plusWeeks(1);
+		java.sql.Date datumDo = java.sql.Date.valueOf( nedeljaKasnije );
+		if(rezervacijeRepository.nedeljnaMesecnaPosecenost(id, date, datumDo)!=null) {
+			return rezervacijeRepository.nedeljnaMesecnaPosecenost(id, date, datumDo);
+		}
+		return 0;
+	}
+	
+	public int mesecnaPosecenost(Long id, Date date) {
+		LocalDate ld = date.toLocalDate();
+		LocalDate mesecKasnije = ld.plusMonths(1);
+		java.sql.Date datumDo = java.sql.Date.valueOf( mesecKasnije );
+		if(rezervacijeRepository.nedeljnaMesecnaPosecenost(id, date, datumDo)!=null) {
+			return rezervacijeRepository.nedeljnaMesecnaPosecenost(id, date, datumDo);
+		}
+		return 0;
+	}
+	
+	public float nedeljniPrihod(Long id, Date date) {
+		LocalDate ld = date.toLocalDate();
+		LocalDate nedeljaKasnije = ld.plusWeeks(1);
+		java.sql.Date datumDo = java.sql.Date.valueOf( nedeljaKasnije );
+		if(rezervacijeRepository.nedeljniMesecniGodisnjiPrihod(id, date, datumDo)!=null) {
+			return rezervacijeRepository.nedeljniMesecniGodisnjiPrihod(id, date, datumDo);
+		}
+		return 0;
+	}
+	
+	public float mesecniPrihod(Long id, Date date) {
+		LocalDate ld = date.toLocalDate();
+		LocalDate mesecKasnije = ld.plusMonths(1);
+		java.sql.Date datumDo = java.sql.Date.valueOf( mesecKasnije );
+		if(rezervacijeRepository.nedeljniMesecniGodisnjiPrihod(id, date, datumDo)!=null) {
+			return rezervacijeRepository.nedeljniMesecniGodisnjiPrihod(id, date, datumDo);
+		}
+		return 0;
+	}
+	
+	public float godisnjiPrihod(Long id, Date date) {
+		LocalDate ld = date.toLocalDate();
+		LocalDate godinaKasnije = ld.plusYears(1);
+		java.sql.Date datumDo = java.sql.Date.valueOf( godinaKasnije );
+		if(rezervacijeRepository.nedeljniMesecniGodisnjiPrihod(id, date, datumDo)!=null) {
+			return rezervacijeRepository.nedeljniMesecniGodisnjiPrihod(id, date, datumDo);
+		}
+		return 0;
 	}
 
 }

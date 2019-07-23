@@ -89,4 +89,34 @@ public class RezervacijeController {
 		return brojOsoba;
 	}
 	
+	@RequestMapping(value="/posecenost/nedeljna", method = RequestMethod.POST)
+	public int nedeljnaPosecenost(@RequestBody Posecenost posecenost){
+		int brojOsoba = rezervacijeService.nedeljnaPosecenost(posecenost.getId(), posecenost.getDate());
+		return brojOsoba;
+	}
+	
+	@RequestMapping(value="/posecenost/mesecna", method = RequestMethod.POST)
+	public int mesecnaPosecenost(@RequestBody Posecenost posecenost){
+		int brojOsoba = rezervacijeService.mesecnaPosecenost(posecenost.getId(), posecenost.getDate());
+		return brojOsoba;
+	}
+	
+	@RequestMapping(value="/prihodi/nedeljni", method = RequestMethod.POST)
+	public float nedeljniPrihodi(@RequestBody Posecenost posecenost){//posecenost ima iste atr koji trebaju i za ovo. 
+		float prihod = rezervacijeService.nedeljniPrihod(posecenost.getId(), posecenost.getDate());
+		return prihod;
+	}
+	
+	@RequestMapping(value="/prihodi/mesecni", method = RequestMethod.POST)
+	public float mesecniPrihodi(@RequestBody Posecenost posecenost){//posecenost ima iste atr koji trebaju i za ovo. 
+		float prihod = rezervacijeService.mesecniPrihod(posecenost.getId(), posecenost.getDate());
+		return prihod;
+	}
+	
+	@RequestMapping(value="/prihodi/godisnji", method = RequestMethod.POST)
+	public float godisnjiPrihodi(@RequestBody Posecenost posecenost){//posecenost ima iste atr koji trebaju i za ovo. 
+		float prihod = rezervacijeService.godisnjiPrihod(posecenost.getId(), posecenost.getDate());
+		return prihod;
+	}
+	
 }

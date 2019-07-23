@@ -16,6 +16,7 @@ import com.isa.hoteli.hoteliservice.dto.HotelskaSobaDTO;
 import com.isa.hoteli.hoteliservice.dto.HotelskaSobaInfoDTO;
 import com.isa.hoteli.hoteliservice.model.HotelskaSoba;
 import com.isa.hoteli.hoteliservice.model.OcenaHotelskaSoba;
+import com.isa.hoteli.hoteliservice.model.Pretraga;
 import com.isa.hoteli.hoteliservice.service.CenaNocenjaService;
 import com.isa.hoteli.hoteliservice.service.HotelskaSobaService;
 import com.isa.hoteli.hoteliservice.service.OcenaService;
@@ -98,6 +99,26 @@ public class HotelskaSobaController {
 		}
 		
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	@RequestMapping(value="/free/{id}", method = RequestMethod.POST)
+	public ResponseEntity<List<HotelskaSobaInfoDTO>> getFreeRooms(@PathVariable("id") Long id, @RequestBody Pretraga pretraga){
+		List<HotelskaSobaInfoDTO> dto = new ArrayList<>();
+		List<HotelskaSoba> lista = hotelskaSobaService.getAllFreeRoomsFromHotel(id, pretraga.getDatumOd(), pretraga.getDatumDo());
+		for (HotelskaSoba item : lista) {
+			dto.add(new HotelskaSobaInfoDTO(item.getId(), item.getBrojSobe(), item.getSprat(), item.getBrojKreveta(), item.getOriginalnaCena(), item.getHotel(), item.getTipSobe(), cenaNocenjaService.getValidPriceFromHotelRoom(item.getId()), ocenaService.getMeanRoomRating(item.getId())));
+		}
+		return new ResponseEntity<List<HotelskaSobaInfoDTO>>(dto, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/reserved/{id}", method = RequestMethod.POST)
+	public ResponseEntity<List<HotelskaSobaInfoDTO>> getReservedRooms(@PathVariable("id") Long id, @RequestBody Pretraga pretraga){
+		List<HotelskaSobaInfoDTO> dto = new ArrayList<>();
+		List<HotelskaSoba> lista = hotelskaSobaService.getAllReservedRoomsFromHotel(id, pretraga.getDatumOd(), pretraga.getDatumDo());
+		for (HotelskaSoba item : lista) {
+			dto.add(new HotelskaSobaInfoDTO(item.getId(), item.getBrojSobe(), item.getSprat(), item.getBrojKreveta(), item.getOriginalnaCena(), item.getHotel(), item.getTipSobe(), cenaNocenjaService.getValidPriceFromHotelRoom(item.getId()), ocenaService.getMeanRoomRating(item.getId())));
+		}
+		return new ResponseEntity<List<HotelskaSobaInfoDTO>>(dto, HttpStatus.OK);
 	}
 
 }

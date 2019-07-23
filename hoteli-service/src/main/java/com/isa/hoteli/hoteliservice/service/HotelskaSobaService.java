@@ -70,5 +70,27 @@ public class HotelskaSobaService {
 		}
 		return null;
 	}
+	
+	public List<HotelskaSoba> getAllFreeRoomsFromHotel(Long id, Date datumOd, Date datumDo){
+		List<HotelskaSoba> sobe = hotelskaSobaRepository.getAllFromHotel(id);
+		List<HotelskaSoba> returnList = new ArrayList<>();
+		for (HotelskaSoba hotelskaSoba : sobe) {
+			if(rezervacijeRepository.findKonfliktRezervacije(hotelskaSoba.getId(), datumOd, datumDo).isEmpty()){
+				returnList.add(hotelskaSoba);
+			}
+		}
+		return returnList;
+	}
 
+	public List<HotelskaSoba> getAllReservedRoomsFromHotel(Long id, Date datumOd, Date datumDo){
+		List<HotelskaSoba> sobe = hotelskaSobaRepository.getAllFromHotel(id);
+		List<HotelskaSoba> returnList = new ArrayList<>();
+		for (HotelskaSoba hotelskaSoba : sobe) {
+			if(!rezervacijeRepository.findKonfliktRezervacije(hotelskaSoba.getId(), datumOd, datumDo).isEmpty()){
+				returnList.add(hotelskaSoba);
+			}
+		}
+		return returnList;
+	}
+	
 }
