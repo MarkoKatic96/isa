@@ -14,8 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.isa.hoteli.hoteliservice.dto.HotelDTO;
 import com.isa.hoteli.hoteliservice.dto.HotelInfoDTO;
+import com.isa.hoteli.hoteliservice.dto.HotelskaSobaInfoDTO;
 import com.isa.hoteli.hoteliservice.model.Hotel;
+import com.isa.hoteli.hoteliservice.model.HotelskaSoba;
+import com.isa.hoteli.hoteliservice.model.Pretraga;
 import com.isa.hoteli.hoteliservice.service.HotelService;
+import com.isa.hoteli.hoteliservice.service.HotelskaSobaService;
 import com.isa.hoteli.hoteliservice.service.OcenaService;
 
 @RestController
@@ -27,6 +31,9 @@ public class HotelController {
 	
 	@Autowired
 	private OcenaService ocenaService;
+	
+	@Autowired
+	private HotelskaSobaService hotelskaSobaService;
 	
 	@RequestMapping(value="/test/all", method = RequestMethod.GET)
 	public ResponseEntity<List<HotelDTO>> getHotels(){
@@ -83,6 +90,18 @@ public class HotelController {
 		}
 		
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	@RequestMapping(value="/brza", method = RequestMethod.POST)
+	public ResponseEntity<List<HotelInfoDTO>> getFastHotels(@RequestBody Pretraga pretraga){
+		List<HotelInfoDTO> hoteliDTO = new ArrayList<>();
+		List<Hotel> lista = hotelService.getHotels();
+		for (Hotel hotel : lista) {
+			if(!hotelskaSobaService.getAllFreeRoomsFromHotelWithDiscount(hotel.getId(), pretraga.getDatumOd(), pretraga.getDatumDo()).isEmpty()) {
+				hoteliDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), ocenaService.getMeanHotelRating(hotel.getId())));
+			}
+		}
+		return new ResponseEntity<List<HotelInfoDTO>>(hoteliDTO, HttpStatus.OK);
 	}
 	
 }
