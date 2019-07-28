@@ -60,6 +60,19 @@ public class Korisnik {
 		this.rola = korisnik.getRola();
 	}
 	
+	public Korisnik(Korisnik korisnik) {
+		super();
+		this.id = korisnik.getId();
+		this.email = korisnik.getEmail();
+		this.lozinka = korisnik.getLozinka();
+		this.ime = korisnik.getIme();
+		this.prezime = korisnik.getPrezime();
+		this.grad = korisnik.getGrad();
+		this.telefon = korisnik.getTelefon();
+		this.aktiviran = korisnik.isAktiviran();
+		this.rola = korisnik.getRola();
+	}
+	
 	public Korisnik(Long id, String email, String lozinka, String ime, String prezime, String grad, String telefon,
 			boolean aktiviran, Rola rola, List<Rezervacije> rezervacijeList) {
 		super();

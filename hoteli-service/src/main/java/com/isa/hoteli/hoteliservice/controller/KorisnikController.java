@@ -3,9 +3,17 @@ package com.isa.hoteli.hoteliservice.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.isa.hoteli.hoteliservice.dto.KorisnikDTO;
 import com.isa.hoteli.hoteliservice.model.Korisnik;
+import com.isa.hoteli.hoteliservice.model.Login;
 import com.isa.hoteli.hoteliservice.model.Rola;
+import com.isa.hoteli.hoteliservice.security.JwtTokenUtils;
 import com.isa.hoteli.hoteliservice.service.KorisnikService;
+
 
 @RestController
 @RequestMapping("/korisnik")
@@ -24,14 +35,21 @@ public class KorisnikController {
 	@Autowired
 	private KorisnikService korisnikService;
 	
+	@Autowired
+	JwtTokenUtils jwtTokenUtils;
+	
 	@RequestMapping(value="/all", method = RequestMethod.GET)
-	public ResponseEntity<List<KorisnikDTO>> getUsers(){
-		List<KorisnikDTO> dto = new ArrayList<>();
-		List<Korisnik> lista = korisnikService.getUsers();
-		for (Korisnik item : lista) {
-			dto.add(new KorisnikDTO(item));
+	public ResponseEntity<List<KorisnikDTO>> getUsers(HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.MASTER_ADMIN)) {
+			List<KorisnikDTO> dto = new ArrayList<>();
+			List<Korisnik> lista = korisnikService.getUsers();
+			for (Korisnik item : lista) {
+				dto.add(new KorisnikDTO(item));
+			}
+			return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
@@ -81,5 +99,13 @@ public class KorisnikController {
 		
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
-
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<String> login(@RequestBody Login login){
+		String email = login.getEmail();
+		String lozinka = login.getLozinka();
+		String jwt = korisnikService.login(email, lozinka);
+		return (jwt!=null) ? new ResponseEntity<String>(jwt, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
 }

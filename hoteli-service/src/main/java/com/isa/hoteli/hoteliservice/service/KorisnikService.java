@@ -3,18 +3,29 @@ package com.isa.hoteli.hoteliservice.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isa.hoteli.hoteliservice.dto.KorisnikDTO;
 import com.isa.hoteli.hoteliservice.model.Korisnik;
 import com.isa.hoteli.hoteliservice.repository.KorisnikRepository;
+import com.isa.hoteli.hoteliservice.security.JwtTokenUtils;
 
 @Component
 public class KorisnikService {
 	
 	@Autowired
 	private KorisnikRepository korisnikRepository;
+	
+	@Autowired
+	private JwtTokenUtils jwtTokenProvider;
+	
+	@Autowired
+	private KorisnikService korisnikService;
 	
 	public List<Korisnik> getUsers(){
 		return korisnikRepository.findAll();
@@ -55,6 +66,34 @@ public class KorisnikService {
 			return new KorisnikDTO(obj1.get());
 		}
 		return null;
+	}
+	
+	public String login(String email, String lozinka) {
+		Korisnik k = korisnikRepository.getUserByEmail(email);
+		if(k==null) {
+			return null;
+		}
+		try {
+			if(k.getLozinka().equals(lozinka)) {
+				/*if (k.isBlokiran() || !k.isRegistrovan()) {
+					return null;
+				}*/
+				String jwt = jwtTokenProvider.createToken(email);
+				ObjectMapper mapper = new ObjectMapper();
+				return mapper.writeValueAsString(jwt);
+			}
+		}catch (Exception e) {
+			return null;
+		}
+		
+		return null;
+	}
+	
+	public Korisnik zaTokene(HttpServletRequest req) {
+		String token = jwtTokenProvider.resolveToken(req);
+		String email = jwtTokenProvider.getUsername(token);
+		Korisnik k = korisnikService.getUserByEmail(email);
+		return k;
 	}
 
 }
