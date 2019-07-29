@@ -13,11 +13,12 @@ class Home extends Component{
     render(){
         return(  
             <table className="divHome">
+                <tbody>
                 <tr>
                     <td>
                         <div className="row">
                             <div className="col s12 m7">
-                                <div className="card z-depth-3">
+                                <div className="card z-depth-3" id="cardHome1">
                                 <div className="card-image">
                                     <img className="slike" src={avioSlika}/>
                                     <span className="card-title">Aviokompanije</span>
@@ -35,7 +36,7 @@ class Home extends Component{
                     <td>
                         <div className="row">
                             <div className="col s12 m7">
-                                <div className="card z-depth-3">
+                                <div className="card z-depth-3" id="cardHome2">
                                 <div className="card-image">
                                     <img src={hotelSlika} className="slike"/>
                                     <span className="card-title">Hoteli</span>
@@ -53,7 +54,7 @@ class Home extends Component{
                     <td>
                         <div className="row">
                             <div className="col s12 m7">
-                                <div className="card z-depth-3">
+                                <div className="card z-depth-3" id="cardHome3">
                                 <div className="card-image">
                                     <img src={carSlika} className="slike"/>
                                     <span className="card-title">Rent-a-car</span>
@@ -69,6 +70,7 @@ class Home extends Component{
                         </div>
                     </td>
                 </tr>
+                </tbody>
             </table>
         )
     }
