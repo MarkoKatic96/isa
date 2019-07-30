@@ -25,9 +25,16 @@ class Login extends Component{
                 console.log(res.data);
                 sessionStorage.setItem('jwtToken', res.data);
                 sessionStorage.setItem('email', a)
-                this.props.setToken(sessionStorage.getItem('jwtToken')) 
-                this.props.setEmail(sessionStorage.getItem('email'))
-                this.props.history.push("/");
+                this.props.setToken(sessionStorage.getItem('jwtToken'));
+                this.props.setEmail(sessionStorage.getItem('email'));
+                this.props.logIn();
+                axios.get("http://localhost:8080/korisnik/all/" + sessionStorage.getItem('email'))
+                .then(res=>{
+                  console.log(res.data.rola);
+                  sessionStorage.setItem('rola', res.data.rola);
+                  this.props.history.push("/");
+                })
+                
             }).catch(error=>{
                 alert("Pogresno unet email ili lozinka.");
             })

@@ -62,6 +62,7 @@ public class KorisnikService {
 			obj1.get().setAktiviran(obj.isAktiviran());
 			obj1.get().setTelefon(obj.getTelefon());
 			obj1.get().setRola(obj.getRola());
+			obj1.get().setZaduzenZaId(obj.getZaduzenZaId());
 			korisnikRepository.save(obj1.get());
 			return new KorisnikDTO(obj1.get());
 		}
@@ -75,9 +76,6 @@ public class KorisnikService {
 		}
 		try {
 			if(k.getLozinka().equals(lozinka)) {
-				/*if (k.isBlokiran() || !k.isRegistrovan()) {
-					return null;
-				}*/
 				String jwt = jwtTokenProvider.createToken(email);
 				ObjectMapper mapper = new ObjectMapper();
 				return mapper.writeValueAsString(jwt);

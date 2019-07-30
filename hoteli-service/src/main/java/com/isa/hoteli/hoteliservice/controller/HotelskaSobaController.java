@@ -132,5 +132,15 @@ public class HotelskaSobaController {
 		}
 		return new ResponseEntity<List<HotelskaSobaInfoDTO>>(dto, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="/slobodne/{id}", method = RequestMethod.POST)
+	public ResponseEntity<List<HotelskaSobaInfoDTO>> getFreeRoomsFromHotel(@PathVariable("id") Long id, @RequestBody Pretraga pretraga){
+		List<HotelskaSobaInfoDTO> dto = new ArrayList<>();
+		List<HotelskaSoba> lista = hotelskaSobaService.getAllFreeRoomsFromHotel(id, pretraga.getDatumOd(), pretraga.getDatumDo());
+		for (HotelskaSoba item : lista) {
+			dto.add(new HotelskaSobaInfoDTO(item.getId(), item.getBrojSobe(), item.getSprat(), item.getBrojKreveta(), item.getOriginalnaCena(), item.getHotel(), item.getTipSobe(), cenaNocenjaService.getValidPriceFromHotelRoom(item.getId()), ocenaService.getMeanRoomRating(item.getId())));
+		}
+		return new ResponseEntity<List<HotelskaSobaInfoDTO>>(dto, HttpStatus.OK);
+	}
 
 }

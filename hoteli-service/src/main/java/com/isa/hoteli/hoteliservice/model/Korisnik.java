@@ -40,6 +40,8 @@ public class Korisnik {
 	private String telefon;
 	private boolean aktiviran;
 	private Rola rola;
+	private Long zaduzenZaId;//kombinacijom ovoga i role cemo znati za koji je hotel, avio, rent tacno zaduzen
+	private boolean prviPutLogovan;
 	@OneToMany(mappedBy="korisnik")
 	private List<Rezervacije> rezervacijeList;
 	
@@ -58,6 +60,8 @@ public class Korisnik {
 		this.telefon = korisnik.getTelefon();
 		this.aktiviran = korisnik.isAktiviran();
 		this.rola = korisnik.getRola();
+		this.zaduzenZaId = korisnik.getZaduzenZaId();
+		this.prviPutLogovan = korisnik.isPrviPutLogovan();
 	}
 	
 	public Korisnik(Korisnik korisnik) {
@@ -71,10 +75,12 @@ public class Korisnik {
 		this.telefon = korisnik.getTelefon();
 		this.aktiviran = korisnik.isAktiviran();
 		this.rola = korisnik.getRola();
+		this.zaduzenZaId = korisnik.getZaduzenZaId();
+		this.prviPutLogovan = korisnik.isPrviPutLogovan();
 	}
 	
 	public Korisnik(Long id, String email, String lozinka, String ime, String prezime, String grad, String telefon,
-			boolean aktiviran, Rola rola, List<Rezervacije> rezervacijeList) {
+			boolean aktiviran, Rola rola, List<Rezervacije> rezervacijeList, Long zaduzenZaId, boolean prviPutLogovan) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -86,6 +92,8 @@ public class Korisnik {
 		this.aktiviran = aktiviran;
 		this.rola = rola;
 		this.rezervacijeList = rezervacijeList;
+		this.zaduzenZaId = zaduzenZaId;
+		this.prviPutLogovan = prviPutLogovan;
 	}
 	
 	public Long getId() {
@@ -150,6 +158,22 @@ public class Korisnik {
 	@JsonIgnore
 	public void setRezervacijeList(List<Rezervacije> rezervacijeList) {
 		this.rezervacijeList = rezervacijeList;
+	}
+
+	public Long getZaduzenZaId() {
+		return zaduzenZaId;
+	}
+
+	public void setZaduzenZaId(Long zaduzenZaId) {
+		this.zaduzenZaId = zaduzenZaId;
+	}
+
+	public boolean isPrviPutLogovan() {
+		return prviPutLogovan;
+	}
+
+	public void setPrviPutLogovan(boolean prviPutLogovan) {
+		this.prviPutLogovan = prviPutLogovan;
 	}
 
 	

@@ -5,7 +5,9 @@ import { withRouter} from 'react-router-dom';
 class Rooms extends Component{
 
     state={
-        sobe:[]
+        sobe:[],
+        datumOd:"",
+        datumDo:""
     }
 
     componentDidMount() {
@@ -16,6 +18,22 @@ class Rooms extends Component{
                 sobe: res.data
             })
         })
+    }
+
+    handleChange = (e) => { //za inpute
+        this.setState({
+            [e.target.id]: e.target.value
+        })
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+            axios.post("http://localhost:8080/sobe/slobodne/" + this.props.match.params.hotelId, {datumOd: this.state.datumOd, datumDo: this.state.datumDo})
+            .then(res => {
+                this.setState({
+                    sobe: res.data
+                })
+            })
     }
 
     render(){
@@ -51,6 +69,18 @@ class Rooms extends Component{
 
         return(
             <div className="center container">
+            <br/>
+            <h5 className="left-align container">Pronadjite slobodne sobe u odredjenom periodu:</h5>
+            <br/>
+                <div className="center container">
+                    <form onSubmit={this.handleSubmit}>
+                        <label className="left black-text" htmlFor="datumOd">Datum od:</label>
+                        <input type="date" id="datumOd" onChange={this.handleChange}/>
+                        <label className="left black-text" htmlFor="datumDo">Datum do:</label>
+                        <input type="date" id="datumDo" onChange={this.handleChange}/>
+                        <button className="btn waves-effect waves-light green">Pretrazi</button>
+                    </form>
+                </div>
                 <br/>
                 <h3 className="left-align container">Sobe:</h3>
                 <br/>

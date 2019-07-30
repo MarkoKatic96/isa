@@ -18,6 +18,8 @@ public class KorisnikDTO {
 	private boolean aktiviran;
 	private Rola rola;
 	private List<Rezervacije> rezervacijeList;
+	private Long zaduzenZaId;
+	private boolean prviPutLogovan;
 	
 	public KorisnikDTO() {
 
@@ -34,10 +36,12 @@ public class KorisnikDTO {
 		this.telefon = korisnik.getTelefon();
 		this.aktiviran = korisnik.isAktiviran();
 		this.rola = korisnik.getRola();
+		this.zaduzenZaId = korisnik.getZaduzenZaId();
+		this.prviPutLogovan = korisnik.isPrviPutLogovan();
 	}
 	
 	public KorisnikDTO(Long id, String email, String lozinka, String ime, String prezime, String grad, String telefon,
-			boolean aktiviran, Rola rola, List<Rezervacije> rezervacijeList) {
+			boolean aktiviran, Rola rola, List<Rezervacije> rezervacijeList, Long zaduzenZaId, boolean prviPutLogovan) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -49,6 +53,8 @@ public class KorisnikDTO {
 		this.aktiviran = aktiviran;
 		this.rola = rola;
 		this.rezervacijeList = rezervacijeList;
+		this.zaduzenZaId = zaduzenZaId;
+		this.prviPutLogovan = prviPutLogovan;
 	}
 	
 	public Long getId() {
@@ -110,6 +116,22 @@ public class KorisnikDTO {
 	}
 	public void setRezervacijeList(List<Rezervacije> rezervacijeList) {
 		this.rezervacijeList = rezervacijeList;
+	}
+
+	public Long getZaduzenZaId() {
+		return zaduzenZaId;
+	}
+
+	public void setZaduzenZaId(Long zaduzenZaId) {
+		this.zaduzenZaId = zaduzenZaId;
+	}
+
+	public boolean isPrviPutLogovan() {
+		return prviPutLogovan;
+	}
+
+	public void setPrviPutLogovan(boolean prviPutLogovan) {
+		this.prviPutLogovan = prviPutLogovan;
 	}
 	
 	
