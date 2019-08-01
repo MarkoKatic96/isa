@@ -11,6 +11,9 @@ import RentACars from './RentACarPages/RentACars';
 import Login from './Login';
 import Register from './Register';
 import Services from './HotelPages/Services';
+import EditHotel from './HotelPages/Admin/EditHotel';
+import HotelRooms from './HotelPages/Admin/HotelRooms';
+import AddRoom from "./HotelPages/Admin/AddRoom";
 
 class App extends Component {
 
@@ -37,13 +40,11 @@ class App extends Component {
     this.setState({
       loggedIn: true
     })
+    localStorage.setItem("isLogged", true);
   }
 
   logOut=()=>{
     this.setState({loggedIn: false}); 
-    sessionStorage.setItem('jwtToken', undefined);
-    sessionStorage.setItem('email', undefined);
-    sessionStorage.setItem('rola', undefined);
     /*console.log(this.state.loggedIn);
     console.log(sessionStorage.getItem('jwtToken'));
     console.log(sessionStorage.getItem('email'));
@@ -63,6 +64,9 @@ class App extends Component {
           <Route path = '/register' render={Register}/>
           <Route path = '/rooms/:hotelId' render={Rooms}/>
           <Route path = '/services/:serviceId' render={Services}/>
+          <Route path = '/edit/hotel' render={EditHotel}/>
+          <Route path = '/admin/rooms' render={HotelRooms}/>
+          <Route path = '/admin/add_room/:hotelId' render={AddRoom}/>
         </div>
       </BrowserRouter>
     );

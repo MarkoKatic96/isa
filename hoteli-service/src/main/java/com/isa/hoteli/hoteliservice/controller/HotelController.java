@@ -3,6 +3,8 @@ package com.isa.hoteli.hoteliservice.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,12 @@ import com.isa.hoteli.hoteliservice.dto.HotelInfoDTO;
 import com.isa.hoteli.hoteliservice.dto.HotelskaSobaInfoDTO;
 import com.isa.hoteli.hoteliservice.model.Hotel;
 import com.isa.hoteli.hoteliservice.model.HotelskaSoba;
+import com.isa.hoteli.hoteliservice.model.Korisnik;
 import com.isa.hoteli.hoteliservice.model.Pretraga;
+import com.isa.hoteli.hoteliservice.model.Rola;
 import com.isa.hoteli.hoteliservice.service.HotelService;
 import com.isa.hoteli.hoteliservice.service.HotelskaSobaService;
+import com.isa.hoteli.hoteliservice.service.KorisnikService;
 import com.isa.hoteli.hoteliservice.service.OcenaService;
 
 @RestController
@@ -36,6 +41,9 @@ public class HotelController {
 	
 	@Autowired
 	private HotelskaSobaService hotelskaSobaService;
+	
+	@Autowired
+	private KorisnikService korisnikService;
 	
 	@RequestMapping(value="/test/all", method = RequestMethod.GET)
 	public ResponseEntity<List<HotelDTO>> getHotels(){
@@ -84,14 +92,18 @@ public class HotelController {
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<HotelDTO> updateHotelById(@PathVariable("id") Long id, @RequestBody HotelDTO hotelDTO){
-		Hotel hotel = new Hotel(hotelDTO);
-		HotelDTO returnHotel = hotelService.updateHotel(hotel, id);
-		if(returnHotel!=null) {
-			return new ResponseEntity<>(returnHotel, HttpStatus.OK);
+	public ResponseEntity<HotelDTO> updateHotelById(@PathVariable("id") Long id, @RequestBody HotelDTO hotelDTO, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==id) {
+			Hotel hotel = new Hotel(hotelDTO);
+			HotelDTO returnHotel = hotelService.updateHotel(hotel, id);
+			if(returnHotel!=null) {
+				return new ResponseEntity<>(returnHotel, HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/brza", method = RequestMethod.POST)

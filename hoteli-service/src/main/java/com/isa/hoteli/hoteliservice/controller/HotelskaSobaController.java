@@ -3,6 +3,8 @@ package com.isa.hoteli.hoteliservice.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.isa.hoteli.hoteliservice.dto.HotelskaSobaDTO;
 import com.isa.hoteli.hoteliservice.dto.HotelskaSobaInfoDTO;
 import com.isa.hoteli.hoteliservice.model.HotelskaSoba;
+import com.isa.hoteli.hoteliservice.model.Korisnik;
 import com.isa.hoteli.hoteliservice.model.OcenaHotelskaSoba;
 import com.isa.hoteli.hoteliservice.model.Pretraga;
+import com.isa.hoteli.hoteliservice.model.Rola;
 import com.isa.hoteli.hoteliservice.service.CenaNocenjaService;
 import com.isa.hoteli.hoteliservice.service.HotelskaSobaService;
+import com.isa.hoteli.hoteliservice.service.KorisnikService;
 import com.isa.hoteli.hoteliservice.service.OcenaService;
 
 @RestController
@@ -36,7 +41,10 @@ public class HotelskaSobaController {
 	@Autowired
 	private CenaNocenjaService cenaNocenjaService;
 	
-	@RequestMapping(value="/test/all", method = RequestMethod.GET)
+	@Autowired
+	private KorisnikService korisnikService;
+	
+	@RequestMapping(value="/admin/all", method = RequestMethod.GET)
 	public ResponseEntity<List<HotelskaSobaDTO>> getRooms(){
 		List<HotelskaSobaDTO> dto = new ArrayList<>();
 		List<HotelskaSoba> lista = hotelskaSobaService.getRooms();
@@ -54,6 +62,20 @@ public class HotelskaSobaController {
 			dto.add(new HotelskaSobaInfoDTO(item.getId(), item.getBrojSobe(), item.getSprat(), item.getBrojKreveta(), item.getOriginalnaCena(), item.getHotel(), item.getTipSobe(), cenaNocenjaService.getValidPriceFromHotelRoom(item.getId()), ocenaService.getMeanRoomRating(item.getId())));
 		}
 		return new ResponseEntity<List<HotelskaSobaInfoDTO>>(dto, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/admin/all/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<HotelskaSobaDTO>> getRoomsFromHotelAdmin(@PathVariable("id") Long id, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==id) {
+			List<HotelskaSobaDTO> dto = new ArrayList<>();
+			List<HotelskaSoba> lista = hotelskaSobaService.getRoomsFromHotel(id);
+			for (HotelskaSoba item : lista) {
+				dto.add(new HotelskaSobaDTO(item));
+			}
+			return new ResponseEntity<List<HotelskaSobaDTO>>(dto, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/all/{id}", method = RequestMethod.GET)
@@ -77,14 +99,18 @@ public class HotelskaSobaController {
 	}
 	
 	@RequestMapping(value="/", method = RequestMethod.POST)
-	public ResponseEntity<HotelskaSobaDTO> createRoom(@RequestBody HotelskaSobaDTO dto){
-		HotelskaSoba obj = new HotelskaSoba(dto);
-		HotelskaSobaDTO returnType = hotelskaSobaService.createRoom(obj);
-		if(returnType!=null) {
-			return new ResponseEntity<>(returnType, HttpStatus.OK);
+	public ResponseEntity<HotelskaSobaDTO> createRoom(@RequestBody HotelskaSobaDTO dto, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA)) {
+			HotelskaSoba obj = new HotelskaSoba(dto);
+			HotelskaSobaDTO returnType = hotelskaSobaService.createRoom(obj);
+			if(returnType!=null) {
+				return new ResponseEntity<>(returnType, HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)

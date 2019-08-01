@@ -56,3 +56,22 @@
     margin-left: 50px;
 }
 
+#obrisiSobuBtn{
+    margin-left: 50px;
+}
+
+#dodajSobuBtn{
+    float:left;
+    margin-left: 300px;
+    height: 50px;
+    width: 100px;
+}
+
+#dodajSobaClick{
+    margin-top: 20px;
+}
+
+#selectTip{
+    height: 70px;
+    z-index: 1000;
+}

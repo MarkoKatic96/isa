@@ -22,16 +22,14 @@ class Login extends Component{
         if(a!=="" && b!==""){
             axios.post('http://localhost:8080/korisnik/login', {email: a, lozinka: b})
             .then(res => {
-                console.log(res.data);
-                sessionStorage.setItem('jwtToken', res.data);
-                sessionStorage.setItem('email', a)
-                this.props.setToken(sessionStorage.getItem('jwtToken'));
-                this.props.setEmail(sessionStorage.getItem('email'));
+                localStorage.setItem('jwtToken', res.data);
+                localStorage.setItem('email', a)
+                this.props.setToken(localStorage.getItem('jwtToken'));
+                this.props.setEmail(localStorage.getItem('email'));
                 this.props.logIn();
-                axios.get("http://localhost:8080/korisnik/all/" + sessionStorage.getItem('email'))
+                axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
                 .then(res=>{
-                  console.log(res.data.rola);
-                  sessionStorage.setItem('rola', res.data.rola);
+                  localStorage.setItem('rola', res.data.rola);
                   this.props.history.push("/");
                 })
                 

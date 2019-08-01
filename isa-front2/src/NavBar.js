@@ -4,16 +4,19 @@ import {Link, withRouter} from "react-router-dom"
 class NavBar extends Component{
 
     odjava = () =>{
-        this.props.setToken(sessionStorage.getItem('jwtToken'));
-        this.props.setEmail(sessionStorage.getItem('email'));
-        this.props.logOut();      
+        localStorage.setItem('jwtToken', undefined);
+        localStorage.setItem('email', undefined);
+        localStorage.setItem('rola', undefined);
+        localStorage.setItem("isLogged", false);
+        this.props.logOut();  
+        this.props.history.push("/");    
     }
 
     render(){
-        var isLogged = this.props.loggedIn;
-        var rola = sessionStorage.getItem('rola');
-        var ispis;
-        console.log(rola)
+        //var isLogged = this.props.loggedIn;
+        var isLogged = localStorage.getItem("isLogged")
+        var rola = localStorage.getItem('rola');
+        var ispis="";
         if(rola=="KORISNIK"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><Link to="/login">Korisnik</Link></li>
@@ -26,8 +29,8 @@ class NavBar extends Component{
                     </ul>
         }else if(rola=="ADMIN_HOTELA"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
-                        <li><Link to="/login">Izmeni hotel</Link></li>
-                        <li><Link to="/login">Sobe</Link></li>
+                        <li><Link to="/edit/hotel">Izmeni hotel</Link></li>
+                        <li><Link to="/admin/rooms">Sobe</Link></li>
                         <li><Link to="/login">Cenovnik</Link></li>
                         <li><Link to="/login">Izvestaji</Link></li>
                         <li><Link to="/login">Usluge</Link></li>
@@ -49,7 +52,7 @@ class NavBar extends Component{
             <nav className="nav-wrapper red darken-3">
                 <div className="container">
                     <Link to='/' className="brand-logo">Home</Link>
-                    { isLogged ? (
+                    { (localStorage.getItem("isLogged") && ispis!="") ? (
                         <div>
                             {ispis}
                         </div>
