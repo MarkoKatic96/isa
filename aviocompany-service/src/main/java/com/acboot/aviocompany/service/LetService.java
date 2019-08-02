@@ -1,6 +1,8 @@
 package com.acboot.aviocompany.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,5 +110,34 @@ public class LetService
 		}
 		else
 			return false;
+	}
+	
+	
+	
+	  /////////////////////////////////
+	 /////////////////////////////////
+	/////////////////////////////////
+	
+	
+
+	/*
+	 * Pretraga po datumu od-do
+	 */
+	public List<LetDTO> searchLetoviPoVremenu(LocalDateTime time1, LocalDateTime time2) 
+	{
+		Optional<List<Let>> letovi = letRepo.findLetoviPoDatumu(time1, time2);
+		
+		ArrayList<LetDTO> letDtos = new ArrayList<LetDTO>();
+		
+		if(letovi.isPresent())
+		{
+			for(Let let : letovi.get())
+			{
+				letDtos.add(letConv.convertToDTO(let));
+			}
+			return letDtos;
+		}
+		
+		return Collections.emptyList();
 	}
 }

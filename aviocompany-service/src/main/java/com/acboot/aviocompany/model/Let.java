@@ -1,4 +1,5 @@
 package com.acboot.aviocompany.model;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -31,10 +32,10 @@ public class Let
 	private long brojLeta;
 	
 	@NotNull
-	private Date vremePoletanja;
+	private LocalDateTime vremePoletanja;
 	
 	@NotNull
-	private Date vremeSletanja;
+	private LocalDateTime vremeSletanja;
 	
 	@NotNull
 	private int duzinaPutovanja; //u km

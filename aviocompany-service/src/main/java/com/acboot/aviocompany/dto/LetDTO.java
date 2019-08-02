@@ -1,6 +1,6 @@
 package com.acboot.aviocompany.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -14,8 +14,8 @@ public class LetDTO
 {
 	private long idLeta;
 	private long brojLeta;
-	private Date vremePoletanja;
-	private Date vremeSletanja;
+	private LocalDateTime vremePoletanja;
+	private LocalDateTime vremeSletanja;
 	private int duzinaPutovanja; 
 	private int brojPresedanja;
 	private float prosecnaOcena;
