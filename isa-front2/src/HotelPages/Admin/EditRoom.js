@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { withRouter} from 'react-router-dom';
 import Select from 'react-select';
-class AddRoom extends Component{
+class EditRoom extends Component{
 
     state={
         sprat:"",
@@ -12,7 +12,7 @@ class AddRoom extends Component{
         tipSobe:"",
         tipoviSobe:[],
         selectedTip: "",
-        hotel:""
+        soba:""
     }
 
     componentDidMount() {
@@ -23,13 +23,19 @@ class AddRoom extends Component{
                 tipoviSobe: res.data
              })
        })
-       axios.get("http://localhost:8080/hotel/" + this.props.match.params.hotelId)
+
+       axios.get("http://localhost:8080/sobe/" + this.props.match.params.sobaId)
         .then(res=>{
             console.log(res.data);
              this.setState({
-                hotel: res.data
+                soba: res.data,
+                sprat: res.data.sprat,
+                brojSobe: res.data.brojSobe,
+                brojKreveta: res.data.brojKreveta,
+                originalnaCena: res.data.originalnaCena
              })
        })
+
     }
 
     handleChange = (e) => { //za inpute
@@ -55,12 +61,12 @@ class AddRoom extends Component{
         }
         e.preventDefault();
         if(this.state.sprat!=="" && this.state.brojSobe!=="" && this.state.brojKreveta!=="" && this.state.selectedTip!=="" && this.state.originalnaCena!==""){
-            axios.post("http://localhost:8080/sobe/", {sprat: this.state.sprat, brojSobe: this.state.brojSobe, brojKreveta: this.state.brojKreveta, tipSobe: tipZaSlanje, hotel: this.state.hotel, originalnaCena: this.state.originalnaCena}, { headers: { Authorization: `Bearer ${token}` } })
+            axios.put("http://localhost:8080/sobe/" + this.props.match.params.sobaId, {sprat: this.state.sprat, brojSobe: this.state.brojSobe, brojKreveta: this.state.brojKreveta, tipSobe: tipZaSlanje, hotel: this.state.soba.hotel, originalnaCena: this.state.originalnaCena}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
-                alert("Uspesno dodata nova soba.")
+                alert("Uspesno izmenjena soba.")
                 this.props.history.push("/admin/rooms");
             }).catch(error=>{
-                alert("Niste ovlasceni da dodate sobu.");
+                alert("Soba je rezervisana, ne mozete je trenutno izmeniti.");
             })
         }else{
             alert("Sva polja moraju biti ispravno popunjena.")
@@ -85,19 +91,19 @@ class AddRoom extends Component{
                 <div className="center container">
                     <form onSubmit={this.handleSubmit}>
                         <label className="left black-text" htmlFor="brojSobe">Broj sobe:</label>
-                        <input type="number" id="brojSobe" onChange={this.handleChange}/>
-                        <label className="left black-text" htmlFor="sprat">Sprat:</label>
-                        <input type="number" id="sprat" onChange={this.handleChange}/>
+                        <input type="number" id="brojSobe" value={this.state.brojSobe} onChange={this.handleChange}/>
+                        <label className="left black-text"  htmlFor="sprat">Sprat:</label>
+                        <input type="number" id="sprat" value={this.state.sprat} onChange={this.handleChange}/>
                         <label className="left black-text" htmlFor="brojKreveta">Broj kreveta:</label>
-                        <input type="number" id="brojKreveta" onChange={this.handleChange}/>
+                        <input type="number" id="brojKreveta" value={this.state.brojKreveta} onChange={this.handleChange}/>
                         <label className="left black-text" htmlFor="originalnaCena">Originalna cena:</label>
-                        <input type="number" id="originalnaCena" onChange={this.handleChange}/>
+                        <input type="number" id="originalnaCena" value={this.state.originalnaCena} onChange={this.handleChange}/>
                         <Select 
                                     value={selectedTip}
                                     onChange={this.handleChangeTip}
                                     options={ listaTipova } 
                                     id="selectTip"/>
-                        <button className="btn waves-effect waves-light green" id="dodajSobaClick">Dodaj</button>
+                        <button className="btn waves-effect waves-light green" id="dodajSobaClick">Izmeni</button>
                     </form>
                 </div>
             </div>
@@ -105,4 +111,4 @@ class AddRoom extends Component{
     }
 
 }
-export default withRouter(AddRoom)
+export default withRouter(EditRoom)

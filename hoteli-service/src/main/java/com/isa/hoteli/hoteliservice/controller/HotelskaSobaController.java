@@ -101,7 +101,7 @@ public class HotelskaSobaController {
 	@RequestMapping(value="/", method = RequestMethod.POST)
 	public ResponseEntity<HotelskaSobaDTO> createRoom(@RequestBody HotelskaSobaDTO dto, HttpServletRequest req){
 		Korisnik k = korisnikService.zaTokene(req);
-		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA)) {
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && dto.getHotel().getId()==k.getZaduzenZaId()) {
 			HotelskaSoba obj = new HotelskaSoba(dto);
 			HotelskaSobaDTO returnType = hotelskaSobaService.createRoom(obj);
 			if(returnType!=null) {
@@ -114,19 +114,27 @@ public class HotelskaSobaController {
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteRoomById(@PathVariable("id") Long id){
-		return new ResponseEntity<String>(hotelskaSobaService.deleteRoom(id), HttpStatus.OK);
+	public ResponseEntity<String> deleteRoomById(@PathVariable("id") Long id, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==hotelskaSobaService.getRoomById(id).getHotel().getId()) {
+			return new ResponseEntity<String>(hotelskaSobaService.deleteRoom(id), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<HotelskaSobaDTO> updateRoomById(@PathVariable("id") Long id, @RequestBody HotelskaSobaDTO dto){
-		HotelskaSoba obj = new HotelskaSoba(dto);
-		HotelskaSobaDTO returnTip = hotelskaSobaService.updateRoom(obj, id);
-		if(returnTip!=null) {
-			return new ResponseEntity<>(returnTip, HttpStatus.OK);
+	public ResponseEntity<HotelskaSobaDTO> updateRoomById(@PathVariable("id") Long id, @RequestBody HotelskaSobaDTO dto, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==hotelskaSobaService.getRoomById(id).getHotel().getId()) {
+			HotelskaSoba obj = new HotelskaSoba(dto);
+			HotelskaSobaDTO returnTip = hotelskaSobaService.updateRoom(obj, id);
+			if(returnTip!=null) {
+				return new ResponseEntity<>(returnTip, HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/free/{id}", method = RequestMethod.POST)

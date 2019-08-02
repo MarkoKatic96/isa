@@ -31,10 +31,10 @@ class NavBar extends Component{
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><Link to="/edit/hotel">Izmeni hotel</Link></li>
                         <li><Link to="/admin/rooms">Sobe</Link></li>
-                        <li><Link to="/login">Cenovnik</Link></li>
+                        <li><Link to="/cenovnik">Cenovnik</Link></li>
                         <li><Link to="/login">Izvestaji</Link></li>
-                        <li><Link to="/login">Usluge</Link></li>
-                        <li><Link to="/login">Profil</Link></li>
+                        <li><Link to="/admin/services">Usluge</Link></li>
+                        <li><Link to="/profile">Profil</Link></li>
                         <li><Link onClick={this.odjava}>Odjava</Link></li>
                     </ul>
         }else if(rola=="ADMIN_RENT_A_CAR"){

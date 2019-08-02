@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { withRouter} from 'react-router-dom';
 
-class HotelRooms extends Component{
+class Cenovnik extends Component{
 
     state={
         sobe:[],
@@ -55,18 +55,15 @@ class HotelRooms extends Component{
                         <div className="col s12 m12">
                             <div className="card grey darken-2 card-panel hoverable">
                                 <div className="card-content white-text left-align">
-                                <span className="card-title"><b>{soba.brojSobe}</b></span>
+                                <span className="card-title"><b>Soba sa brojem {soba.brojSobe}</b></span>
                                 <div className="divider white"></div>
                                 <br/>
-                                <p>Sprat: {soba.sprat}</p>
-                                <p>Broj kreveta: {soba.brojKreveta}</p>
-                                <p>Tip sobe: {soba.tipSobe.naziv}</p>
                                 <p>Originalna cena: {soba.originalnaCena}</p>
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
                                     <button className="btn waves-effect waves-light green" id="izmeniSobuBtn" onClick={()=>{this.izmeniClick(soba.id)}}>Izmeni</button>
-                                    <button className="btn waves-effect waves-light red" id="obrisiSobuBtn" onClick={()=>{this.obrisiClick(soba.id)}}>Obrisi</button>
+                                    <button className="btn waves-effect waves-light green" id="obrisiSobuBtn" onClick={()=>{this.obrisiClick(soba.id)}}>Definisi vanrednu cenu nocenja</button>
                                 </div>
                             </div>
                         </div>
@@ -74,15 +71,14 @@ class HotelRooms extends Component{
                 </div>
             )
         })):(
-            <div className="center">Nije pronadjena nijedna soba.</div>
+            <div className="center">Nije pronadjena nijedna cena.</div>
         )
 
         return(
             <div className="center container">
                 <br/>
                 <div>
-                    <h3 className="left-align container" id="dodajSobuBtn">Sobe:</h3>
-                    <button className="btn waves-effect waves-light green" id="dodajSobuBtn" onClick={()=>{this.dodajClick()}}>Dodaj</button>
+                    <h3 className="left-align container" id="dodajSobuBtn">Cene:</h3>
                 </div>
                 <br/>
                 {sobeList}
@@ -91,4 +87,4 @@ class HotelRooms extends Component{
     }
 
 }
-export default withRouter(HotelRooms)
+export default withRouter(Cenovnik)

@@ -54,17 +54,17 @@ public class KorisnikService {
 	public KorisnikDTO updateUser(Korisnik obj, Long id) {
 		Optional<Korisnik> obj1 = korisnikRepository.findById(id);
 		if(obj1.isPresent()) {
-			obj1.get().setEmail(obj.getEmail());
-			obj1.get().setLozinka(obj.getLozinka());
-			obj1.get().setIme(obj.getIme());
-			obj1.get().setPrezime(obj.getPrezime());
-			obj1.get().setGrad(obj.getGrad());
-			obj1.get().setAktiviran(obj.isAktiviran());
-			obj1.get().setTelefon(obj.getTelefon());
-			obj1.get().setRola(obj.getRola());
-			obj1.get().setZaduzenZaId(obj.getZaduzenZaId());
-			korisnikRepository.save(obj1.get());
-			return new KorisnikDTO(obj1.get());
+			Korisnik k = korisnikRepository.getUserByEmail(obj.getEmail());
+			if(k==null || k.getId()==id) {//ako jedino taj korisnik koji se trenutno menja ima isti email
+				obj1.get().setEmail(obj.getEmail());
+				obj1.get().setLozinka(obj.getLozinka());
+				obj1.get().setIme(obj.getIme());
+				obj1.get().setPrezime(obj.getPrezime());
+				obj1.get().setGrad(obj.getGrad());
+				obj1.get().setTelefon(obj.getTelefon());
+				korisnikRepository.save(obj1.get());
+				return new KorisnikDTO(obj1.get());
+			}
 		}
 		return null;
 	}

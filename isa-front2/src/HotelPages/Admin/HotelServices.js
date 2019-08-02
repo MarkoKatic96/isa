@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { withRouter} from 'react-router-dom';
 
-class HotelRooms extends Component{
+class HotelServices extends Component{
 
     state={
-        sobe:[],
+        services:[],
         korisnik:""
     }
 
@@ -19,10 +19,10 @@ class HotelRooms extends Component{
             })
             console.log(res.data);
             a = res.data.zaduzenZaId;
-            axios.get("http://localhost:8080/sobe/admin/all/" + a, { headers: { Authorization: `Bearer ${token}` } })
+            axios.get("http://localhost:8080/usluga/all/" + a, { headers: { Authorization: `Bearer ${token}` } })
             .then(res=>{
                 this.setState({
-                    sobe: res.data
+                    services: res.data
                 })
                 console.log(res.data);
             })
@@ -30,16 +30,16 @@ class HotelRooms extends Component{
     }
 
     dodajClick=()=>{
-        this.props.history.push('/admin/add_room/' + this.state.korisnik.zaduzenZaId);
+        this.props.history.push('/admin/add_services/' + this.state.korisnik.zaduzenZaId);
     }
 
-    izmeniClick=(sobaId)=>{
-        this.props.history.push('/admin/edit_room/' + sobaId);
+    izmeniClick=(serviceId)=>{
+        this.props.history.push('/admin/edit_services/' + serviceId);
     }
 
-    obrisiClick=(sobaId)=>{
+    obrisiClick=(serviceId)=>{
         var token = localStorage.getItem('jwtToken');
-        axios.delete("http://localhost:8080/sobe/" + sobaId, { headers: { Authorization: `Bearer ${token}` } })
+        axios.delete("http://localhost:8080/usluga/" + serviceId, { headers: { Authorization: `Bearer ${token}` } })
             .then(res=>{
                 console.log(res.data);
                 this.componentDidMount();
@@ -47,26 +47,24 @@ class HotelRooms extends Component{
     }
 
     render(){
-        var {sobe}=this.state;
-        const sobeList = sobe.length ? (sobe.map(soba => {
+        var {services}=this.state;
+        const servicesList = services.length ? (services.map(service => {
             return(
-                <div className="center container" key={soba.id}>
+                <div className="center container" key={service.id}>
                     <div className="row">
                         <div className="col s12 m12">
                             <div className="card grey darken-2 card-panel hoverable">
                                 <div className="card-content white-text left-align">
-                                <span className="card-title"><b>{soba.brojSobe}</b></span>
+                                <span className="card-title"><b>{service.naziv}</b></span>
                                 <div className="divider white"></div>
                                 <br/>
-                                <p>Sprat: {soba.sprat}</p>
-                                <p>Broj kreveta: {soba.brojKreveta}</p>
-                                <p>Tip sobe: {soba.tipSobe.naziv}</p>
-                                <p>Originalna cena: {soba.originalnaCena}</p>
+                                <p>Cena: {service.cena}</p>
+                                <p>Popust: {service.popust}%</p>
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                    <button className="btn waves-effect waves-light green" id="izmeniSobuBtn" onClick={()=>{this.izmeniClick(soba.id)}}>Izmeni</button>
-                                    <button className="btn waves-effect waves-light red" id="obrisiSobuBtn" onClick={()=>{this.obrisiClick(soba.id)}}>Obrisi</button>
+                                    <button className="btn waves-effect waves-light green" id="izmeniSobuBtn" onClick={()=>{this.izmeniClick(service.id)}}>Izmeni</button>
+                                    <button className="btn waves-effect waves-light red" id="obrisiSobuBtn" onClick={()=>{this.obrisiClick(service.id)}}>Obrisi</button>
                                 </div>
                             </div>
                         </div>
@@ -74,21 +72,21 @@ class HotelRooms extends Component{
                 </div>
             )
         })):(
-            <div className="center">Nije pronadjena nijedna soba.</div>
+            <div className="center">Nije pronadjena nijedna usluga.</div>
         )
 
         return(
             <div className="center container">
                 <br/>
                 <div>
-                    <h3 className="left-align container" id="dodajSobuBtn">Sobe:</h3>
+                    <h3 className="left-align container" id="dodajSobuBtn">Usluge:</h3>
                     <button className="btn waves-effect waves-light green" id="dodajSobuBtn" onClick={()=>{this.dodajClick()}}>Dodaj</button>
                 </div>
                 <br/>
-                {sobeList}
+                {servicesList}
             </div>
         )
     }
 
 }
-export default withRouter(HotelRooms)
+export default withRouter(HotelServices)

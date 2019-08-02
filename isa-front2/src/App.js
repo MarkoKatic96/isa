@@ -14,6 +14,12 @@ import Services from './HotelPages/Services';
 import EditHotel from './HotelPages/Admin/EditHotel';
 import HotelRooms from './HotelPages/Admin/HotelRooms';
 import AddRoom from "./HotelPages/Admin/AddRoom";
+import EditRoom from './HotelPages/Admin/EditRoom';
+import HotelServices from './HotelPages/Admin/HotelServices';
+import AddService from './HotelPages/Admin/AddService';
+import EditService from './HotelPages/Admin/EditService';
+import AdminProfile from './HotelPages/Admin/AdminProfile';
+import Cenovnik from './HotelPages/Admin/Cenovnik';
 
 class App extends Component {
 
@@ -67,6 +73,12 @@ class App extends Component {
           <Route path = '/edit/hotel' render={EditHotel}/>
           <Route path = '/admin/rooms' render={HotelRooms}/>
           <Route path = '/admin/add_room/:hotelId' render={AddRoom}/>
+          <Route path = '/admin/edit_room/:sobaId' render={EditRoom}/>
+          <Route path = '/admin/services' render={HotelServices}/>
+          <Route path = '/admin/add_services/:hotelId' render={AddService}/>
+          <Route path = '/admin/edit_services/:serviceId' render={EditService}/>
+          <Route path = '/profile' render={AdminProfile}/>
+          <Route path = '/cenovnik' render={Cenovnik}/>
         </div>
       </BrowserRouter>
     );

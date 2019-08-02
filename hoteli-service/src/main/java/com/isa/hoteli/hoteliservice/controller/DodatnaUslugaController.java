@@ -3,6 +3,8 @@ package com.isa.hoteli.hoteliservice.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,10 @@ import com.isa.hoteli.hoteliservice.dto.CenaNocenjaDTO;
 import com.isa.hoteli.hoteliservice.dto.DodatnaUslugaDTO;
 import com.isa.hoteli.hoteliservice.model.CenaNocenja;
 import com.isa.hoteli.hoteliservice.model.DodatnaUsluga;
+import com.isa.hoteli.hoteliservice.model.Korisnik;
+import com.isa.hoteli.hoteliservice.model.Rola;
 import com.isa.hoteli.hoteliservice.service.DodatnaUslugaService;
+import com.isa.hoteli.hoteliservice.service.KorisnikService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -26,6 +31,9 @@ public class DodatnaUslugaController {
 
 	@Autowired
 	private DodatnaUslugaService dodatnaUslugaService;
+	
+	@Autowired
+	private KorisnikService korisnikService;
 	
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	public ResponseEntity<List<DodatnaUslugaDTO>> getServices(){
@@ -58,30 +66,42 @@ public class DodatnaUslugaController {
 	}
 
 	@RequestMapping(value="/", method = RequestMethod.POST)
-	public ResponseEntity<DodatnaUslugaDTO> createService(@RequestBody DodatnaUslugaDTO dto){
-		DodatnaUsluga obj = new DodatnaUsluga(dto);
-		DodatnaUslugaDTO returnType = dodatnaUslugaService.createService(obj);
-		if(returnType!=null) {
-			return new ResponseEntity<>(returnType, HttpStatus.OK);
+	public ResponseEntity<DodatnaUslugaDTO> createService(@RequestBody DodatnaUslugaDTO dto, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && dto.getHotel().getId()==k.getZaduzenZaId()) {
+			DodatnaUsluga obj = new DodatnaUsluga(dto);
+			DodatnaUslugaDTO returnType = dodatnaUslugaService.createService(obj);
+			if(returnType!=null) {
+				return new ResponseEntity<>(returnType, HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteServiceById(@PathVariable("id") Long id){
-		return new ResponseEntity<String>(dodatnaUslugaService.deleteService(id), HttpStatus.OK);
+	public ResponseEntity<String> deleteServiceById(@PathVariable("id") Long id, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && dodatnaUslugaService.getServiceById(id).getHotel().getId()==k.getZaduzenZaId()) {
+			return new ResponseEntity<String>(dodatnaUslugaService.deleteService(id), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<DodatnaUslugaDTO> updateServiceById(@PathVariable("id") Long id, @RequestBody DodatnaUslugaDTO dto){
-		DodatnaUsluga obj = new DodatnaUsluga(dto);
-		DodatnaUslugaDTO returnTip = dodatnaUslugaService.updateService(obj, id);
-		if(returnTip!=null) {
-			return new ResponseEntity<>(returnTip, HttpStatus.OK);
+	public ResponseEntity<DodatnaUslugaDTO> updateServiceById(@PathVariable("id") Long id, @RequestBody DodatnaUslugaDTO dto, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && dto.getHotel().getId()==k.getZaduzenZaId()) {
+			DodatnaUsluga obj = new DodatnaUsluga(dto);
+			DodatnaUslugaDTO returnTip = dodatnaUslugaService.updateService(obj, id);
+			if(returnTip!=null) {
+				return new ResponseEntity<>(returnTip, HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 }
