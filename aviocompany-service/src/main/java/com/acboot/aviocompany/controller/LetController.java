@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.acboot.aviocompany.dto.KlasaDTO;
 import com.acboot.aviocompany.dto.LetDTO;
 import com.acboot.aviocompany.service.LetService;
 
@@ -82,13 +83,23 @@ public class LetController
 		return (!letService.deleteOne(id)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.OK); 
 	}
 	
+	////////////////////////////////////////////
 	
+
+	@PutMapping("/addclass")
+	public ResponseEntity<LetDTO> addKlaseLeta(@RequestBody LetDTO skills)
+	{
+		System.out.println("addKlaseLeta()");
+		
+		LetDTO dto = letService.addKlaseLeta(skills);
+		
+		return (dto == null) ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST) : new ResponseEntity<LetDTO>(dto, HttpStatus.CREATED);
+	}
 	
 	
 	  /////////////////////////////////
 	 /////////////////////////////////
 	/////////////////////////////////
-	
 	
 	
 	
@@ -111,6 +122,64 @@ public class LetController
 	}
 	
 	
+	/*
+	 * Pretraga letova po destinaciji poletanja i sletanja (preko id-jeva)
+	 */
+	@GetMapping("/searchbydest/{fromdest}/{todest}")
+	public ResponseEntity<List<LetDTO>> searchLetoviPoDestinaciji(@PathVariable("fromdest") Long takeOffDestination, @PathVariable("todest") Long landingDestination)
+	{
+		System.out.println("searchLetoviPoDestinaciji()");
+		
+		List<LetDTO> letovi = letService.searchLetoviPoDestinaciji(takeOffDestination, landingDestination);
+		
+		return(letovi.isEmpty()) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<List<LetDTO>>(letovi, HttpStatus.OK);
+	}
+	
+	
+	/*
+	 * Pretraga letova po tipu leta
+	 */
+	@GetMapping("/searchbytype/{type}")
+	public ResponseEntity<List<LetDTO>> searchLetoviPoTipu(@PathVariable("type") String type)
+	{		
+		System.out.println("searchLetoviPoTipu()");
+		
+		List<LetDTO> letovi = letService.searchLetoviPoTipu(type);
+		
+		return(letovi.isEmpty()) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<List<LetDTO>>(letovi, HttpStatus.OK); 
+	}
+	
+	
+	/*
+	 * Pretraga letova po broju preostalih karata (broju osoba) -> npr ako korisnik hoce da rezervise za jos {broj} ljudi
+	 */
+	@GetMapping("/searchbyfreeseats/{number}")
+	public ResponseEntity<List<LetDTO>> searchLetoviPoBrojuMesta(@PathVariable("number") String number)
+	{		
+		System.out.println("searchLetoviPoBrojuMesta()");
+		
+		Integer num = Integer.parseInt(number);
+		List<LetDTO> letovi = letService.searchLetoviPoBrojuMesta(num);
+		
+		return(letovi.isEmpty()) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<List<LetDTO>>(letovi, HttpStatus.OK); 
+	}
+	
+	
+	/*
+	 * Pretraga letova po klasama koje podrzava
+	 * Radi tako sto vraca rezultat za bilo koji od navedenih parametara
+	 */
+	@GetMapping("/searchbyclasses")
+	public ResponseEntity<List<LetDTO>> searchLetoviPoKlasama(@RequestBody List<KlasaDTO> klase)
+	{		
+		System.out.println("searchLetoviPoKlasama()");
+		
+		List<LetDTO> letovi = letService.searchLetoviPoKlasama(klase);
+		
+		return(letovi.isEmpty()) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<List<LetDTO>>(letovi, HttpStatus.OK); 
+	}
+	
+	
 //	/* (Y)
 //	 * Trazimo prosecnu ocenu za jedan let
 //	 * Prosledjujemo id leta
@@ -128,71 +197,13 @@ public class LetController
 //	}
 //	
 //	
-//	/*
-//	 * Pretraga letova po destinaciji poletanja i sletanja (preko id-jeva)
-//	 */
-//	@GetMapping("/getbydest/{fromDest}/{toDest}")
-//	@ApiOperation(value = "Get flights by destination.", httpMethod = "GET")
-//	@ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-//						   @ApiResponse(code = 400, message = "BAD_REQUEST")
-//	})
-//	public ResponseEntity<List<FlightDTO>> getFlightsByDestination(@PathVariable("fromDest") Long takeOffDestination, @PathVariable("toDest") Long landingDestination)
-//	{
-////		Destination fromDest = new Destination();
-////		fromDest.setName(takeOffDestination);
-////		Destination toDest = new Destination();
-////		toDest.setName(landingDestination);
-//		
-//		List<FlightDTO> flights = service.getFlightsByDestination(takeOffDestination, landingDestination);
-//		
-//		return(!flights.isEmpty()) ? new ResponseEntity<List<FlightDTO>>(flights, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
-//	}
 //	
-//	/*
-//	 * Pretraga letova po tipu leta
-//	 */
-//	@GetMapping("/getbytype/{type}")
-//	@ApiOperation(value = "Get flights by type.", httpMethod = "GET")
-//	@ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-//						   @ApiResponse(code = 400, message = "BAD_REQUEST")
-//	})
-//	public ResponseEntity<List<FlightDTO>> getFlightsByType(@PathVariable("type") String type)
-//	{		
-//		List<FlightDTO> flights = service.getFlightsByType(type);
-//		
-//		return(!flights.isEmpty()) ? new ResponseEntity<List<FlightDTO>>(flights, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
-//	}
 //	
-//	/*
-//	 * Pretraga letova po broju preostalih karata (broju osoba) -> npr ako korisnik hoce da rezervise za jos {broj} ljudi
-//	 */
-//	@GetMapping("/getbyticketnum/{number}")
-//	@ApiOperation(value = "Get flights by tickets left.", httpMethod = "GET")
-//	@ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-//						   @ApiResponse(code = 400, message = "BAD_REQUEST")
-//	})
-//	public ResponseEntity<List<FlightDTO>> getFlightsByTicketNumber(@PathVariable("number") String number)
-//	{		
-//		Integer num = Integer.parseInt(number);
-//		List<FlightDTO> flights = service.getFlightsByTicketNumber(num);
-//		
-//		return(!flights.isEmpty()) ? new ResponseEntity<List<FlightDTO>>(flights, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
-//	}
 //	
-//	/*
-//	 * Pretraga letova po klasi koji podrzava, odredjuje se na osnovu karata koje se rezervisu za konkretan let
-//	 */
-//	@GetMapping("/getbyclass/{klasa}")
-//	@ApiOperation(value = "Get flights by type.", httpMethod = "GET")
-//	@ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-//						   @ApiResponse(code = 400, message = "BAD_REQUEST")
-//	})
-//	public ResponseEntity<List<FlightDTO>> getFlightsByClass(@PathVariable("klasa") String klasa)
-//	{		
-//		List<FlightDTO> flights = service.getFlightsByClass(klasa);
-//		
-//		return(!flights.isEmpty()) ? new ResponseEntity<List<FlightDTO>>(flights, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
-//	}
+//	
+
+//	
+
 //	
 	
 	

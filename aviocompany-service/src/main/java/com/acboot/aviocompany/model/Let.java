@@ -48,8 +48,10 @@ public class Let
 	@NotNull
 	private String tipPuta;
 	
-	@NotNull
 	private short brojOsoba;
+	
+	@NotNull
+	private short brojMesta;
 	
 	private float ukupanPrihod;
 	

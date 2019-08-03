@@ -21,6 +21,7 @@ public class LetDTO
 	private float prosecnaOcena;
 	private String tipPuta;
 	private short brojOsoba;
+	private short brojMesta;
 	private float ukupanPrihod;
 	
     private AvioKompanijaDTO aviokompanija;

@@ -49,6 +49,7 @@ public class LetConverter
 		dto.setProsecnaOcena(model.getProsecnaOcena());
 		dto.setTipPuta(model.getTipPuta());
 		dto.setBrojOsoba(model.getBrojOsoba());
+		dto.setBrojMesta(model.getBrojMesta());
 		dto.setUkupanPrihod(model.getUkupanPrihod());
 		
 		dto.setAviokompanija(avioConv.convertToDTO(model.getAviokompanija()));
@@ -116,6 +117,7 @@ public class LetConverter
 		model.setProsecnaOcena(dto.getProsecnaOcena());
 		model.setTipPuta(dto.getTipPuta());
 		model.setBrojOsoba(dto.getBrojOsoba());
+		model.setBrojMesta(dto.getBrojMesta());
 		model.setUkupanPrihod(dto.getUkupanPrihod());
 		
 		model.setAviokompanija(avioConv.convertFromDTO(dto.getAviokompanija()));

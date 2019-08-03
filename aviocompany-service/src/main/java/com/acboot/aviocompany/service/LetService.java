@@ -3,14 +3,18 @@ package com.acboot.aviocompany.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.acboot.aviocompany.converter.LetConverter;
+import com.acboot.aviocompany.dto.KlasaDTO;
 import com.acboot.aviocompany.dto.LetDTO;
+import com.acboot.aviocompany.model.Klasa;
 import com.acboot.aviocompany.model.Let;
 import com.acboot.aviocompany.repository.LetRepository;
 
@@ -114,8 +118,29 @@ public class LetService
 	
 	
 	
+	/**
+	 * OSTALE OPERACIJE
+	 */
+	
+	
+	/*
+	 * Postavljanje klasa za odredjeni let
+	 */
+	public LetDTO addKlaseLeta(LetDTO dto)
+	{
+		Optional<Let> let = letRepo.findById(letConv.convertFromDTO(dto).getIdLeta());
+
+		let.get().setKlaseKojeLetSadrzi(letConv.convertFromDTO(dto).getKlaseKojeLetSadrzi());
+		letRepo.save(let.get());
+
+		return letConv.convertToDTO(let.get());
+	}	
+	
+	
+	
+	
 	  /////////////////////////////////
-	 /////////////////////////////////
+	 ///////////PRETRAGA//////////////
 	/////////////////////////////////
 	
 	
@@ -125,7 +150,7 @@ public class LetService
 	 */
 	public List<LetDTO> searchLetoviPoVremenu(LocalDateTime time1, LocalDateTime time2) 
 	{
-		Optional<List<Let>> letovi = letRepo.findLetoviPoDatumu(time1, time2);
+		Optional<List<Let>> letovi = letRepo.findFlightsByDate(time1, time2);
 		
 		ArrayList<LetDTO> letDtos = new ArrayList<LetDTO>();
 		
@@ -140,4 +165,96 @@ public class LetService
 		
 		return Collections.emptyList();
 	}
+
+	
+	/*
+	 * Pretraga po polaznim i odredisnim destinacijama
+	 */
+	public List<LetDTO> searchLetoviPoDestinaciji(Long takeOffDestination, Long landingDestination)
+	{
+		Optional<List<Let>> letovi = letRepo.findFlightsByDestination(takeOffDestination, landingDestination);
+		
+		ArrayList<LetDTO> dtos = new ArrayList<LetDTO>();
+		
+		if(letovi.isPresent())
+		{
+			for(Let let : letovi.get())
+			{
+				dtos.add(letConv.convertToDTO(let));
+			}
+		}
+		return dtos;
+	}
+	
+	
+	/*
+	 * Pretraga letova po tipu leta
+	 */
+	public List<LetDTO> searchLetoviPoTipu(String type)
+	{
+		Optional<List<Let>> letovi = letRepo.findFlightsByType(type);
+		
+		ArrayList<LetDTO> dtos = new ArrayList<LetDTO>();
+		
+		if(letovi.isPresent())
+		{
+			for(Let let : letovi.get())
+			{
+				dtos.add(letConv.convertToDTO(let));
+			}
+		}
+		
+		return dtos;
+	}
+
+	
+	/*
+	 * Pretraga po broju preostalih slobodnih mesta
+	 */
+	public List<LetDTO> searchLetoviPoBrojuMesta(Integer number)
+	{
+		
+		List<Let> letovi = letRepo.findAll();
+		
+		List<LetDTO> dtos = new ArrayList<LetDTO>();
+		
+		for(Let let : letovi)
+		{
+			if((letConv.convertToDTO(let).getBrojMesta() - letConv.convertToDTO(let).getBrojOsoba()) >= number)
+				dtos.add(letConv.convertToDTO(let));
+				
+		}
+		
+		return dtos;
+	}
+
+	/*
+	 * Pretraga po klasama koje let podrzava
+	 */
+	public List<LetDTO> searchLetoviPoKlasama(List<KlasaDTO> klase)
+	{
+		List<Let> letovi = letRepo.findAll();
+		
+		List<LetDTO> dtos = new ArrayList<LetDTO>();
+		
+		for(Let let : letovi)
+		{
+			for(Klasa klasa : let.getKlaseKojeLetSadrzi())
+			{
+				for(KlasaDTO str : klase)
+				{
+					if(klasa.getNaziv().equals(str.getNaziv()))
+					{
+						dtos.add(letConv.convertToDTO(let));
+					}
+				}
+			}
+		}
+		
+		return dtos;
+	}
+
+	
+	
+	
 }
