@@ -20,6 +20,10 @@ import AddService from './HotelPages/Admin/AddService';
 import EditService from './HotelPages/Admin/EditService';
 import AdminProfile from './HotelPages/Admin/AdminProfile';
 import Cenovnik from './HotelPages/Admin/Cenovnik';
+import EditPrice from './HotelPages/Admin/EditPrice';
+import AddSinglePrice from './HotelPages/Admin/AddSinglePrice';
+import SinglePrices from './HotelPages/Admin/SinglePrices';
+import Izvestaji from './HotelPages/Admin/Izvestaji';
 
 class App extends Component {
 
@@ -79,6 +83,10 @@ class App extends Component {
           <Route path = '/admin/edit_services/:serviceId' render={EditService}/>
           <Route path = '/profile' render={AdminProfile}/>
           <Route path = '/cenovnik' render={Cenovnik}/>
+          <Route path = '/admin/edit_price/:sobaId' render={EditPrice}/>
+          <Route path = '/admin/single_prices/:sobaId' render={SinglePrices}/>
+          <Route path = '/admin/add_price/:sobaId' render={AddSinglePrice}/>
+          <Route path = '/izvestaji' render={Izvestaji}/>
         </div>
       </BrowserRouter>
     );

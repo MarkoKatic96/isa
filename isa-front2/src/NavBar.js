@@ -32,7 +32,7 @@ class NavBar extends Component{
                         <li><Link to="/edit/hotel">Izmeni hotel</Link></li>
                         <li><Link to="/admin/rooms">Sobe</Link></li>
                         <li><Link to="/cenovnik">Cenovnik</Link></li>
-                        <li><Link to="/login">Izvestaji</Link></li>
+                        <li><Link to="/izvestaji">Izvestaji</Link></li>
                         <li><Link to="/admin/services">Usluge</Link></li>
                         <li><Link to="/profile">Profil</Link></li>
                         <li><Link onClick={this.odjava}>Odjava</Link></li>

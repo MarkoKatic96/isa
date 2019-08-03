@@ -86,7 +86,7 @@ class EditRoom extends Component{
         return(
             <div className="center container">
                 <br/>
-                <h3>Dodavanje sobe:</h3>
+                <h3>Izmena sobe:</h3>
                 <br/>
                 <div className="center container">
                     <form onSubmit={this.handleSubmit}>

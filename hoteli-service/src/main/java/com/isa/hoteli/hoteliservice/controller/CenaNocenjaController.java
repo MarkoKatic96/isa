@@ -67,7 +67,7 @@ public class CenaNocenjaController {
 	@RequestMapping(value="/", method = RequestMethod.POST)
 	public ResponseEntity<CenaNocenjaDTO> createPrice(@RequestBody CenaNocenjaDTO dto, HttpServletRequest req){
 		Korisnik k = korisnikService.zaTokene(req);
-		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA)) {
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==dto.getHotelskaSoba().getHotel().getId()) {
 			CenaNocenja obj = new CenaNocenja(dto);
 			CenaNocenjaDTO returnType = cenaNocenjaService.createPrice(obj);
 			if(returnType!=null) {
@@ -80,8 +80,12 @@ public class CenaNocenjaController {
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deletePriceById(@PathVariable("id") Long id){
-		return new ResponseEntity<String>(cenaNocenjaService.deletePrice(id), HttpStatus.OK);
+	public ResponseEntity<String> deletePriceById(@PathVariable("id") Long id, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==cenaNocenjaService.getPriceById(id).getHotelskaSoba().getHotel().getId()) {
+			return new ResponseEntity<String>(cenaNocenjaService.deletePrice(id), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.PUT)

@@ -176,5 +176,16 @@ public class HotelskaSobaController {
 		}
 		return new ResponseEntity<List<HotelskaSobaInfoDTO>>(dto, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="/cena/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<HotelskaSobaDTO> updateOriginalPrice(@PathVariable("id") Long id, @RequestBody HotelskaSobaDTO dto, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==hotelskaSobaService.getRoomById(id).getHotel().getId()) {
+			HotelskaSoba obj = new HotelskaSoba(dto);
+			HotelskaSobaDTO returnTip = hotelskaSobaService.updateRoomPrice(obj, id);
+			return new ResponseEntity<HotelskaSobaDTO>(returnTip, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
 
 }

@@ -75,3 +75,19 @@
     height: 70px;
     z-index: 1000;
 }
+
+#btnOcene1{
+    margin-right: 50px;
+    margin-top:  20px;
+}
+
+#btnOcene2{
+    margin-right: 50px;
+    margin-left: 50px;
+    margin-top:  20px;
+}
+
+#btnOcene3{
+    margin-left: 50px;
+    margin-top:  20px;
+}

@@ -53,7 +53,10 @@ public class HotelskaSobaService {
 	}
 	
 	public HotelskaSobaDTO createRoom(HotelskaSoba soba) {
-		return new HotelskaSobaDTO(hotelskaSobaRepository.save(soba));
+		if(hotelskaSobaRepository.getRoomWithNumber(soba.getHotel().getId(), soba.getBrojSobe())==null) {
+			return new HotelskaSobaDTO(hotelskaSobaRepository.save(soba));
+		}
+		return null;
 	}
 	
 	public String deleteRoom(Long id) {
@@ -68,7 +71,7 @@ public class HotelskaSobaService {
 	
 	public HotelskaSobaDTO updateRoom(HotelskaSoba soba, Long id) {
 		Date datum = new Date(System.currentTimeMillis());
-		if(rezervacijeRepository.neMozeMenjatiBrisati(id, datum).isEmpty()) {
+		if(rezervacijeRepository.neMozeMenjatiBrisati(id, datum).isEmpty() && hotelskaSobaRepository.getRoomWithNumber(soba.getHotel().getId(), soba.getBrojSobe())==null){
 			Optional<HotelskaSoba> soba1 = hotelskaSobaRepository.findById(id);
 			if(soba1.isPresent()) {
 				soba1.get().setBrojKreveta(soba.getBrojKreveta());
@@ -81,6 +84,17 @@ public class HotelskaSobaService {
 				return new HotelskaSobaDTO(soba1.get());
 			}
 		}
+		
+		return null;
+	}
+	
+	public HotelskaSobaDTO updateRoomPrice(HotelskaSoba soba, Long id) {
+			Optional<HotelskaSoba> soba1 = hotelskaSobaRepository.findById(id);
+			if(soba1.isPresent()) {
+				soba1.get().setOriginalnaCena(soba.getOriginalnaCena());
+				hotelskaSobaRepository.save(soba1.get());
+				return new HotelskaSobaDTO(soba1.get());
+			}
 		
 		return null;
 	}

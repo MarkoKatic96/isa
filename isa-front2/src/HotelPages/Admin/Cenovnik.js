@@ -27,23 +27,22 @@ class Cenovnik extends Component{
                 console.log(res.data);
             })
         })
-    }
 
-    dodajClick=()=>{
-        this.props.history.push('/admin/add_room/' + this.state.korisnik.zaduzenZaId);
-    }
-
-    izmeniClick=(sobaId)=>{
-        this.props.history.push('/admin/edit_room/' + sobaId);
-    }
-
-    obrisiClick=(sobaId)=>{
-        var token = localStorage.getItem('jwtToken');
-        axios.delete("http://localhost:8080/sobe/" + sobaId, { headers: { Authorization: `Bearer ${token}` } })
+                    axios.get("http://localhost:8080/sobe/admin/all/" + a, { headers: { Authorization: `Bearer ${token}` } })
             .then(res=>{
+                this.setState({
+                    sobe: res.data
+                })
                 console.log(res.data);
-                this.componentDidMount();
             })
+    }
+
+    izmeniCenuClick=(sobaId)=>{
+        this.props.history.push('/admin/edit_price/' + sobaId);
+    }
+
+    vanrednaClick=(sobaId)=>{
+        this.props.history.push('/admin/single_prices/' + sobaId);
     }
 
     render(){
@@ -62,8 +61,8 @@ class Cenovnik extends Component{
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                    <button className="btn waves-effect waves-light green" id="izmeniSobuBtn" onClick={()=>{this.izmeniClick(soba.id)}}>Izmeni</button>
-                                    <button className="btn waves-effect waves-light green" id="obrisiSobuBtn" onClick={()=>{this.obrisiClick(soba.id)}}>Definisi vanrednu cenu nocenja</button>
+                                    <button className="btn waves-effect waves-light green" id="izmeniSobuBtn" onClick={()=>{this.izmeniCenuClick(soba.id)}}>Izmeni</button>
+                                    <button className="btn waves-effect waves-light green" id="obrisiSobuBtn" onClick={()=>{this.vanrednaClick(soba.id)}}>Vanredne cene nocenja</button>
                                 </div>
                             </div>
                         </div>
