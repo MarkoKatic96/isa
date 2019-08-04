@@ -14,7 +14,7 @@ class Home extends Component{
         return(  
             <table className="divHome">
                 <tbody>
-                <tr>
+                <tr>z
                     <td>
                         <div className="row">
                             <div className="col s12 m7">

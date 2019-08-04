@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter} from 'react-router-dom';
-import ChooseBar from '../ChooseBar';
+import UserHome from './User/UserHome';
 
 class Aviokompanije extends Component{
 
@@ -10,8 +10,7 @@ class Aviokompanije extends Component{
     render(){
         return(
             <div>
-                <ChooseBar/>
-                <p>EO ME</p>
+                <UserHome />
             </div>
         )
     }

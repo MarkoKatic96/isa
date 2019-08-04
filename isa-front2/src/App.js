@@ -6,7 +6,6 @@ import Home from './Home';
 import "./card.css"
 import Hotels from './HotelPages/Hotels';
 import Rooms from './HotelPages/Rooms';
-import Aviokompanije from './AvioPages/Aviokompanije';
 import RentACars from './RentACarPages/RentACars';
 import Login from './Login';
 import Register from './Register';
@@ -24,6 +23,7 @@ import EditPrice from './HotelPages/Admin/EditPrice';
 import AddSinglePrice from './HotelPages/Admin/AddSinglePrice';
 import SinglePrices from './HotelPages/Admin/SinglePrices';
 import Izvestaji from './HotelPages/Admin/Izvestaji';
+import AirlineIndex from './AvioPages/AirlineIndex';
 
 class App extends Component {
 
@@ -68,7 +68,7 @@ class App extends Component {
           <NavBar token = {this.state.token} setToken = {this.setToken} loggedIn={this.state.loggedIn} setEmail = {this.setEmail} logOut={this.logOut}/>
           <Route exact path = '/' render={Home}/>
           <Route path = '/hotels' render={props => <Hotels loggedIn={this.state.loggedIn}/>}/>
-          <Route path = '/companies' render={Aviokompanije}/>
+          <Route path = '/companies' render={AirlineIndex}/>
           <Route path = '/rent-a-cars' render={RentACars}/>
           <Route path = '/login' render={props => <Login setToken = {this.setToken} setEmail = {this.setEmail}  logIn={this.logIn}/>}/>
           <Route path = '/register' render={Register}/>
