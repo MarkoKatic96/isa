@@ -73,14 +73,29 @@ public class AvioKompanijaController
 	
 	
 	@DeleteMapping("/delete/{id}")
-//	@ApiOperation( value = "Removes one job candidate.", notes = "Returns true if candidate removed succesfully.", httpMethod="DELETE")
-//	@ApiResponses( value = { @ApiResponse( code = 200, message = "OK"),
-//							 @ApiResponse( code = 400, message = "BAD_REQUEST")})
 	public ResponseEntity<Boolean> deleteAvioKompanija(@PathVariable("id") Long id)
 	{
 		System.out.println("deleteAvioKompanija()");
 		
 		return (!avioService.deleteOne(id)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.OK); 
+	}
+	
+	
+	/*
+	 * OSTALE OPERACIJE
+	 */
+	
+	/*
+	 * Trazi prosecnu ocenu za jednu aviokompaniju na osnovu prosecnih ocena letova
+	 */
+	@GetMapping("/getavgrating/{id}")
+	public ResponseEntity<Float> getSrednjaOcenaAvioKompanije(@PathVariable("id") Long id)
+	{
+		System.out.println("getSrednjaOcenaAvioKompanije()");
+		
+		Float avg = avioService.getSrednjaOcenaAvioKompanije(id);
+		
+		return(avg == null) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<Float>(avg, HttpStatus.OK);
 	}
 
 }

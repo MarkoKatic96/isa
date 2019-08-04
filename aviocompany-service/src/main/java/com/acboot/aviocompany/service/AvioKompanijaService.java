@@ -96,4 +96,23 @@ public class AvioKompanijaService
 			return false;
 	}
 	
+	
+	
+	/*
+	 * OSTALE OPERACIJE
+	 */
+	
+
+	public Float getSrednjaOcenaAvioKompanije(Long id)
+	{
+		Optional<Float> avg = avioRepo.findAverageRating(id);
+		
+		if(avg.isPresent())
+		{
+			return avg.get();
+		}
+		
+		return null;
+	}
+	
 }

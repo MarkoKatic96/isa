@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.acboot.aviocompany.dto.KlasaDTO;
 import com.acboot.aviocompany.dto.LetDTO;
+import com.acboot.aviocompany.dto.PretragaDTO;
 import com.acboot.aviocompany.service.LetService;
 
 import io.swagger.annotations.Api;
@@ -102,6 +103,19 @@ public class LetController
 	/////////////////////////////////
 	
 	
+	/*
+	 * PRETRAGA KOJA OBUHVATA SVE OVE ISPOD POJEDINACNE
+	 */
+	@GetMapping("/searchflights")
+	public ResponseEntity<List<LetDTO>> searchLetove(@RequestBody PretragaDTO dto)
+	{		
+		System.out.println("searchLetove()");
+		
+		List<LetDTO> letovi = letService.searchLetove(dto);
+		
+		return(letovi.isEmpty()) ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<List<LetDTO>>(letovi, HttpStatus.OK); 
+	}
+	
 	
 	
 	/* (Y)
@@ -180,41 +194,22 @@ public class LetController
 	}
 	
 	
-//	/* (Y)
-//	 * Trazimo prosecnu ocenu za jedan let
-//	 * Prosledjujemo id leta
-//	 */
-//	@GetMapping("/getavgrating/{id}")
-//	@ApiOperation(value = "Get average rating for one flight.", notes = "Returns average.", httpMethod = "GET")
-//	@ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-//						   @ApiResponse(code = 404, message = "NOT_FOUND")
-//	})
-//	public ResponseEntity<Float> getAverageRating(@PathVariable("id") Long id)
-//	{
-//		Float avg = service.getAvgRating(id);
-//		
-//		return(avg != null) ? new ResponseEntity<Float>(avg, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//	}
-//	
-//	
-//	
-//	
-//	
-//	
-
-//	
-
-//	
+	/*
+	 * ADMIN OPERACIJE 
+	 */
+	 
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/*
+	 * Trazi prosecnu ocenu za jedan let na osnovu ocena korisnika (jedna karta jedna ocena)
+	 */
+	@GetMapping("/getavgrating/{id}")
+	public ResponseEntity<Float> getSrednjaOcenaLeta(@PathVariable("id") Long id)
+	{
+		System.out.println("getSrednjaOcenaLeta()");
+		
+		Float avg = letService.getSrednjaOcenaLeta(id);
+		
+		return(avg == null) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<Float>(avg, HttpStatus.OK);
+	}
 
 }

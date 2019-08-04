@@ -33,4 +33,10 @@ public interface LetRepository extends JpaRepository<Let, Long>
 	@Query(value = "select distinct f.id_leta, f.broj_leta, f.vreme_poletanja, f.vreme_sletanja, f.duzina_putovanja, f.broj_presedanja, f.prosecna_ocena, f.tip_puta, f.broj_osoba, f.ukupan_prihod, f.avio_kompanija, f.destinacija_poletanja, f.destinacija_sletanja from let f where f.tip_puta = :type ;", nativeQuery = true)
 	Optional<List<Let>> findFlightsByType(@Param("type") String type);
 
+	/*
+	 * Pronalazi srednju ocenu za jedan let
+	 */
+	@Query(value = "select avg(t.ocena) from karta t, let f where f.id_leta = :id ;", nativeQuery = true)
+	Optional<Float> findAverageRating(@Param("id") Long id);
+	
 }

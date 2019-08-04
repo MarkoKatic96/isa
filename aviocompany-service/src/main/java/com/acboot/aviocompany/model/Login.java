@@ -1,11 +1,9 @@
 package com.acboot.aviocompany.model;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,25 +13,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Karta
+public class Login 
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long idKarte;
+	private Long id; //ne treba ovo ovako, treba dto login objekat da se kreira, ima dosta da se menja
 	
-	@NotNull
-	private float cena;
-	
-	private short ocena;
-	
-	@NotNull
-	private boolean brzaRezervacija;
-	
-	@NotNull
-	private float popust;
-	
-	@ManyToOne
-    @JoinColumn(name="id_leta", nullable=false)
-    private Let let;
-	
+	private String email;
+	private String lozinka;
 }

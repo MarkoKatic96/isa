@@ -3,10 +3,8 @@ package com.acboot.aviocompany.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.acboot.aviocompany.converter.LetConverter;
 import com.acboot.aviocompany.dto.KlasaDTO;
 import com.acboot.aviocompany.dto.LetDTO;
+import com.acboot.aviocompany.dto.PretragaDTO;
 import com.acboot.aviocompany.model.Klasa;
 import com.acboot.aviocompany.model.Let;
 import com.acboot.aviocompany.repository.LetRepository;
@@ -143,6 +142,114 @@ public class LetService
 	 ///////////PRETRAGA//////////////
 	/////////////////////////////////
 	
+	/**
+	 * GENERALNA PRETRAGA
+	 * @return -> spisak letova koji zadovoljavaju kriterijume
+	 */
+	public List<LetDTO> searchLetove(PretragaDTO dto)
+	{
+		List<Let> SVI_LETOVI = letRepo.findAll();
+		
+		List<LetDTO> ZA_PODUDARANJE = new ArrayList<LetDTO>();
+		for(Let let : SVI_LETOVI)
+		{
+			ZA_PODUDARANJE.add(letConv.convertToDTO(let));
+		}
+		
+		List<LetDTO> retVal = new ArrayList<LetDTO>();
+		for(Let let : SVI_LETOVI)
+		{
+			retVal.add(letConv.convertToDTO(let));
+		}
+		
+		ArrayList<LetDTO> letoviDate = new ArrayList<LetDTO>();
+		ArrayList<LetDTO> letoviDestination = new ArrayList<LetDTO>();
+		ArrayList<LetDTO> letoviType = new ArrayList<LetDTO>();
+		ArrayList<LetDTO> letoviNumber = new ArrayList<LetDTO>();
+		ArrayList<LetDTO> letoviClass = new ArrayList<LetDTO>();
+		
+		//treba naci presek svih ovih
+		
+		//mora se uneti vreme od-do, ne moze samo jedno ili drugo (zbog query)
+		if(dto.getTime1() != null && dto.getTime2() != null)
+		{
+			Optional<List<Let>> letovi = letRepo.findFlightsByDate(dto.getTime1(), dto.getTime2());
+			
+			if(letovi.isPresent())
+			{
+				for(Let let : letovi.get())
+				{
+					letoviDate.add(letConv.convertToDTO(let));
+				}
+			}
+			retVal.retainAll(letoviDate);
+		}
+		
+		if(dto.getTakeOffDestination() != null && dto.getLandingDestination() != null)
+		{
+			Optional<List<Let>> letovi = letRepo.findFlightsByDestination(dto.getTakeOffDestination(), dto.getLandingDestination());
+			
+			if(letovi.isPresent())
+			{
+				for(Let let : letovi.get())
+				{
+					letoviDestination.add(letConv.convertToDTO(let));
+				}
+			}
+			retVal.retainAll(letoviDestination);
+		}
+		
+		//ako se izostavi ovaj parametar ne vraca nista, popravi to
+		//samo ovo je osetljivo na null exception wtff
+		if(dto.getType() != null || !dto.getType().equals(""))
+		{
+			Optional<List<Let>> letovi = letRepo.findFlightsByType(dto.getType());
+			
+			if(letovi.isPresent())
+			{
+				for(Let let : letovi.get())
+				{
+					letoviType.add(letConv.convertToDTO(let));
+				}
+			}
+			retVal.retainAll(letoviType);
+		}
+		
+		if(dto.getNumber() != null)
+		{
+			List<Let> letoviBroj = letRepo.findAll();
+			
+			for(Let let : letoviBroj)
+			{
+				if((letConv.convertToDTO(let).getBrojMesta() - letConv.convertToDTO(let).getBrojOsoba()) >= dto.getNumber())
+					letoviNumber.add(letConv.convertToDTO(let));
+			}
+			retVal.retainAll(letoviNumber);
+		}
+		
+		if(!dto.getKlase().isEmpty())
+		{
+			List<Let> letoviKlasa = letRepo.findAll();
+			
+			for(Let let : letoviKlasa)
+			{
+				for(Klasa klasa : let.getKlaseKojeLetSadrzi())
+				{
+					for(KlasaDTO str : dto.getKlase())
+					{
+						if(klasa.getNaziv().equals(str.getNaziv()))
+						{
+							letoviClass.add(letConv.convertToDTO(let));
+						}
+					}
+				}
+			}
+			retVal.retainAll(letoviClass);
+		}
+		
+		return retVal;
+	}
+	
 	
 
 	/*
@@ -213,7 +320,6 @@ public class LetService
 	 */
 	public List<LetDTO> searchLetoviPoBrojuMesta(Integer number)
 	{
-		
 		List<Let> letovi = letRepo.findAll();
 		
 		List<LetDTO> dtos = new ArrayList<LetDTO>();
@@ -253,8 +359,35 @@ public class LetService
 		
 		return dtos;
 	}
+	
+	
+	
+	/*
+	 * ADMIN OPERACIJE
+	 */
+	
+	
+	/*
+	 * Pronalazi prosecnu ocenu za jedan let
+	 * Trebalo bi da se poziva nakon svakog ocenjivanja od strane korisnika
+	 * Tako da u ril tajmu podesi prosecnu ocenu
+	 */
+	public Float getSrednjaOcenaLeta(Long id)
+	{
+		Optional<Float> avg = letRepo.findAverageRating(id);
+		
+		if(avg.isPresent())
+		{
+			Let let = letRepo.findById(id).get();
+			let.setProsecnaOcena(avg.get());
+			letRepo.save(let);
+			
+			return avg.get();
+		}
+		
+		return null;
+	}
 
 	
-	
-	
+
 }
