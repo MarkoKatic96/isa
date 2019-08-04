@@ -3,6 +3,8 @@ package com.isa.hoteli.hoteliservice.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.isa.hoteli.hoteliservice.dto.CenaNocenjaDTO;
 import com.isa.hoteli.hoteliservice.dto.RezervacijeDTO;
 import com.isa.hoteli.hoteliservice.model.CenaNocenja;
+import com.isa.hoteli.hoteliservice.model.Korisnik;
 import com.isa.hoteli.hoteliservice.model.Posecenost;
 import com.isa.hoteli.hoteliservice.model.Rezervacije;
+import com.isa.hoteli.hoteliservice.model.Rola;
+import com.isa.hoteli.hoteliservice.service.KorisnikService;
 import com.isa.hoteli.hoteliservice.service.RezervacijeService;
 
 @RestController
@@ -27,6 +32,9 @@ public class RezervacijeController {
 
 	@Autowired
 	private RezervacijeService rezervacijeService;
+	
+	@Autowired
+	private KorisnikService korisnikService;
 	
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	public ResponseEntity<List<RezervacijeDTO>> getReservations(){
@@ -86,39 +94,63 @@ public class RezervacijeController {
 	}
 	
 	@RequestMapping(value="/posecenost/dnevna", method = RequestMethod.POST)
-	public int dnevnaPosecenost(@RequestBody Posecenost posecenost){
-		int brojOsoba = rezervacijeService.dnevnaPosecenost(posecenost.getId(), posecenost.getDate());
-		return brojOsoba;
+	public int dnevnaPosecenost(@RequestBody Posecenost posecenost, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==posecenost.getId()) {
+			int brojOsoba = rezervacijeService.dnevnaPosecenost(posecenost.getId(), posecenost.getDate());
+			return brojOsoba;
+		}
+		return -1;
 	}
 	
 	@RequestMapping(value="/posecenost/nedeljna", method = RequestMethod.POST)
-	public int nedeljnaPosecenost(@RequestBody Posecenost posecenost){
-		int brojOsoba = rezervacijeService.nedeljnaPosecenost(posecenost.getId(), posecenost.getDate());
-		return brojOsoba;
+	public int nedeljnaPosecenost(@RequestBody Posecenost posecenost, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==posecenost.getId()) {
+			int brojOsoba = rezervacijeService.nedeljnaPosecenost(posecenost.getId(), posecenost.getDate());
+			return brojOsoba;
+		}
+		return -1;
 	}
 	
 	@RequestMapping(value="/posecenost/mesecna", method = RequestMethod.POST)
-	public int mesecnaPosecenost(@RequestBody Posecenost posecenost){
-		int brojOsoba = rezervacijeService.mesecnaPosecenost(posecenost.getId(), posecenost.getDate());
-		return brojOsoba;
+	public int mesecnaPosecenost(@RequestBody Posecenost posecenost, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==posecenost.getId()) {
+			int brojOsoba = rezervacijeService.mesecnaPosecenost(posecenost.getId(), posecenost.getDate());
+			return brojOsoba;
+		}
+		return -1;
 	}
 	
 	@RequestMapping(value="/prihodi/nedeljni", method = RequestMethod.POST)
-	public float nedeljniPrihodi(@RequestBody Posecenost posecenost){//posecenost ima iste atr koji trebaju i za ovo. 
-		float prihod = rezervacijeService.nedeljniPrihod(posecenost.getId(), posecenost.getDate());
-		return prihod;
+	public float nedeljniPrihodi(@RequestBody Posecenost posecenost, HttpServletRequest req){//posecenost ima iste atr koji trebaju i za ovo. 
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==posecenost.getId()) {
+			float prihod = rezervacijeService.nedeljniPrihod(posecenost.getId(), posecenost.getDate());
+			return prihod;
+		}
+		return (float) -1.0;
 	}
 	
 	@RequestMapping(value="/prihodi/mesecni", method = RequestMethod.POST)
-	public float mesecniPrihodi(@RequestBody Posecenost posecenost){//posecenost ima iste atr koji trebaju i za ovo. 
-		float prihod = rezervacijeService.mesecniPrihod(posecenost.getId(), posecenost.getDate());
-		return prihod;
+	public float mesecniPrihodi(@RequestBody Posecenost posecenost, HttpServletRequest req){//posecenost ima iste atr koji trebaju i za ovo. 
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==posecenost.getId()) {
+			float prihod = rezervacijeService.mesecniPrihod(posecenost.getId(), posecenost.getDate());
+			return prihod;
+		}
+		return (float) -1.0;
 	}
 	
 	@RequestMapping(value="/prihodi/godisnji", method = RequestMethod.POST)
-	public float godisnjiPrihodi(@RequestBody Posecenost posecenost){//posecenost ima iste atr koji trebaju i za ovo. 
-		float prihod = rezervacijeService.godisnjiPrihod(posecenost.getId(), posecenost.getDate());
-		return prihod;
+	public float godisnjiPrihodi(@RequestBody Posecenost posecenost, HttpServletRequest req){//posecenost ima iste atr koji trebaju i za ovo.
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==posecenost.getId()) {
+			float prihod = rezervacijeService.godisnjiPrihod(posecenost.getId(), posecenost.getDate());
+			return prihod;
+		}
+		return (float) -1.0;
 	}
 	
 }
