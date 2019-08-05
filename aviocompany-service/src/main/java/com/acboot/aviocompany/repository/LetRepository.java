@@ -22,10 +22,10 @@ public interface LetRepository extends JpaRepository<Let, Long>
 	Optional<List<Let>> findFlightsByDate(@Param("time1") LocalDateTime time1, @Param("time2") LocalDateTime time2);
 	
 	/*
-	 * Pretraga letova po destinacijama (preko ID-ja destinacije)
+	 * Pretraga letova po destinacijama (preko naziva destinacije)
 	 */
-	@Query(value = "select distinct f.id_leta, f.broj_leta, f.vreme_poletanja, f.vreme_sletanja, f.duzina_putovanja, f.broj_presedanja, f.prosecna_ocena, f.tip_puta, f.broj_osoba, f.ukupan_prihod, f.avio_kompanija, f.destinacija_poletanja, f.destinacija_sletanja from let f where destinacija_poletanja = :fromId and destinacija_sletanja = :toId ;", nativeQuery = true)
-	Optional<List<Let>> findFlightsByDestination(@Param("fromId") Long fromId, @Param("toId") Long toId);
+	@Query(value = "select distinct f.id_leta, f.broj_leta, f.vreme_poletanja, f.vreme_sletanja, f.duzina_putovanja, f.broj_presedanja, f.prosecna_ocena, f.tip_puta, f.broj_osoba, f.ukupan_prihod, f.avio_kompanija, f.destinacija_poletanja, f.destinacija_sletanja from let f where destinacija_poletanja = :takeOffDest and destinacija_sletanja = :landingDest ;", nativeQuery = true)
+	Optional<List<Let>> findFlightsByDestination(@Param("takeOffDest") Long takeOffDest, @Param("landingDest") Long landingDest);
 
 	/*
 	 * Pretraga letova po tipu leta

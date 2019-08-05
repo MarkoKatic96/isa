@@ -86,7 +86,9 @@ public class LetController
 	
 	////////////////////////////////////////////
 	
-
+	/*
+	 * Povezivanje letova i klasa
+	 */
 	@PutMapping("/addclass")
 	public ResponseEntity<LetDTO> addKlaseLeta(@RequestBody LetDTO skills)
 	{
@@ -98,6 +100,19 @@ public class LetController
 	}
 	
 	
+	/*
+	 * Vraca id aviokompanije za koju je vezan let koji je prosledjen preko id-ja
+	 */
+	@GetMapping("/getcompanyid/{flightid}")
+	public ResponseEntity<Long> getIdKompanije(@PathVariable("flightid") Integer idLeta)
+	{
+		System.out.println("getIdKompanije()");
+		
+		Long idKompanije = letService.getIdKompanije(idLeta);
+		
+		return (idKompanije == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<Long>(idKompanije, HttpStatus.OK);
+	}
+	
 	  /////////////////////////////////
 	 /////////////////////////////////
 	/////////////////////////////////
@@ -107,11 +122,11 @@ public class LetController
 	 * PRETRAGA KOJA OBUHVATA SVE OVE ISPOD POJEDINACNE
 	 */
 	@PostMapping("/searchflights")
-	public ResponseEntity<List<LetDTO>> searchLetove(@RequestBody PretragaDTO dto)
+	public ResponseEntity<List<LetDTO>> searchLetove(@RequestBody PretragaDTO pretraga)
 	{		
 		System.out.println("searchLetove()");
 		
-		List<LetDTO> letovi = letService.searchLetove(dto);
+		List<LetDTO> letovi = letService.searchLetove(pretraga);
 		
 		return(letovi.isEmpty()) ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<List<LetDTO>>(letovi, HttpStatus.OK); 
 	}

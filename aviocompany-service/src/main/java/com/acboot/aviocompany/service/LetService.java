@@ -135,6 +135,24 @@ public class LetService
 		return letConv.convertToDTO(let.get());
 	}	
 	
+	/*
+	 * Vraca id kompanije za odredjeni let
+	 */
+	public Long getIdKompanije(Integer idLeta)
+	{
+		Long idKompanije = null;
+		
+		for(Let let : letRepo.findAll())
+		{
+			if(let.getIdLeta() == idLeta)
+				idKompanije = let.getAviokompanija().getIdAvioKompanije();
+			else
+				continue;
+		}
+		
+		return idKompanije;
+	}
+	
 	
 	
 	
@@ -184,6 +202,7 @@ public class LetService
 			}
 			retVal.retainAll(letoviDate);
 		}
+	
 		
 		if(dto.getTakeOffDestination() != null && dto.getLandingDestination() != null)
 		{
@@ -387,6 +406,8 @@ public class LetService
 		
 		return null;
 	}
+
+	
 
 	
 
