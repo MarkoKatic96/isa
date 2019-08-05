@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter} from 'react-router-dom';
-import UserHome from './User/UserHome';
+import FlightsSearch from './User/FlightsSearch';
 
 class Aviokompanije extends Component{
 
@@ -10,7 +10,7 @@ class Aviokompanije extends Component{
     render(){
         return(
             <div>
-                <UserHome />
+                <FlightsSearch />
             </div>
         )
     }
