@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import axios from 'axios'
 import NavBar from './NavBar';
 import Home from './Home';
 import "./card.css"
@@ -24,6 +23,9 @@ import AddSinglePrice from './HotelPages/Admin/AddSinglePrice';
 import SinglePrices from './HotelPages/Admin/SinglePrices';
 import Izvestaji from './HotelPages/Admin/Izvestaji';
 import AirlineIndex from './AvioPages/AirlineIndex';
+import FlightsSearch from './AvioPages/User/FlightsSearch';
+import FlightInfo from './AvioPages/User/FlightInfo';
+import AvioCompanyInfo from './AvioPages/User/AvioCompanyInfo';
 
 class App extends Component {
 
@@ -87,6 +89,10 @@ class App extends Component {
           <Route path = '/admin/single_prices/:sobaId' render={SinglePrices}/>
           <Route path = '/admin/add_price/:sobaId' render={AddSinglePrice}/>
           <Route path = '/izvestaji' render={Izvestaji}/>
+
+          <Route path = '/flsearch' render={() => <FlightsSearch />} />
+          <Route path = '/flinfo/:flightid' render={() => <FlightInfo />} />
+          <Route path = '/companyinfo/:flightid' render={() => <AvioCompanyInfo />} />
         </div>
       </BrowserRouter>
     );

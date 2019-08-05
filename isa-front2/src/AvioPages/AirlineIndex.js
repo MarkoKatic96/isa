@@ -1,19 +1,13 @@
 import React, { Component } from 'react'
 import { withRouter} from 'react-router-dom';
-import FlightsSearch from './User/FlightsSearch';
+import AllFlights from './User/AllFlights';
 
-class Aviokompanije extends Component{
+const AirlineIndex = props => {
+    return(
+        <div>
+            <AllFlights />
+        </div>
+    )
+};
 
-    componentDidMount() {
-    }
-
-    render(){
-        return(
-            <div>
-                <FlightsSearch />
-            </div>
-        )
-    }
-
-}
-export default withRouter(Aviokompanije)
+export default withRouter(AirlineIndex)
