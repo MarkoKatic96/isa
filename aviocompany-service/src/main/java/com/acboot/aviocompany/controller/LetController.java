@@ -106,7 +106,7 @@ public class LetController
 	/*
 	 * PRETRAGA KOJA OBUHVATA SVE OVE ISPOD POJEDINACNE
 	 */
-	@GetMapping("/searchflights")
+	@PostMapping("/searchflights")
 	public ResponseEntity<List<LetDTO>> searchLetove(@RequestBody PretragaDTO dto)
 	{		
 		System.out.println("searchLetove()");
