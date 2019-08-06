@@ -40,15 +40,15 @@ class AllFlights extends Component {
                                         <span className="card-title"><b>Broj leta: {flight.brojLeta}</b></span>
                                         <div className="divider white"></div>
                                         <br />
-                                        <p>Destinacija poletanja: {flight.destinacijaPoletanja.naziv}</p>
-                                        <p>Destinacija sletanja: {flight.destinacijaSletanja.naziv}</p>
-                                        <p>Vreme poletanja: {flight.vremePoletanja}</p>
-                                        <p>Vreme sletanja: {flight.vremeSletanja}</p>
+                                        <p>Destinacija poletanja: {flight.destinacijaPoletanja.naziv}</p> <button className="btn waves-effect waves-light blue" id="destsinfo-btn" onClick={() => { this.showDestinationsInfo() }}>Informacije o destinaciji</button>
+                                        <p>Destinacija sletanja: {flight.destinacijaSletanja.naziv}</p> <button className="btn waves-effect waves-light blue" id="destsinfo-btn" onClick={() => { this.showDestinationsInfo() }}>Informacije o destinaciji</button> <br /><br />
+                                        <p>Vreme poletanja: {flight.vremePoletanja}</p><br />
+                                        <p>Vreme sletanja: {flight.vremeSletanja}</p><br />
                                         <p>Broj slobodnih mesta: {flight.brojMesta - flight.brojOsoba}</p>
                                     </div>
                                     <div className="divider white"></div>
                                     <div className="card-action">
-                                        <button className="btn waves-effect waves-light blue" id="letinfo-btn" onClick={() => { this.showFlightInfo(flight.idLeta) }}>Informacije o letu</button>
+                                        <button className="btn waves-effect waves-light red" id="letinfo-btn" onClick={() => { this.showFlightInfo(flight.idLeta) }}>Informacije o letu</button>
                                         </div>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@ class AllFlights extends Component {
         return (
             <div>
                 <br />
-                <Link to="/flsearch"><button className="btn red center lighten-1 z-depth-0">Pretrazi letove</button></Link>
+                <Link to="/flsearch"><button className="btn green center lighten-1 z-depth-0">Pretrazi letove</button></Link>
                 <div className="center container">
                     <h3 className="left-align container">Spisak letova:</h3>
                 </div>

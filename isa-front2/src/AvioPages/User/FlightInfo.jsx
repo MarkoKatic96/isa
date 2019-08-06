@@ -30,18 +30,17 @@ class FlightInfo extends Component {
             }
         )
 
-        
+
 
     }
 
-    componentWillUnmount()
-    {
-        
-    }
-
-    showCompanyInfo = () =>
-    {
+    showCompanyInfo = () => {
         this.props.history.push('/companyinfo/' + this.state.aviokompanija);
+    }
+
+    reserveTicket = (idLeta) =>
+    {
+        this.props.history.push('/reservation/' + idLeta);
     }
 
     render() {
@@ -64,8 +63,8 @@ class FlightInfo extends Component {
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                    <button className="btn waves-effect waves-light green" id="avioinfo-btn" onClick={() => { this.showCompanyInfo() }}>Informacije o aviokompaniji</button>
-                                    <button className="btn waves-effect waves-light red" id="rezervisi-btn" onClick={() => { this.reserveTicket(this.state.let.idLeta) }}>Rezervacija</button>
+                                <button className="btn waves-effect waves-light green" id="avioinfo-btn" onClick={() => { this.showCompanyInfo() }}>Informacije o aviokompaniji</button>
+                                    <button className="btn waves-effect waves-light red" id="rezervisi-btn" onClick={() => { this.reserveTicket(this.state.let.idLeta) }}>Rezervacija</button><br />
                                 </div>
                             </div>
                         </div>
