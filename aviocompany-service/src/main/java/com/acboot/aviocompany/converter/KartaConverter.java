@@ -12,6 +12,9 @@ public class KartaConverter
 	@Autowired
 	private LetConverter letConv;
 	
+	@Autowired
+	private KorisnikConverter korConv;
+	
 	public KartaDTO convertToDTO(Karta model)
 	{
 		KartaDTO dto = new KartaDTO();
@@ -22,6 +25,8 @@ public class KartaConverter
 		dto.setBrzaRezervacija(model.isBrzaRezervacija());
 		dto.setPopust(model.getPopust());
 		dto.setLet(letConv.convertToDTO(model.getLet()));
+		dto.setVremeRezervisanja(model.getVremeRezervisanja());
+		dto.setKorisnik(korConv.convertToDTO(model.getKorisnik()));
 		
 		return dto;
 	}
@@ -36,6 +41,9 @@ public class KartaConverter
 		model.setBrzaRezervacija(dto.isBrzaRezervacija());
 		model.setPopust(dto.getPopust());
 		model.setLet(letConv.convertFromDTO(dto.getLet()));
+		model.setVremeRezervisanja(dto.getVremeRezervisanja());
+		model.setKorisnik(korConv.convertFromDTO(dto.getKorisnik()));
+		
 		
 		return model;
 		

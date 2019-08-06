@@ -1,5 +1,7 @@
 package com.acboot.aviocompany.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,4 +19,7 @@ public class KartaDTO
 	private float popust;
 
 	private LetDTO let;
+	
+	private LocalDateTime vremeRezervisanja;
+	private KorisnikDTO korisnik;
 }

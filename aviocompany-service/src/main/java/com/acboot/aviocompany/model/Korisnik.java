@@ -1,10 +1,13 @@
 package com.acboot.aviocompany.model;
 
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.acboot.aviocompany.dto.KorisnikDTO;
 
@@ -32,6 +35,9 @@ public class Korisnik
 	private Rola rola;
 //	private Long zaduzenZaId;
 	private boolean prviPutLogovan;
+	
+	@OneToMany(mappedBy="korisnik")
+    private List<Karta> spisakRezervisanihKarata;
 	
 	//treba dodati rezervacije (rezervacije je entitet povezan sa kartom)
 

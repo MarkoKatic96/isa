@@ -23,6 +23,7 @@ public class KorisnikConverter
 		dto.setRola(model.getRola());
 		dto.setPrviPutLogovan(model.isPrviPutLogovan());
 		
+		
 		return dto;
 	}
 	

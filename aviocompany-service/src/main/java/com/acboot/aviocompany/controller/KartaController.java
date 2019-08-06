@@ -79,5 +79,43 @@ public class KartaController
 		
 		return (!kartaService.deleteOne(id)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.OK); 
 	}
+	
+	
+	/*
+	 * OSTALE OPERACIJE
+	 */
+
+	/*
+	 * Rezervacija jedne karte od strane korisnika
+	 */
+	@PostMapping("/reserveone/")
+	public ResponseEntity<Boolean> rezervisiJednuKartu(@RequestBody List<Long> rezervacija)
+	{
+		System.out.println("rezervisiJednuKartu()");
+		
+		Long idKorisnika, idKarte;
+		
+		Object[] rezz = rezervacija.toArray();
+		
+		idKorisnika = (Long) rezz[0];
+		idKarte = (Long) rezz[1];
+		
+		System.out.println("ID_KORISNIK: " + idKorisnika + "\nID_KARTE: " + idKarte);
+		
+		return (!kartaService.rezervisiJednuKartu(idKorisnika, idKarte)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+	}
+	
+	/*
+	 * Rezervacija vise karata odjednom od strane korisnika
+	 */
+	@PostMapping("/reservemore/{userid}")
+	public ResponseEntity<String> rezervisiViseKarata(@PathVariable("userid") Long idKorisnika, @RequestBody List<KartaDTO> karte)
+	{
+		System.out.println("rezervisiViseKarata()");
+	
+		String retVal = kartaService.rezervisiViseKarata(idKorisnika, karte);
+		
+		return (retVal.equals("REZERVISANE")) ? new ResponseEntity<String>(retVal, HttpStatus.CREATED) : new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST);
+	}
 
 }
