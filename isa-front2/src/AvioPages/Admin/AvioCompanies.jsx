@@ -52,7 +52,7 @@ class AvioCompanies extends Component {
 
         if(this.state.name !== "" && this.state.address !== "" && this.state.description !== "")
         {
-            console.log(this.state.company)
+            console.log(localStorage.getItem('rola'))
             axios.put("http://localhost:8221/aviocompany/update/" + this.state.company.idAvioKompanije, 
             {
                 naziv: this.state.name, adresa: this.state.address, opis: this.state.description
@@ -61,7 +61,7 @@ class AvioCompanies extends Component {
                     alert("Informacije aviokompanije su uspesno izmenjene.")
                     this.props.history.push("/");
                 }).catch(error=>{
-                    alert("Niste ovlasceni da napravite ovu izmenu.");
+                    console.log(error)
                 })
         }
         else

@@ -24,7 +24,7 @@ class NavBar extends Component{
                     </ul>
         }else if(rola=="ADMIN_AVIO_KOMPANIJE"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
-                        <li><Link to="/adcompanies">Avio kompanije</Link></li>
+                        <li><Link to="/adcompanies/edit">Avio kompanije</Link></li>
                         <li><Link to="/adflights">Letovi</Link></li>
                         <li><Link to="/adprices">Cene</Link></li>
                         <li><Link to="/adreports">Izvestaji</Link></li>
