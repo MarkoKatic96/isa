@@ -23,7 +23,7 @@ public class KorisnikDTO
 	private String telefon;
 	private boolean aktiviran;
 	private Rola rola;
-//	private Long zaduzenZaId;
+	private Long zaduzenZaId;
 	private boolean prviPutLogovan;
 	private List<KorisnikDTO> prijateljiKorisnika;
 	private List<KorisnikDTO> zahteviKorisnika;
@@ -39,7 +39,7 @@ public class KorisnikDTO
 		this.telefon = korisnik.getTelefon();
 		this.aktiviran = korisnik.isAktiviran();
 		this.rola = korisnik.getRola();
-//		this.zaduzenZaId = korisnik.getZaduzenZaId();
+		this.zaduzenZaId = korisnik.getZaduzenZaId();
 		this.prviPutLogovan = korisnik.isPrviPutLogovan();
 	}
 

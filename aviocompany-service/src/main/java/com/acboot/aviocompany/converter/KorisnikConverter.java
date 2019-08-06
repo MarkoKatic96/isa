@@ -28,6 +28,7 @@ public class KorisnikConverter
 		dto.setTelefon(model.getTelefon());
 		dto.setAktiviran(model.isAktiviran());
 		dto.setRola(model.getRola());
+		dto.setZaduzenZaId(model.getZaduzenZaId());
 		dto.setPrviPutLogovan(model.isPrviPutLogovan());
 		
 		List<KorisnikDTO> korList = new ArrayList<KorisnikDTO>();
@@ -65,6 +66,7 @@ public class KorisnikConverter
 		model.setTelefon(dto.getTelefon());
 		model.setAktiviran(dto.isAktiviran());
 		model.setRola(dto.getRola());
+		model.setZaduzenZaId(dto.getZaduzenZaId());
 		model.setPrviPutLogovan(dto.isPrviPutLogovan());
 		
 		List<Korisnik> korList = new ArrayList<Korisnik>();

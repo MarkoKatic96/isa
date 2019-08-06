@@ -2,6 +2,8 @@ package com.acboot.aviocompany.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.acboot.aviocompany.dto.AvioKompanijaDTO;
+import com.acboot.aviocompany.model.Korisnik;
+import com.acboot.aviocompany.model.Rola;
 import com.acboot.aviocompany.service.AvioKompanijaService;
+import com.acboot.aviocompany.service.KorisnikService;
 
 import io.swagger.annotations.Api;
 
@@ -28,6 +33,9 @@ public class AvioKompanijaController
 {
 	@Autowired
 	private AvioKompanijaService avioService;
+	
+	@Autowired
+	private KorisnikService korServ;
 	
 	
 	@GetMapping("/getone/{id}")
@@ -60,15 +68,22 @@ public class AvioKompanijaController
 		return (avioService.saveOne(dto) == null) ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST) : new ResponseEntity<AvioKompanijaDTO>(dto, HttpStatus.CREATED);
 	}
 	
-	
+	/*
+	 * ADMIN
+	 */
 	@PutMapping("/update/{id}")
-	public ResponseEntity<AvioKompanijaDTO> updateAvioKompanija(@PathVariable("id") Long id, @RequestBody AvioKompanijaDTO dto)
+	public ResponseEntity<AvioKompanijaDTO> updateAvioKompanija(@PathVariable("id") String id, @RequestBody AvioKompanijaDTO dto, HttpServletRequest req)
 	{
 		System.out.println("updateAvioKompanija()");
 		
-		AvioKompanijaDTO avio = avioService.updateOne(id, dto);
+		Korisnik k = korServ.zaTokene(req);
+		if(k != null && k.getRola().equals(Rola.ADMIN_AVIO_KOMPANIJE) && k.getZaduzenZaId() == Long.parseLong(id, 10))
+		{
+			AvioKompanijaDTO avio = avioService.updateOne(Long.parseLong(id, 10), dto);
+			return (avio == null) ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST) : new ResponseEntity<AvioKompanijaDTO>(avio, HttpStatus.CREATED);
+		}
 		
-		return (avio == null) ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST) : new ResponseEntity<AvioKompanijaDTO>(avio, HttpStatus.CREATED);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	
@@ -79,7 +94,7 @@ public class AvioKompanijaController
 		
 		return (!avioService.deleteOne(id)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.OK); 
 	}
-	
+
 	
 	/*
 	 * OSTALE OPERACIJE

@@ -37,6 +37,94 @@ public class KorisnikController
 	@Autowired
 	private KorisnikService korService;
 	
+	
+	@GetMapping("/all")
+	public ResponseEntity<List<KorisnikDTO>> getKorisnici(HttpServletRequest req)
+	{
+		Korisnik k = korService.zaTokene(req);
+		
+		if(k != null && k.getRola().equals(Rola.MASTER_ADMIN))
+		{
+			List<KorisnikDTO> dto = new ArrayList<KorisnikDTO>();
+			List<Korisnik> lista = korService.getUsers();
+			
+			for(Korisnik item : lista)
+			{
+				dto.add(new KorisnikDTO(item));
+			}
+			return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	@RequestMapping(value="/{id}", method = RequestMethod.GET)
+	public ResponseEntity<KorisnikDTO> getUserById(@PathVariable("id") Long id){
+		if(korService.getUserById(id)!=null) {
+			KorisnikDTO dto = new KorisnikDTO(korService.getUserById(id));
+			return new ResponseEntity<KorisnikDTO>(dto, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	@RequestMapping(value="/all/{email}", method = RequestMethod.GET)
+	public ResponseEntity<KorisnikDTO> getUserByEmail(@PathVariable("email") String email){
+		
+		System.out.println("preuzmiRolu()");
+		
+		if(korService.getUserByEmail(email)!=null) {
+			KorisnikDTO dto = new KorisnikDTO(korService.getUserByEmail(email));
+			return new ResponseEntity<KorisnikDTO>(dto, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	@RequestMapping(value="/", method = RequestMethod.POST)
+	public ResponseEntity<KorisnikDTO> createUser(@RequestBody KorisnikDTO dto){
+		Korisnik obj = new Korisnik(dto);
+		obj.setRola(Rola.KORISNIK);
+		KorisnikDTO returnType = korService.createKorisnika(obj);
+		if(returnType!=null) {
+			return new ResponseEntity<>(returnType, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteUserById(@PathVariable("id") Long id){
+		return new ResponseEntity<String>(korService.deleteKorisnika(id), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<KorisnikDTO> updateUserById(@PathVariable("id") Long id, @RequestBody KorisnikDTO dto){
+		Korisnik obj = new Korisnik(dto);
+		KorisnikDTO returnTip = korService.updateKorisnika(obj, id);
+		if(returnTip!=null) {
+			return new ResponseEntity<>(returnTip, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<String> login(@RequestBody Login login){
+		
+		System.out.println("login()");
+		
+		String email = login.getEmail();
+		String lozinka = login.getLozinka();
+		String jwt = korService.login(email, lozinka);
+		return (jwt!=null) ? new ResponseEntity<String>(jwt, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	
+	/*
+	 * OSTALE OPERACIJE
+	 */
+	
+	
 	/*
 	 * U zaglavlju prima id korisnika koji salje zahtev, telo sadrzi email korisnika kome se salje zahtev
 	 */
@@ -63,82 +151,4 @@ public class KorisnikController
 		
 		return (!retVal.equals("SUCCESS")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.OK);
 	}
-//	
-//	@GetMapping("/all")
-//	public ResponseEntity<List<KorisnikDTO>> getKorisnici(HttpServletRequest req)
-//	{
-//		Korisnik k = korService.zaTokene(req);
-//		
-//		if(k != null && k.getRola().equals(Rola.MASTER_ADMIN))
-//		{
-//			List<KorisnikDTO> dto = new ArrayList<KorisnikDTO>();
-//			List<Korisnik> lista = korService.getUsers();
-//			
-//			for(Korisnik item : lista)
-//			{
-//				dto.add(new KorisnikDTO(item));
-//			}
-//			return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
-//		}
-//		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//	}
-//	
-//	@RequestMapping(value="/{id}", method = RequestMethod.GET)
-//	public ResponseEntity<KorisnikDTO> getUserById(@PathVariable("id") Long id){
-//		if(korService.getUserById(id)!=null) {
-//			KorisnikDTO dto = new KorisnikDTO(korService.getUserById(id));
-//			return new ResponseEntity<KorisnikDTO>(dto, HttpStatus.OK);
-//		}
-//		
-//		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//	}
-//	
-//	@RequestMapping(value="/all/{email}", method = RequestMethod.GET)
-//	public ResponseEntity<KorisnikDTO> getUserByEmail(@PathVariable("email") String email){
-//		if(korService.getUserByEmail(email)!=null) {
-//			KorisnikDTO dto = new KorisnikDTO(korService.getUserByEmail(email));
-//			return new ResponseEntity<KorisnikDTO>(dto, HttpStatus.OK);
-//		}
-//		
-//		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//	}
-//	
-//	@RequestMapping(value="/", method = RequestMethod.POST)
-//	public ResponseEntity<KorisnikDTO> createUser(@RequestBody KorisnikDTO dto){
-//		Korisnik obj = new Korisnik(dto);
-//		obj.setRola(Rola.KORISNIK);
-//		KorisnikDTO returnType = korService.createKorisnika(obj);
-//		if(returnType!=null) {
-//			return new ResponseEntity<>(returnType, HttpStatus.OK);
-//		}
-//		
-//		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//	}
-//	
-//	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-//	public ResponseEntity<String> deleteUserById(@PathVariable("id") Long id){
-//		return new ResponseEntity<String>(korService.deleteKorisnika(id), HttpStatus.OK);
-//	}
-//	
-//	@RequestMapping(value="/{id}", method = RequestMethod.PUT)
-//	public ResponseEntity<KorisnikDTO> updateUserById(@PathVariable("id") Long id, @RequestBody KorisnikDTO dto){
-//		Korisnik obj = new Korisnik(dto);
-//		KorisnikDTO returnTip = korService.updateKorisnika(obj, id);
-//		if(returnTip!=null) {
-//			return new ResponseEntity<>(returnTip, HttpStatus.OK);
-//		}
-//		
-//		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//	}
-//	
-//	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
-//	public ResponseEntity<String> login(@RequestBody Login login){
-//		String email = login.getEmail();
-//		String lozinka = login.getLozinka();
-//		String jwt = korService.login(email, lozinka);
-//		return (jwt!=null) ? new ResponseEntity<String>(jwt, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//	}
-//	
-	
-	
 }

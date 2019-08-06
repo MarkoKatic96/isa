@@ -36,7 +36,7 @@ public class Korisnik
 	private String telefon;
 	private boolean aktiviran;
 	private Rola rola;
-//	private Long zaduzenZaId;
+	private Long zaduzenZaId;
 	private boolean prviPutLogovan;
 	
 	@OneToMany(mappedBy="korisnik")
