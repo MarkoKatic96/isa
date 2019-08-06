@@ -26,14 +26,14 @@ public class AvioKompanijaConverter
 		dto.setAdresa(model.getAdresa());
 		dto.setOpis(model.getOpis());
 		
-		List<DestinacijaDTO> destList = new ArrayList<DestinacijaDTO>();
-		
-		for(Destinacija dest : model.getDestinacijeNaKojimaPosluje())
-		{
-			destList.add(destConv.convertToDTO(dest));
-		}
-		
-		dto.setDestinacijeNaKojimaPosluje(destList);
+//		List<DestinacijaDTO> destList = new ArrayList<DestinacijaDTO>();
+//		
+//		for(Destinacija dest : model.getDestinacijeNaKojimaPosluje())
+//		{
+//			destList.add(destConv.convertToDTO(dest));
+//		}
+//		
+//		dto.setDestinacijeNaKojimaPosluje(destList);
 		
 		return dto;
 	}
@@ -47,14 +47,14 @@ public class AvioKompanijaConverter
 		model.setAdresa(dto.getAdresa());
 		model.setOpis(dto.getOpis());
 		
-		List<Destinacija> destList = new ArrayList<Destinacija>();
-		
-		for(DestinacijaDTO dest : dto.getDestinacijeNaKojimaPosluje())
-		{
-			destList.add(destConv.convertFromDTO(dest));
-		}
-		
-		model.setDestinacijeNaKojimaPosluje(destList);
+//		List<Destinacija> destList = new ArrayList<Destinacija>();
+//		
+//		for(DestinacijaDTO dest : dto.getDestinacijeNaKojimaPosluje())
+//		{
+//			destList.add(destConv.convertFromDTO(dest));
+//		}
+//		
+//		model.setDestinacijeNaKojimaPosluje(destList);
 		
 		return model;
 		

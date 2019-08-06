@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.print.attribute.standard.Destination;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,11 +71,13 @@ public class AvioKompanijaService
 		
 		if(avio.isPresent())
 		{
-			avio.get().setIdAvioKompanije(avioConv.convertFromDTO(dto).getIdAvioKompanije());
+//			avio.get().setIdAvioKompanije(avioConv.convertFromDTO(dto).getIdAvioKompanije());
 			avio.get().setNaziv(avioConv.convertFromDTO(dto).getNaziv());
 			avio.get().setAdresa(avioConv.convertFromDTO(dto).getAdresa());
 			avio.get().setOpis(avioConv.convertFromDTO(dto).getOpis());
-			avio.get().setDestinacijeNaKojimaPosluje(avioConv.convertFromDTO(dto).getDestinacijeNaKojimaPosluje());
+			
+//			if(!avio.get().getDestinacijeNaKojimaPosluje().isEmpty())
+				avio.get().setDestinacijeNaKojimaPosluje(avioConv.convertFromDTO(dto).getDestinacijeNaKojimaPosluje());
 			
 			avioRepo.save(avio.get());
 			
@@ -82,6 +86,7 @@ public class AvioKompanijaService
 		else
 			return null;
 	}
+	
 	
 	public boolean deleteOne(Long id)
 	{
