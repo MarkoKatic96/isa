@@ -27,6 +27,11 @@ import FlightsSearch from './AvioPages/User/FlightsSearch';
 import FlightInfo from './AvioPages/User/FlightInfo';
 import AvioCompanyInfo from './AvioPages/User/AvioCompanyInfo';
 import Reservation from './AvioPages/User/Reservation';
+import AvioCompanies from './AvioPages/Admin/AvioCompanies';
+import Flights from './AvioPages/Admin/Flights';
+import Prices from './AvioPages/Admin/Prices';
+import Reports from './AvioPages/Admin/Reports';
+import AdminInfo from './AvioPages/Admin/AdminInfo';
 
 class App extends Component {
 
@@ -95,6 +100,11 @@ class App extends Component {
           <Route path = '/flinfo/:flightid' render={() => <FlightInfo />} />
           <Route path = '/companyinfo/:flightid' render={() => <AvioCompanyInfo />} />
           <Route path = '/reservation/:flightid' render={() => <Reservation />} />
+          <Route path = '/adcompanies' render={() => <AvioCompanies />} />
+          <Route path = '/adflights' render={() => <Flights />} />
+          <Route path = '/adprices' render={() => <Prices />} />
+          <Route path = '/adreports' render={() => <Reports />} />
+          <Route path = '/adinfo' render={() => <AdminInfo />} />
         </div>
       </BrowserRouter>
     );
