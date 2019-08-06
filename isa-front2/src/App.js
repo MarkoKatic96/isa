@@ -32,6 +32,7 @@ import Flights from './AvioPages/Admin/Flights';
 import Prices from './AvioPages/Admin/Prices';
 import Reports from './AvioPages/Admin/Reports';
 import AdminInfo from './AvioPages/Admin/AdminInfo';
+import AddAdmin from './MasterAdminPages/AddAdmin';
 
 class App extends Component {
 
@@ -95,6 +96,7 @@ class App extends Component {
           <Route path = '/admin/single_prices/:sobaId' render={SinglePrices}/>
           <Route path = '/admin/add_price/:sobaId' render={AddSinglePrice}/>
           <Route path = '/izvestaji' render={Izvestaji}/>
+          <Route path = '/master/add_admin' render={AddAdmin}/>
 
           <Route path = '/flsearch' render={() => <FlightsSearch />} />
           <Route path = '/flinfo/:flightid' render={() => <FlightInfo />} />

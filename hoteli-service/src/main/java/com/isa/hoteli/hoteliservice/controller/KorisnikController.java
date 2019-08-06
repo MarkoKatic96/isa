@@ -86,6 +86,22 @@ public class KorisnikController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
+	@RequestMapping(value="/admin", method = RequestMethod.POST)
+	public ResponseEntity<KorisnikDTO> createAdmin(@RequestBody KorisnikDTO dto, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.MASTER_ADMIN)) {
+			Korisnik obj = new Korisnik(dto);
+			obj.setAktiviran(true);
+			KorisnikDTO returnType = korisnikService.createUser(obj);
+			if(returnType!=null) {
+				return new ResponseEntity<>(returnType, HttpStatus.OK);
+			}
+		
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteUserById(@PathVariable("id") Long id){
 		return new ResponseEntity<String>(korisnikService.deleteUser(id), HttpStatus.OK);

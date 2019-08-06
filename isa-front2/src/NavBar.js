@@ -48,7 +48,10 @@ class NavBar extends Component{
                     </ul>
         }else if(rola=="MASTER_ADMIN"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
-                        <li><Link to="/login">Master</Link></li>
+                        <li><Link to="/master/add_admin">Dodaj admina</Link></li>
+                        <li><Link to="/master/add_admin">Kreiraj aviokompaniju</Link></li>
+                        <li><Link to="/master/add_admin">Kreiraj hotel</Link></li>
+                        <li><Link to="/master/add_admin">Kreiraj rent-a-car</Link></li>
                         <li><Link onClick={this.odjava}>Odjava</Link></li>
                     </ul>
         }
