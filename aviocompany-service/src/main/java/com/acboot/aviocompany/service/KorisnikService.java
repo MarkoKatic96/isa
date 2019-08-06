@@ -1,11 +1,13 @@
 package com.acboot.aviocompany.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import com.acboot.aviocompany.dto.KorisnikDTO;
@@ -18,8 +20,83 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class KorisnikService
 {
-//	@Autowired
-//	private KorisnikRepository korisnikRepo;
+	@Autowired
+	private KorisnikRepository korisnikRepo;
+	
+	@Autowired
+	private MailService mailService;
+	
+	public String posaljiZahtev(Long idKorisnika, String email)
+	{
+		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
+		Optional<Korisnik> prijatelj = korisnikRepo.getUserByEmail(email);
+		
+		if(!prijatelj.isPresent())
+			return "EMAIL_ERR";
+		
+		if(korisnik.get().getZahteviKorisnika().contains(prijatelj.get()))
+			return "EXISTS_ERR";
+		
+		if(korisnik.get().getPrijateljiKorisnika().contains(prijatelj.get()))
+			return "EXISTS_ERR";
+		
+		List<Korisnik> insert = new ArrayList<Korisnik>();
+		insert.add(prijatelj.get());
+		
+		korisnik.get().setZahteviKorisnika(insert);
+		korisnikRepo.save(korisnik.get());
+		
+		
+		try {
+			mailService.sendNotificaitionAsync(korisnik.get(), prijatelj.get());
+		} catch (MailException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "SUCCESS";
+	}
+
+	/*
+	 * Prihvatanje zahteva korisnika za prijateljstvo (BACA CONCURENTMODIFICATIONEXCEPTION)
+	 */
+	public String prihvatiZahtev(Long idKorisnika, String email) 
+	{
+		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
+		Optional<Korisnik> prijatelj = korisnikRepo.getUserByEmail(email);
+		
+		if(!prijatelj.isPresent())
+			return "EMAIL_ERR";
+		
+		if(korisnik.get().getPrijateljiKorisnika().contains(prijatelj.get()))
+			return "EXISTS_ERR";
+		
+		List<Korisnik> insert = new ArrayList<Korisnik>();
+		insert.add(prijatelj.get());
+		
+		korisnik.get().setPrijateljiKorisnika(insert);
+		korisnikRepo.save(korisnik.get());
+		
+		//brisanje iz liste zahteva
+		
+		List<Korisnik> zahteviKorisnika = korisnik.get().getZahteviKorisnika();
+		
+		List<Korisnik> sviZahtevi = korisnik.get().getZahteviKorisnika();
+		
+		for(Korisnik prijateljZaht : zahteviKorisnika)
+		{
+			System.out.println(prijateljZaht.getIme());
+			if(prijateljZaht.getEmail().equals(email))
+			{
+				sviZahtevi.remove(prijateljZaht);
+				korisnik.get().setZahteviKorisnika(sviZahtevi);
+				korisnikRepo.save(korisnik.get());
+			}
+		}
+		
+		return "SUCCESS";
+	}
+	
 //	
 //	@Autowired
 //	private JwtTokenUtils jwtTokenProvider;

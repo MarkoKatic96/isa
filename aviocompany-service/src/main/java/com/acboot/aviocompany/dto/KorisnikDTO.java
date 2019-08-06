@@ -1,5 +1,7 @@
 package com.acboot.aviocompany.dto;
 
+import java.util.List;
+
 import com.acboot.aviocompany.model.Korisnik;
 import com.acboot.aviocompany.model.Rola;
 
@@ -23,6 +25,8 @@ public class KorisnikDTO
 	private Rola rola;
 //	private Long zaduzenZaId;
 	private boolean prviPutLogovan;
+	private List<KorisnikDTO> prijateljiKorisnika;
+	private List<KorisnikDTO> zahteviKorisnika;
 	
 	public KorisnikDTO(Korisnik korisnik) {
 		super();

@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.acboot.aviocompany.dto.KorisnikDTO;
@@ -40,6 +43,31 @@ public class Korisnik
     private List<Karta> spisakRezervisanihKarata;
 	
 	//treba dodati rezervacije (rezervacije je entitet povezan sa kartom)
+	
+	@ManyToMany
+	@JoinTable(
+	  name = "korisnik_prijatelji", 
+	  joinColumns = @JoinColumn(name = "korisnik_id"), 
+	  inverseJoinColumns = @JoinColumn(name = "prijatelj_id"))
+	private List<Korisnik> prijateljiKorisnika;
+	
+	@ManyToMany(mappedBy = "prijateljiKorisnika")
+	private List<Korisnik> korisnici;
+	
+	/*
+	 * ZAHTEVI KORISNIKA
+	 */
+	@ManyToMany
+	@JoinTable(
+	  name = "korisnik_zahtevi", 
+	  joinColumns = @JoinColumn(name = "korisnik_id"), 
+	  inverseJoinColumns = @JoinColumn(name = "prijatelj_id"))
+	private List<Korisnik> zahteviKorisnika;
+	
+	@ManyToMany(mappedBy = "zahteviKorisnika")
+	private List<Korisnik> korisniciZaht;
+	
+	
 
 	
 	public Korisnik(KorisnikDTO korisnik) {

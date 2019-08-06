@@ -156,7 +156,6 @@ public class KartaService
 		
 			for(KartaDTO dto : karte)
 			{
-				System.out.println(dto.getKorisnik().getId());
 				if(dto.getKorisnik().getId() != 1 || dto.getVremeRezervisanja().getYear() > 2002)
 					return "POSTOJI vec rezervisana karta za let broj " + dto.getLet().getBrojLeta();
 				

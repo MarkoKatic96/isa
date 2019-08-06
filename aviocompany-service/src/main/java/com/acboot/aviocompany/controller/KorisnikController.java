@@ -11,11 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.acboot.aviocompany.dto.KartaDTO;
 import com.acboot.aviocompany.dto.KorisnikDTO;
 import com.acboot.aviocompany.model.Korisnik;
 import com.acboot.aviocompany.model.Login;
@@ -31,8 +34,35 @@ import io.swagger.annotations.Api;
 @Api(tags = "")
 public class KorisnikController
 {
-//	@Autowired
-//	private KorisnikService korService;
+	@Autowired
+	private KorisnikService korService;
+	
+	/*
+	 * U zaglavlju prima id korisnika koji salje zahtev, telo sadrzi email korisnika kome se salje zahtev
+	 */
+	@PostMapping("/invitefriend/{id}")
+	public ResponseEntity<String> posaljiZahtev(@PathVariable("id") Long idKorisnika, @RequestBody String email)
+	{
+		System.out.println("posaljiZahtev()");
+		System.out.println(email);
+		
+		String retVal = korService.posaljiZahtev(idKorisnika, email);
+		
+		return (!retVal.equals("SUCCESS")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.OK);
+	}
+	
+	/*
+	 * Prima id korisnika od koga je zahtev i email prijatelja kome je poslat (mora u paru da bi izvukli zahtev iz baze)
+	 */
+	@PostMapping("/acceptrequest/{id}")
+	public ResponseEntity<String> prihvatiZahtev(@PathVariable("id") Long idKorisnika, @RequestBody String email)
+	{
+		System.out.println("prihvatiZahtev()");
+		
+		String retVal = korService.prihvatiZahtev(idKorisnika, email);
+		
+		return (!retVal.equals("SUCCESS")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.OK);
+	}
 //	
 //	@GetMapping("/all")
 //	public ResponseEntity<List<KorisnikDTO>> getKorisnici(HttpServletRequest req)
