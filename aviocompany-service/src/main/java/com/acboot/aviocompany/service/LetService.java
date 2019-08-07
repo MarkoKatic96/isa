@@ -13,8 +13,10 @@ import com.acboot.aviocompany.converter.LetConverter;
 import com.acboot.aviocompany.dto.KlasaDTO;
 import com.acboot.aviocompany.dto.LetDTO;
 import com.acboot.aviocompany.dto.PretragaDTO;
+import com.acboot.aviocompany.model.AvioKompanija;
 import com.acboot.aviocompany.model.Klasa;
 import com.acboot.aviocompany.model.Let;
+import com.acboot.aviocompany.repository.AvioKompanijaRepository;
 import com.acboot.aviocompany.repository.LetRepository;
 
 @Service
@@ -26,6 +28,9 @@ public class LetService
 	
 	@Autowired
 	LetConverter letConv;
+	
+	@Autowired
+	private AvioKompanijaRepository avioRepo;
 	
 	
 	public LetDTO findById(Long id)
@@ -53,6 +58,27 @@ public class LetService
 		}
 		else
 			return null;
+	}
+	
+	/*
+	 * ADMIN
+	 */
+	public List<LetDTO> getAllLetoviZaOdredjenogAdmina(Long idKompanije)
+	{
+		List<LetDTO> retList = new ArrayList<LetDTO>();
+		Optional<AvioKompanija> avio = avioRepo.findById(idKompanije);
+		
+		for(Let let : letRepo.findAll())
+		{
+			if(let.getAviokompanija().equals(avio.get()))
+			{
+				retList.add(letConv.convertToDTO(let));
+			}
+			else
+				continue;
+		}
+		
+		return retList;
 	}
 	
 	public LetDTO saveOne(LetDTO dto)
@@ -406,6 +432,8 @@ public class LetService
 		
 		return null;
 	}
+
+	
 
 	
 

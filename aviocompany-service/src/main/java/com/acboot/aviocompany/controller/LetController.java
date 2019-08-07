@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.acboot.aviocompany.dto.AvioKompanijaDTO;
 import com.acboot.aviocompany.dto.KlasaDTO;
 import com.acboot.aviocompany.dto.LetDTO;
 import com.acboot.aviocompany.dto.PretragaDTO;
+import com.acboot.aviocompany.model.Korisnik;
+import com.acboot.aviocompany.model.Rola;
+import com.acboot.aviocompany.service.KorisnikService;
 import com.acboot.aviocompany.service.LetService;
 
 import io.swagger.annotations.Api;
@@ -32,6 +38,9 @@ public class LetController
 {
 	@Autowired
 	private LetService letService;
+	
+	@Autowired
+	private KorisnikService korServ;
 	
 	
 	@GetMapping("/getone/{id}")
@@ -55,7 +64,28 @@ public class LetController
 		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<LetDTO>>(listDto, HttpStatus.OK);
 	}
 	
+	/*
+	 * ADMIN
+	 */
+	@GetMapping("/getall/{id}")
+	public ResponseEntity<List<LetDTO>> getAllLetoviZaOdredjenogAdmina(@PathVariable("id") Long idKompanije, HttpServletRequest req)
+	{
+		System.out.println("getAllLetoviZaOdredjenogAdmina()");
+		
+		Korisnik k = korServ.zaTokene(req);
+		
+		if(k != null && k.getRola().equals(Rola.ADMIN_AVIO_KOMPANIJE) && k.getZaduzenZaId() == idKompanije)
+		{
+			List<LetDTO> letovi = letService.getAllLetoviZaOdredjenogAdmina(idKompanije);
+			return (letovi.isEmpty()) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<LetDTO>>(letovi, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
 	
+	/*
+	 * ADMIN
+	 */
 	@PostMapping("/add/")
 	public ResponseEntity<LetDTO> addLet(@RequestBody LetDTO dto)
 	{
