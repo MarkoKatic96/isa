@@ -198,29 +198,38 @@ class Flights extends Component {
             informacije: ""
         }
 
-
         let destinacijePresedanja = [];
         let object = new Object();
-        this.state.destinacijePresedanja.map(dest => {
-            object.idDestinacije = dest.value;
-            object.naziv = dest.label;
-            object.informacije = "";
-            destinacijePresedanja.push(object);
-        })
+        for(let i = 0; i<this.state.destinacijePresedanja.length; i++)
+        {
+            object.idDestinacije = this.state.destinacijePresedanja[i].value;
+            object.naziv = this.state.destinacijePresedanja[i].label;
+            destinacijePresedanja.push(object)
+            object = {}
+        }
+
 
         let klaseKojeLetSadrzi = []
-        this.state.klaseKojeLetSadrzi.map(klasa => {
-            object.idKlase = klasa.value;
-            object.naziv = klasa.label;
-            klaseKojeLetSadrzi.push(object);
-        })
+
+        for(let i = 0; i<this.state.klaseKojeLetSadrzi.length; i++)
+        {
+            object.idKlase = this.state.klaseKojeLetSadrzi[i].value;
+            object.naziv = this.state.klaseKojeLetSadrzi[i].label;
+            klaseKojeLetSadrzi.push(object)
+            object = {}
+        }
 
         let dodatneUslugeKojeLetSadrzi = []
-        let temp3 = this.state.dodatneUslugeKojeLetSadrzi.map(usluga => {
-            object.idDodatneUsluge = usluga.value;
-            object.naziv = usluga.label;
-            dodatneUslugeKojeLetSadrzi.push(object);
-        })
+        for(let i = 0; i<this.state.dodatneUslugeKojeLetSadrzi.length; i++)
+        {
+            object.idDodatneUsluge = this.state.dodatneUslugeKojeLetSadrzi[i].value;
+            object.naziv = this.state.dodatneUslugeKojeLetSadrzi[i].label;
+            dodatneUslugeKojeLetSadrzi.push(object)
+            object = {}
+        }
+
+        
+
 
         if (idLeta !== "" && brojLeta !== "" && vremePoletanja !== "" && vremeSletanja !== "" && duzinaPutovanja !== "" && brojPresedanja !== "" && tipPuta !== "" &&
             brojMesta !== "" && aviokompanija !== "" && destinacijaPoletanja !== "" && destinacijaSletanja !== "" && destinacijePresedanja !== "" &&
@@ -365,7 +374,7 @@ class Flights extends Component {
                                 value={destinacijePresedanja}
                                 onChange={(destinacijePresedanja) => { this.changeDestinacijePresedanja(destinacijePresedanja) }}
                                 options={listaDestinacija}
-                                id="destinacijePresedanja" isMulti={true} />
+                                id="destinacijePresedanja" isMulti />
 
                             <label htmlFor="tipPuta">Tip leta</label>
                             <input type="text" id="tipPuta" onChange={(e) => { this.changeInputField(e) }} />

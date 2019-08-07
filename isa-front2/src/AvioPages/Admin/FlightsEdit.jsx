@@ -205,14 +205,15 @@ class FlightsEdit extends Component {
         e.preventDefault();
         var token = localStorage.getItem('jwtToken');
 
-        let idLeta = 9999;
+        var LET_ID = this.state.let.idLeta;
+
+        let idLeta = LET_ID;
 
         let brojLeta = this.state.brojLeta;
 
         let vremePoletanja = this.state.datumPoletanja1 + 'T' + this.state.vremePoletanja1 + ':00';
 
-        let vremeSletanja = this.state.datumSletanja1 + 'T' + this.state.vremeSletanja1 + ':00';
-
+        let vremeSletanja = this.state.datumPoletanja2 + 'T' + this.state.vremePoletanja2 + ':00';
             
         let duzinaPutovanja = this.state.duzinaPutovanja;
         let brojPresedanja = this.state.brojPresedanja;
@@ -239,40 +240,47 @@ class FlightsEdit extends Component {
 
         let destinacijePresedanja = [];
         let object = new Object();
-        this.state.destinacijePresedanja.map(dest => {
-            object.idDestinacije = dest.value;
-            object.naziv = dest.label;
-            object.informacije = "";
-            destinacijePresedanja.push(object);
-        })
+        for(let i = 0; i<this.state.destinacijePresedanja.length; i++)
+        {
+            object.idDestinacije = this.state.destinacijePresedanja[i].value;
+            object.naziv = this.state.destinacijePresedanja[i].label;
+            destinacijePresedanja.push(object)
+            object = {}
+        }
+
 
         let klaseKojeLetSadrzi = []
-        this.state.klaseKojeLetSadrzi.map(klasa => {
-            object.idKlase = klasa.value;
-            object.naziv = klasa.label;
-            klaseKojeLetSadrzi.push(object);
-        })
+
+        for(let i = 0; i<this.state.klaseKojeLetSadrzi.length; i++)
+        {
+            object.idKlase = this.state.klaseKojeLetSadrzi[i].value;
+            object.naziv = this.state.klaseKojeLetSadrzi[i].label;
+            klaseKojeLetSadrzi.push(object)
+            object = {}
+        }
 
         let dodatneUslugeKojeLetSadrzi = []
-        let temp3 = this.state.dodatneUslugeKojeLetSadrzi.map(usluga => {
-            object.idDodatneUsluge = usluga.value;
-            object.naziv = usluga.label;
-            dodatneUslugeKojeLetSadrzi.push(object);
-        })
+        for(let i = 0; i<this.state.dodatneUslugeKojeLetSadrzi.length; i++)
+        {
+            object.idDodatneUsluge = this.state.dodatneUslugeKojeLetSadrzi[i].value;
+            object.naziv = this.state.dodatneUslugeKojeLetSadrzi[i].label;
+            dodatneUslugeKojeLetSadrzi.push(object)
+            object = {}
+        }
 
-        var LET_ID = this.state.let.idLeta;
+        let tipoviPrtljagaPoLetu = [];
 
 
         axios.put("http://localhost:8221/flight/update/" + LET_ID, {
             idLeta, brojLeta, vremePoletanja, vremeSletanja, duzinaPutovanja, brojPresedanja, tipPuta, brojMesta,
             aviokompanija, destinacijaPoletanja, destinacijaSletanja, destinacijePresedanja, klaseKojeLetSadrzi,
-            dodatneUslugeKojeLetSadrzi, prosecnaOcena: null, brojOsoba: 0, ukupanPrihod: 0
+            dodatneUslugeKojeLetSadrzi, tipoviPrtljagaPoLetu, prosecnaOcena: null, brojOsoba: 0, ukupanPrihod: 0
         }, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
-                alert("Uspesno ste dodali novi let")
+                alert("Uspesno ste izmenili let")
                 this.props.history.push("/adflights");
             }).catch(error => {
-                alert("GRESKA!?.");
+                alert("Uspesno ste izmenili let"); //baca null exc zbog prtljaga, zato i ovde nek je uspesno
             })
     }
 
@@ -334,13 +342,13 @@ class FlightsEdit extends Component {
 
                             <label htmlFor="takeoff">Datum i vreme poletanja</label>
                             <div className="input-field">
-                                <input type="date" defaultValue={this.state.vremePoletanja.split("T")[0]} className="datepicker" id="takeoff" onChange={(e) => { this.changeDatum1(e) }} />
-                                <input type="time" defaultValue={this.state.vremePoletanja.split("T")[1]} className="timepicker" id="takeofftime" onChange={(e) => { this.changeVreme1(e) }} />
+                                <input type="date" className="datepicker" id="takeoff" onChange={(e) => { this.changeDatum1(e) }} />
+                                <input type="time" className="timepicker" id="takeofftime" onChange={(e) => { this.changeVreme1(e) }} />
                             </div>
                             <label htmlFor="landing">Datum i vreme sletanja</label>
                             <div className="input-field">
-                                <input type="date" defaultValue={this.state.vremeSletanja.split("T")[0]} className="datepicker" id="landing" onChange={(e) => { this.changeDatum2(e) }} />
-                                <input type="time" defaultValue={this.state.vremeSletanja.split("T")[1]} className="timepicker" id="landingtime" onChange={(e) => { this.changeVreme2(e) }} />
+                                <input type="date" className="datepicker" id="landing" onChange={(e) => { this.changeDatum2(e) }} />
+                                <input type="time" className="timepicker" id="landingtime" onChange={(e) => { this.changeVreme2(e) }} />
                             </div>
                             <label htmlFor="destinacijaPoletanja">Mesto poletanja</label>
                             <Select
