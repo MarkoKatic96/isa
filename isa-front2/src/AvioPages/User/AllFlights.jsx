@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import { withRouter} from 'react-router-dom';
+import './user.css';
 
 class AllFlights extends Component {
 
     state = {
         letovi: [],
-        showFlightInfo: false
+        showDestPolInfo: false,
+        showDestSleInfo: false
     }
 
     componentDidMount() {
@@ -26,6 +28,38 @@ class AllFlights extends Component {
         this.props.history.push('/flinfo/' + idLeta);
     }
 
+    showDestinacijaPoletanjaInfo = () =>
+    {
+        if(this.state.showDestPolInfo)
+        {
+            this.setState({
+                showDestPolInfo: false
+            })
+        }
+        else
+        {
+            this.setState({
+                showDestPolInfo: true
+            })
+        }
+    }
+
+    showDestinacijaSletanjaInfo = () =>
+    {
+        if(this.state.showDestSleInfo)
+        {
+            this.setState({
+                showDestSleInfo: false
+            })
+        }
+        else
+        {
+            this.setState({
+                showDestSleInfo: true
+            })
+        }
+    }
+
     render() {
         const flightsList = this.state.letovi.length ? (this.state.letovi.map(flight => {
             return (
@@ -40,8 +74,13 @@ class AllFlights extends Component {
                                         <span className="card-title"><b>Broj leta: {flight.brojLeta}</b></span>
                                         <div className="divider white"></div>
                                         <br />
-                                        <p>Destinacija poletanja: {flight.destinacijaPoletanja.naziv}</p> <button className="btn waves-effect waves-light blue" id="destsinfo-btn" onClick={() => { this.showDestinationsInfo() }}>Informacije o destinaciji</button>
-                                        <p>Destinacija sletanja: {flight.destinacijaSletanja.naziv}</p> <button className="btn waves-effect waves-light blue" id="destsinfo-btn" onClick={() => { this.showDestinationsInfo() }}>Informacije o destinaciji</button> <br /><br />
+                                        <p>Destinacija poletanja: {flight.destinacijaPoletanja.naziv}</p> <button className="btn-floating btn-small waves-effect waves-light blue" id="destsinfobtn" onClick={() => { this.showDestinacijaPoletanjaInfo() }}>INFO</button>
+                                        {(this.state.showDestPolInfo) ? (<div>{flight.destinacijaPoletanja.informacije}</div>) : (<div></div>)}<br />
+                                        
+                                        <p>Destinacija sletanja: {flight.destinacijaSletanja.naziv}</p> <button className="btn-floating btn-small waves-effect waves-light blue" id="destsinfobtn" onClick={() => { this.showDestinacijaSletanjaInfo() }}>INFO</button> 
+                                        {(this.state.showDestSleInfo) ? (<div>{flight.destinacijaSletanja.informacije}</div>) : (<div></div>)}<br />
+                                       
+                                        
                                         <p>Vreme poletanja: {flight.vremePoletanja}</p><br />
                                         <p>Vreme sletanja: {flight.vremeSletanja}</p><br />
                                         <p>Broj slobodnih mesta: {flight.brojMesta - flight.brojOsoba}</p>

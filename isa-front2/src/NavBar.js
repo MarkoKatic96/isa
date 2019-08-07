@@ -20,7 +20,7 @@ class NavBar extends Component{
         if(rola=="KORISNIK"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><Link to="/login">Korisnik</Link></li>
-                        <li><Link onClick={this.odjava}>Odjava</Link></li>
+                        <li><Link to="/" onClick={this.odjava}>Odjava</Link></li>
                     </ul>
         }else if(rola=="ADMIN_AVIO_KOMPANIJE"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
@@ -29,7 +29,7 @@ class NavBar extends Component{
                         <li><Link to="/adprices">Cene</Link></li>
                         <li><Link to="/adreports">Izvestaji</Link></li>
                         <li><Link to="/adinfo">Profil</Link></li>
-                        <li><Link onClick={this.odjava}>Odjava</Link></li>
+                        <li><Link to="/" onClick={this.odjava}>Odjava</Link></li>
                     </ul>
         }else if(rola=="ADMIN_HOTELA"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
@@ -39,12 +39,12 @@ class NavBar extends Component{
                         <li><Link to="/izvestaji">Izvestaji</Link></li>
                         <li><Link to="/admin/services">Usluge</Link></li>
                         <li><Link to="/profile">Profil</Link></li>
-                        <li><Link onClick={this.odjava}>Odjava</Link></li>
+                        <li><Link to="/" onClick={this.odjava}>Odjava</Link></li>
                     </ul>
         }else if(rola=="ADMIN_RENT_A_CAR"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><Link to="/login">Rent</Link></li>
-                        <li><Link onClick={this.odjava}>Odjava</Link></li>
+                        <li><Link to="/" onClick={this.odjava}>Odjava</Link></li>
                     </ul>
         }else if(rola=="MASTER_ADMIN"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
@@ -52,7 +52,7 @@ class NavBar extends Component{
                         <li><Link to="/master/add_admin">Kreiraj aviokompaniju</Link></li>
                         <li><Link to="/master/add_admin">Kreiraj hotel</Link></li>
                         <li><Link to="/master/add_admin">Kreiraj rent-a-car</Link></li>
-                        <li><Link onClick={this.odjava}>Odjava</Link></li>
+                        <li><Link to="/" onClick={this.odjava}>Odjava</Link></li>
                     </ul>
         }
         return(          

@@ -43,8 +43,8 @@ class FlightInfo extends Component {
                                     <div className="divider white"></div>
                                     <br />
                                     <p>Adresa: {this.state.kompanija.adresa}</p>
-                                    <p>Prosecna ocena: {this.state.avgrating}</p>
                                     <p>Opis: {this.state.kompanija.opis}</p>
+                                    <p>Prosecna ocena: {this.state.avgrating}</p>
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
