@@ -15,11 +15,13 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.isa.hoteli.hoteliservice.dto.KorisnikDTO;
 import com.isa.hoteli.hoteliservice.model.Korisnik;
@@ -56,12 +58,12 @@ public class KorisnikController {
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	public ResponseEntity<KorisnikDTO> getUserById(@PathVariable("id") Long id){
-		if(korisnikService.getUserById(id)!=null) {
+		try {
 			KorisnikDTO dto = new KorisnikDTO(korisnikService.getUserById(id));
 			return new ResponseEntity<KorisnikDTO>(dto, HttpStatus.OK);
+		}catch(RuntimeException e){		
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nisam nasao", e);
 		}
-		
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
 	@RequestMapping(value="/all/{email}", method = RequestMethod.GET)
