@@ -24,6 +24,7 @@ class Flights extends Component {
 
         tipPuta: "",
         brojMesta: "",
+        cenaKarte: "",
 
         tipoviPrtljagaPoLetu: "", //au brt kako ovo.
         klaseKojeLetSadrzi: [],
@@ -180,6 +181,7 @@ class Flights extends Component {
         let brojPresedanja = this.state.brojPresedanja;
         let tipPuta = this.state.tipPuta;
         let brojMesta = this.state.brojMesta;
+        let cenaKarte = this.state.cenaKarte;
         let aviokompanija = {
             idAvioKompanije: this.state.user.zaduzenZaId,
             naziv: this.state.aviokompanijaPovucena.naziv,
@@ -235,7 +237,7 @@ class Flights extends Component {
             brojMesta !== "" && aviokompanija !== "" && destinacijaPoletanja !== "" && destinacijaSletanja !== "" && destinacijePresedanja !== "" &&
             klaseKojeLetSadrzi !== "" && dodatneUslugeKojeLetSadrzi !== "") {
             axios.post("http://localhost:8221/flight/add/", {
-                idLeta, brojLeta, vremePoletanja, vremeSletanja, duzinaPutovanja, brojPresedanja, tipPuta, brojMesta,
+                idLeta, brojLeta, vremePoletanja, vremeSletanja, duzinaPutovanja, brojPresedanja, tipPuta, brojMesta, cenaKarte,
                 aviokompanija, destinacijaPoletanja, destinacijaSletanja, destinacijePresedanja, klaseKojeLetSadrzi,
                 dodatneUslugeKojeLetSadrzi, prosecnaOcena: null, brojOsoba: 0, ukupanPrihod: 0
             }, { headers: { Authorization: `Bearer ${token}` } })
@@ -382,6 +384,9 @@ class Flights extends Component {
 
                             <label htmlFor="brojMesta">Broj mesta za rezervaciju</label>
                             <input type="number" id="brojMesta" onChange={(e) => { this.changeInputField(e) }} />
+
+                            <label htmlFor="cenaKarte">Cena karte (€)</label>
+                            <input type="number" id="cenaKarte" onChange={(e) => { this.changeInputField(e) }} />
 
 
                             <label htmlFor="klaseKojeLetSadrzi">Klase u avionu</label>

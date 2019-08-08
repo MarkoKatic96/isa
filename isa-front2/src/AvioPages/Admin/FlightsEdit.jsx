@@ -35,6 +35,7 @@ class FlightsEdit extends Component {
 
         tipPuta: "",
         brojMesta: "",
+        cenaKarte: "",
 
         tipoviPrtljagaPoLetu: "", //au brt kako ovo.
         klaseKojeLetSadrzi: [],
@@ -72,19 +73,7 @@ class FlightsEdit extends Component {
                             brojPresedanja: res.data.brojPresedanja,
                             tipPuta: res.data.tipPuta,
                             brojMesta: res.data.brojMesta,
-                        })
-
-                        let dat1 = res.data.vremePoletanja;
-                        let dat2 = res.data.vremeSletanja;
-
-                        let destp = res.data.destinacijaPoletanja.naziv;
-                        let dests = res.data.destinacijaSletanja.naziv;
-
-
-
-                        this.setState({
-                            
-
+                            cenaKarte: res.data.cenaKarte
                         })
                     }
 
@@ -142,7 +131,7 @@ class FlightsEdit extends Component {
 
 
     /*
-    *   OPERACIJE ZA DODAVANJE NOVOG LETA
+    *   OPERACIJE ZA IZMENU LETA
     */
 
     changeInputField = (e) => {
@@ -219,6 +208,7 @@ class FlightsEdit extends Component {
         let brojPresedanja = this.state.brojPresedanja;
         let tipPuta = this.state.tipPuta;
         let brojMesta = this.state.brojMesta;
+        let cenaKarte = this.state.cenaKarte;
         let aviokompanija = {
             idAvioKompanije: this.state.user.zaduzenZaId,
             naziv: this.state.aviokompanijaPovucena.naziv,
@@ -272,7 +262,7 @@ class FlightsEdit extends Component {
 
 
         axios.put("http://localhost:8221/flight/update/" + LET_ID, {
-            idLeta, brojLeta, vremePoletanja, vremeSletanja, duzinaPutovanja, brojPresedanja, tipPuta, brojMesta,
+            idLeta, brojLeta, vremePoletanja, vremeSletanja, duzinaPutovanja, brojPresedanja, tipPuta, brojMesta, cenaKarte,
             aviokompanija, destinacijaPoletanja, destinacijaSletanja, destinacijePresedanja, klaseKojeLetSadrzi,
             dodatneUslugeKojeLetSadrzi, tipoviPrtljagaPoLetu, prosecnaOcena: null, brojOsoba: 0, ukupanPrihod: 0
         }, { headers: { Authorization: `Bearer ${token}` } })
@@ -385,6 +375,8 @@ class FlightsEdit extends Component {
                             <label htmlFor="brojMesta">Broj mesta za rezervaciju</label>
                             <input type="number" defaultValue={this.state.let.brojMesta} id="brojMesta" onChange={(e) => { this.changeInputField(e) }} />
 
+                            <label htmlFor="cenaKarte">Cena karte</label>
+                            <input type="number" defaultValue={this.state.let.cenaKarte} id="cenaKarte" onChange={(e) => { this.changeInputField(e) }} />
 
                             <label htmlFor="klaseKojeLetSadrzi">Klase u avionu</label>
                             <Select
