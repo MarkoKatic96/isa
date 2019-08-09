@@ -20,16 +20,16 @@ class Login extends Component{
         var a=this.state.username; 
         var b=this.state.password;
         if(a!=="" && b!==""){
-            axios.post('http://localhost:8221/user/login', {email: a, lozinka: b})
-            // axios.post('http://localhost:8080/korisnik/login', {email: a, lozinka: b})
+            //axios.post('http://localhost:8221/user/login', {email: a, lozinka: b})
+            axios.post('http://localhost:8080/korisnik/login', {email: a, lozinka: b})
             .then(res => {
                 localStorage.setItem('jwtToken', res.data);
                 localStorage.setItem('email', a)
                 this.props.setToken(localStorage.getItem('jwtToken'));
                 this.props.setEmail(localStorage.getItem('email'));
                 this.props.logIn();
-                axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
-                // axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
+                //axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+                axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
                 .then(res=>{
                   localStorage.setItem('rola', res.data.rola);
                   this.props.history.push("/");

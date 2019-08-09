@@ -128,4 +128,34 @@ public class KorisnikController {
 		return (jwt!=null) ? new ResponseEntity<String>(jwt, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
+	@RequestMapping(value="/allHotelAdmins", method = RequestMethod.GET)
+	public ResponseEntity<List<KorisnikDTO>> getHotelAdmins(){
+		List<KorisnikDTO> dto = new ArrayList<>();
+		List<Korisnik> lista = korisnikService.getHotelAdmins();
+		for (Korisnik item : lista) {
+			dto.add(new KorisnikDTO(item));
+		}
+		return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/allAvioAdmins", method = RequestMethod.GET)
+	public ResponseEntity<List<KorisnikDTO>> getAvioAdmins(){
+		List<KorisnikDTO> dto = new ArrayList<>();
+		List<Korisnik> lista = korisnikService.getAvioAdmins();
+		for (Korisnik item : lista) {
+			dto.add(new KorisnikDTO(item));
+		}
+		return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/allRentAdmins", method = RequestMethod.GET)
+	public ResponseEntity<List<KorisnikDTO>> getRentAdmins(){
+		List<KorisnikDTO> dto = new ArrayList<>();
+		List<Korisnik> lista = korisnikService.getRentAdmins();
+		for (Korisnik item : lista) {
+			dto.add(new KorisnikDTO(item));
+		}
+		return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
+	}
+	
 }

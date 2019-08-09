@@ -90,11 +90,11 @@ public class HotelController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
-	@RequestMapping(value="/{email}", method = RequestMethod.POST)
-	public ResponseEntity<HotelDTO> createHotelAdmin(@PathVariable String email, @RequestBody HotelDTO hotelDTO){
+	@RequestMapping(value="/{id}", method = RequestMethod.POST)
+	public ResponseEntity<HotelDTO> createHotelAdmin(@PathVariable Long id, @RequestBody HotelDTO hotelDTO){
 		Hotel hotel = new Hotel(hotelDTO);
 		HotelDTO returnHotel = hotelService.createHotel(hotel);
-		Korisnik k = korisnikService.getUserByEmail(email);
+		Korisnik k = korisnikService.getUserById(id);
 		if(returnHotel!=null) {
 			k.setZaduzenZaId(returnHotel.getId());
 			korisnikRepository.save(k);

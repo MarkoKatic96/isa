@@ -93,5 +93,17 @@ public class KorisnikService {
 		Korisnik k = korisnikService.getUserByEmail(email);
 		return k;
 	}
+	
+	public List<Korisnik> getHotelAdmins() {
+		return korisnikRepository.findAdmineHotela();
+	}
+	
+	public List<Korisnik> getAvioAdmins() {
+		return korisnikRepository.findAdmineAvio();
+	}
+	
+	public List<Korisnik> getRentAdmins() {
+		return korisnikRepository.findAdmineRent();
+	}
 
 }
