@@ -12,6 +12,7 @@ import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import com.acboot.aviocompany.converter.KartaConverter;
+import com.acboot.aviocompany.converter.KorisnikConverter;
 import com.acboot.aviocompany.dto.KartaDTO;
 import com.acboot.aviocompany.dto.KorisnikDTO;
 import com.acboot.aviocompany.model.Karta;
@@ -28,6 +29,9 @@ public class KorisnikService
 {
 	@Autowired
 	private KorisnikRepository korisnikRepo;
+	
+	@Autowired
+	private KorisnikConverter korisnikConv;
 	
 	@Autowired
 	private KartaRepository kartaRepo;
@@ -75,19 +79,19 @@ public class KorisnikService
 	/*
 	 * Prihvatanje zahteva korisnika za prijateljstvo (BACA CONCURENTMODIFICATIONEXCEPTION)
 	 */
-	public String prihvatiZahtev(Long idKorisnika, String email) 
+	public String prihvatiZahtev(Long idTrenutni, Long idPosiljalac) 
 	{
-		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
-		Optional<Korisnik> prijatelj = korisnikRepo.getUserByEmail(email);
+		Optional<Korisnik> korisnik = korisnikRepo.findById(idTrenutni);
+		Optional<Korisnik> prijateljKojiSalje = korisnikRepo.findById(idPosiljalac);
 		
-		if(!prijatelj.isPresent())
-			return "EMAIL_ERR";
+//		if(!prijateljKojiSalje.isPresent())
+//			return "EMAIL_ERR";
 		
-		if(korisnik.get().getPrijateljiKorisnika().contains(prijatelj.get()))
+		if(korisnik.get().getPrijateljiKorisnika().contains(prijateljKojiSalje.get()))
 			return "EXISTS_ERR";
 		
 		List<Korisnik> insert = new ArrayList<Korisnik>();
-		insert.add(prijatelj.get());
+		insert.add(prijateljKojiSalje.get());
 		
 		korisnik.get().setPrijateljiKorisnika(insert);
 		korisnikRepo.save(korisnik.get());
@@ -101,7 +105,32 @@ public class KorisnikService
 		for(Korisnik prijateljZaht : zahteviKorisnika)
 		{
 			System.out.println(prijateljZaht.getIme());
-			if(prijateljZaht.getEmail().equals(email))
+			if(prijateljZaht.getEmail().equals(prijateljKojiSalje.get().getEmail()))
+			{
+				sviZahtevi.remove(prijateljZaht);
+				korisnik.get().setZahteviKorisnika(sviZahtevi);
+				korisnikRepo.save(korisnik.get());
+			}
+		}
+		
+		return "SUCCESS";
+	}
+	
+	public String odbijZahtev(Long idTrenutni, Long idPosiljalac) 
+	{
+		Optional<Korisnik> korisnik = korisnikRepo.findById(idTrenutni);
+		Optional<Korisnik> prijateljKojiSalje = korisnikRepo.findById(idPosiljalac);
+		
+		//brisanje iz liste zahteva
+		
+		List<Korisnik> zahteviKorisnika = korisnik.get().getZahteviKorisnika();
+		
+		List<Korisnik> sviZahtevi = korisnik.get().getZahteviKorisnika();
+		
+		for(Korisnik prijateljZaht : zahteviKorisnika)
+		{
+			System.out.println(prijateljZaht.getIme());
+			if(prijateljZaht.getEmail().equals(prijateljKojiSalje.get().getEmail()))
 			{
 				sviZahtevi.remove(prijateljZaht);
 				korisnik.get().setZahteviKorisnika(sviZahtevi);
@@ -132,10 +161,6 @@ public class KorisnikService
 			
 		else
 			return "FLIGHT_IS_ON";
-		
-		
-		
-		//sad treba naci i let da proverimo vreme sletanja
 		
 			
 		return "SUCCESS";
@@ -245,6 +270,25 @@ public class KorisnikService
 		
 		return karteRet;
 	}
+
+	/*
+	 * Uzima zahteve koji su poslati OVOM korisniku (a ne koje je ovaj korisnik poslao)
+	 */
+	public List<KorisnikDTO> getAllZahteviZaPrijateljstvo(Long idKorisnika)
+	{
+		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
+		
+		List<KorisnikDTO> korisniciRet = new ArrayList<KorisnikDTO>();
+		
+		for(Korisnik kor : korisnik.get().getKorisniciZaht())
+		{
+			korisniciRet.add(korisnikConv.convertToDTO(kor));
+		}
+		
+		return korisniciRet;
+	}
+
+	
 
 	
 }

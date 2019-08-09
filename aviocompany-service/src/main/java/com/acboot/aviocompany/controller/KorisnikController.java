@@ -146,14 +146,29 @@ public class KorisnikController
 	}
 	
 	/*
-	 * Prima id korisnika od koga je zahtev i email prijatelja kome je poslat (mora u paru da bi izvukli zahtev iz baze)
+	 * PRIHVATANJE ZAHTEVA
+	 * Parametar1 = id korisnika na cijoj smo acc info stranici, parametar2 = id korisnika koji salje zahtev
 	 */
-	@PostMapping("/acceptrequest/{id}")
-	public ResponseEntity<String> prihvatiZahtev(@PathVariable("id") Long idKorisnika, @RequestBody String email)
+	@PostMapping("/acceptrequest/{currentuserid}/{senderuserid}")
+	public ResponseEntity<String> prihvatiZahtev(@PathVariable("currentuserid") Long idTrenutni, @PathVariable("senderuserid") Long idPosiljalac)
 	{
 		System.out.println("prihvatiZahtev()");
 		
-		String retVal = korService.prihvatiZahtev(idKorisnika, email);
+		String retVal = korService.prihvatiZahtev(idTrenutni, idPosiljalac);
+		
+		return (!retVal.equals("SUCCESS")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.OK);
+	}
+	
+	/*
+	 * ODBIJANJE ZAHTEVA
+	 * Parametar1 = id korisnika na cijoj smo acc info stranici, parametar2 = id korisnika koji salje zahtev
+	 */
+	@PostMapping("/refuserequest/{currentuserid}/{senderuserid}")
+	public ResponseEntity<String> odbijZahtev(@PathVariable("currentuserid") Long idTrenutni, @PathVariable("senderuserid") Long idPosiljalac)
+	{
+		System.out.println("odbijZahtev()");
+		
+		String retVal = korService.odbijZahtev(idTrenutni, idPosiljalac);
 		
 		return (!retVal.equals("SUCCESS")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.OK);
 	}
@@ -187,6 +202,20 @@ public class KorisnikController
 		List<KartaDTO> listDto = korService.getAllRezervisaneKarteZaTogKorisnika(idKorisnika);
 		
 		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<KartaDTO>>(listDto, HttpStatus.OK);
+	}
+	
+	
+	/*
+	 * Vraca sve zahteve za prijateljstvo koje je dobio od drugih korisnika (za datog korisnika)
+	 */
+	@GetMapping("/getallrequests/{userid}")
+	public ResponseEntity<List<KorisnikDTO>> getAllZahteviZaPrijateljstvo(@PathVariable("userid") Long idKorisnika)
+	{
+		System.out.println("getAllZahteviZaPrijateljstvo()");
+		
+		List<KorisnikDTO> listDto = korService.getAllZahteviZaPrijateljstvo(idKorisnika);
+		
+		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<KorisnikDTO>>(listDto, HttpStatus.OK);
 	}
 	
 }

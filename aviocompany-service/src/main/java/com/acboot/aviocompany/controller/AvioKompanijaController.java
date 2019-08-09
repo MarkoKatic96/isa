@@ -43,15 +43,15 @@ public class AvioKompanijaController
 	{
 		System.out.println("getAvioKompanija()");
 		
-		Korisnik k = korServ.zaTokene(req);
-		if(k != null && k.getRola().equals(Rola.ADMIN_AVIO_KOMPANIJE) && k.getZaduzenZaId() == id)
-		{
+//		Korisnik k = korServ.zaTokene(req);
+//		if(k != null && k.getRola().equals(Rola.ADMIN_AVIO_KOMPANIJE) && k.getZaduzenZaId() == id)
+//		{
 			AvioKompanijaDTO avioDto = avioService.findById(id);
 			return (avioDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<AvioKompanijaDTO>(avioDto, HttpStatus.OK);
-		}
-		
-		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		
+//		}
+//		
+//		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//		
 	}
 	
 	
