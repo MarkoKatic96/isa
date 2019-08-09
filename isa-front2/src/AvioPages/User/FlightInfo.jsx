@@ -7,11 +7,27 @@ class FlightInfo extends Component {
 
     state = {
         let: "",
-        aviokompanija: ""
+        aviokompanija: "",
+        user: "",
+        showResBtn: ""
     }
 
     componentDidMount() {
-        console.log(this.props.match.params.flightid);
+
+        let local = localStorage.getItem("email");
+        if(local !== 'undefined')
+        {
+            this.setState({
+                showResBtn: true
+            })
+        }
+        else
+        {
+            this.setState({
+                showResBtn: false
+            })
+        }
+
         axios.get('http://localhost:8221/flight/getone/' + this.props.match.params.flightid).then(
             res => {
                 console.log(res);
@@ -29,21 +45,20 @@ class FlightInfo extends Component {
                 })
             }
         )
-
-
-
     }
 
     showCompanyInfo = () => {
         this.props.history.push('/companyinfo/' + this.state.aviokompanija);
     }
 
-    reserveTicket = (idLeta) =>
-    {
+    reserveTicket = (idLeta) => {
         this.props.history.push('/reservation/' + idLeta);
     }
 
     render() {
+        let show = this.state.showResBtn;
+        const rezbtn = (show) ? (<button className="btn waves-effect waves-light red" id="rezervisi-btn" onClick={() => { this.reserveTicket(this.state.let.idLeta) }}>Rezervacija</button>) : (<div></div>)
+
         return (
             <div>
                 <div className="center container">
@@ -63,8 +78,8 @@ class FlightInfo extends Component {
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                <button className="btn waves-effect waves-light green" id="avioinfo-btn" onClick={() => { this.showCompanyInfo() }}>Informacije o aviokompaniji</button>
-                                    <button className="btn waves-effect waves-light red" id="rezervisi-btn" onClick={() => { this.reserveTicket(this.state.let.idLeta) }}>Rezervacija</button><br />
+                                    <button className="btn waves-effect waves-light green" id="avioinfo-btn" onClick={() => { this.showCompanyInfo() }}>Informacije o aviokompaniji</button>
+                                    {rezbtn}
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import UserReservations from './UserReservations';
+import UserFriends from './UserFriends';
+import UserRequests from './UserRequests';
 
 class Account extends Component {
 
@@ -18,7 +20,6 @@ class Account extends Component {
     componentDidMount() {
         axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
             .then(res => {
-                console.log(res)
                 this.setState({
                     user: res.data,
                     email: res.data.email,
@@ -85,6 +86,10 @@ class Account extends Component {
                         </div>
                     </div>
                 </form>
+                <h3>Zahtevi za prijateljstvo:</h3>
+                <UserRequests userid={this.state.user.id} />
+                <h3>Vasi prijatelji:</h3>
+                <UserFriends userid={this.state.user.id} />
                 <h3>Vase rezervacije:</h3>
                 <UserReservations userid={this.state.user.id} />
             </div>

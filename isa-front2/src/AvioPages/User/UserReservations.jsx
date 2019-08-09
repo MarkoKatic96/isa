@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { withRouter} from 'react-router-dom';
 
 class UserReservations extends Component {
     state = {  
@@ -10,7 +11,7 @@ class UserReservations extends Component {
     componentDidMount() {
         axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
             .then(res => {
-                console.log(res)
+                
                 this.setState({
                     user: res.data
                 })
@@ -34,7 +35,7 @@ class UserReservations extends Component {
                     if(res.data)
                     {
                         alert("Rezervacija uspesno otkazana")
-                        // this.props.history.push('/account');  
+                        this.props.history.push('/account');  
                     }
                     else
                     {
@@ -75,7 +76,7 @@ class UserReservations extends Component {
                 </div>
             );
         })) : (
-                <h3>Nema letova</h3>
+                <h4>Nema rezervacija</h4>
             )
 
             return(
@@ -87,4 +88,4 @@ class UserReservations extends Component {
     }
 }
 
-export default UserReservations;
+export default withRouter(UserReservations);

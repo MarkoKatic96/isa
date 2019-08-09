@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
+import axios from 'axios'
 
 class UserFriends extends Component {
-    state = {  }
+    state = {  
+        user: "",
+        userFriends: []
+    }
+
+    
+
     render() {
-        return (
-            <div>
-                
-            </div>
-        );
+            return(
+                <div>
+                    <h1>U izradi</h1>
+                </div>
+            )
+
     }
 }
 

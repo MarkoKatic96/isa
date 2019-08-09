@@ -63,9 +63,9 @@ class AllFlights extends Component {
     render() {
         const flightsList = this.state.letovi.length ? (this.state.letovi.map(flight => {
             return (
-                <div>
+                <div key={flight.idLeta}>
 
-                    <div className="center container" key={flight.idLeta}>
+                    <div className="center container" >
 
                         <div className="row">
                             <div className="col s12 m12">
