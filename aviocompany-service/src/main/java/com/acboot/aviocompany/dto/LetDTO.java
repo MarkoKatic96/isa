@@ -20,9 +20,10 @@ public class LetDTO
 	private int brojPresedanja;
 	private float prosecnaOcena;
 	private String tipPuta;
-	private short brojOsoba;
-	private short brojMesta;
+	private int brojOsoba;
+	private int brojMesta;
 	private float ukupanPrihod;
+	private float cenaKarte;
 	
     private AvioKompanijaDTO aviokompanija;
     private DestinacijaDTO destinacijaPoletanja;

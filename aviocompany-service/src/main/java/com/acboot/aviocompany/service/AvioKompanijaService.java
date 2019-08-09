@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.acboot.aviocompany.converter.AvioKompanijaConverter;
 import com.acboot.aviocompany.dto.AvioKompanijaDTO;
 import com.acboot.aviocompany.model.AvioKompanija;
+import com.acboot.aviocompany.model.Let;
 import com.acboot.aviocompany.repository.AvioKompanijaRepository;
 
 @Service
@@ -22,6 +23,9 @@ public class AvioKompanijaService
 	
 	@Autowired
 	AvioKompanijaConverter avioConv;
+	
+	@Autowired
+	private LetService letService;
 	
 	
 	public AvioKompanijaDTO findById(Long id)
@@ -94,6 +98,13 @@ public class AvioKompanijaService
 		
 		if(avio.isPresent())
 		{
+			List<Let> letovi = avio.get().getLetovi();
+			
+			for(Let let : letovi)
+			{
+				letService.deleteOne(let.getIdLeta());
+			}
+			
 			avioRepo.deleteById(id);
 			return true;
 		}

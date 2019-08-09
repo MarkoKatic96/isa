@@ -1,5 +1,6 @@
 package com.acboot.aviocompany.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,8 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
+import com.acboot.aviocompany.converter.KartaConverter;
+import com.acboot.aviocompany.dto.KartaDTO;
 import com.acboot.aviocompany.dto.KorisnikDTO;
+import com.acboot.aviocompany.model.Karta;
 import com.acboot.aviocompany.model.Korisnik;
+import com.acboot.aviocompany.model.Let;
+import com.acboot.aviocompany.repository.KartaRepository;
 import com.acboot.aviocompany.repository.KorisnikRepository;
 import com.acboot.aviocompany.security.JwtTokenUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,6 +28,12 @@ public class KorisnikService
 {
 	@Autowired
 	private KorisnikRepository korisnikRepo;
+	
+	@Autowired
+	private KartaRepository kartaRepo;
+	
+	@Autowired
+	private KartaConverter kartaConv;
 	
 	@Autowired
 	private MailService mailService;
@@ -97,6 +109,35 @@ public class KorisnikService
 			}
 		}
 		
+		return "SUCCESS";
+	}
+	
+	
+	/*
+	 * OCENA KORISNIKA NAKON ZAVRSENOG LETA
+	 */
+	public String oceniLet(Long idKorisnika, Long idKarte, Integer ocena)
+	{
+		Optional<Karta> karta = kartaRepo.findById(idKarte);
+
+		Let let = karta.get().getLet();
+		
+		LocalDateTime date = LocalDateTime.now();
+		
+		if(let.getVremeSletanja().isBefore(date))
+		{
+			karta.get().setOcena(ocena);
+			kartaRepo.save(karta.get());
+		}
+			
+		else
+			return "FLIGHT_IS_ON";
+		
+		
+		
+		//sad treba naci i let da proverimo vreme sletanja
+		
+			
 		return "SUCCESS";
 	}
 	
@@ -184,4 +225,26 @@ public class KorisnikService
 		Korisnik k = this.getUserByEmail(email);
 		return k;
 	}
+
+	public List<KartaDTO> getAllRezervisaneKarteZaTogKorisnika(Long idKorisnika)
+	{
+		List<Karta> karte = kartaRepo.findAll();
+		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
+		
+		List<KartaDTO> karteRet = new ArrayList<KartaDTO>();
+		
+		for(Karta karta : karte)
+		{
+			if(karta.getKorisnik().equals(korisnik.get()))
+			{
+				karteRet.add(kartaConv.convertToDTO(karta));
+			}
+			else
+				continue;
+		}
+		
+		return karteRet;
+	}
+
+	
 }

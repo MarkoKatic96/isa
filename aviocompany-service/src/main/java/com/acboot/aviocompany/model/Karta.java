@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Value;
 
 import lombok.AllArgsConstructor;
@@ -32,7 +33,8 @@ public class Karta
 	@NotNull
 	private float cena;
 	
-	private short ocena;
+	@Range(min=0, max=5)
+	private int ocena;
 	
 	@NotNull
 	private boolean brzaRezervacija;

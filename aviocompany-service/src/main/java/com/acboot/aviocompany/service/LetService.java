@@ -14,9 +14,13 @@ import com.acboot.aviocompany.dto.KlasaDTO;
 import com.acboot.aviocompany.dto.LetDTO;
 import com.acboot.aviocompany.dto.PretragaDTO;
 import com.acboot.aviocompany.model.AvioKompanija;
+import com.acboot.aviocompany.model.Karta;
 import com.acboot.aviocompany.model.Klasa;
+import com.acboot.aviocompany.model.Korisnik;
 import com.acboot.aviocompany.model.Let;
 import com.acboot.aviocompany.repository.AvioKompanijaRepository;
+import com.acboot.aviocompany.repository.KartaRepository;
+import com.acboot.aviocompany.repository.KorisnikRepository;
 import com.acboot.aviocompany.repository.LetRepository;
 
 @Service
@@ -31,6 +35,15 @@ public class LetService
 	
 	@Autowired
 	private AvioKompanijaRepository avioRepo;
+	
+	@Autowired
+	private KorisnikRepository korisnikRepo;
+	
+	@Autowired
+	private KartaService kartaService;
+	
+	@Autowired
+	private KartaRepository kartaRepo;
 	
 	
 	public LetDTO findById(Long id)
@@ -84,12 +97,27 @@ public class LetService
 	public LetDTO saveOne(LetDTO dto)
 	{
 		Optional<Let> let = letRepo.findById(dto.getIdLeta());
-						
+		Optional<Korisnik> korisnik = korisnikRepo.findById((long) 1);
+		
 		if(let.isPresent())
 			return null;
 		else
 		{			
 			letRepo.save(letConv.convertFromDTO(dto));
+			Let lett = letRepo.findByBrojLeta(dto.getBrojLeta());
+			for(int i=0; i<lett.getBrojMesta(); i++)
+			{
+				Karta karta = new Karta();
+				karta.setBrzaRezervacija(false);
+				karta.setCena(letConv.convertFromDTO(dto).getCenaKarte());
+				karta.setKorisnik(korisnik.get());
+				karta.setOcena(0);
+				karta.setPopust(0);
+				karta.setVremeRezervisanja(LocalDateTime.of(2000, 10, 10, 10, 10));
+				karta.setLet(lett);
+				kartaRepo.save(karta);
+			}
+			
 			return dto;
 		}
 	}
@@ -134,6 +162,16 @@ public class LetService
 		
 		if(let.isPresent())
 		{
+			List<Karta> karte = kartaRepo.findAll();
+			
+			for(Karta karta : karte)
+			{
+				if(karta.getLet().equals(let.get()))
+				{
+					kartaRepo.delete(karta);
+				}
+			}
+			
 			letRepo.deleteById(id);
 			return true;
 		}

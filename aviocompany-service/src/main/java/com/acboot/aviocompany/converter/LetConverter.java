@@ -51,6 +51,7 @@ public class LetConverter
 		dto.setBrojOsoba(model.getBrojOsoba());
 		dto.setBrojMesta(model.getBrojMesta());
 		dto.setUkupanPrihod(model.getUkupanPrihod());
+		dto.setCenaKarte(model.getCenaKarte());
 		
 		dto.setAviokompanija(avioConv.convertToDTO(model.getAviokompanija()));
 		dto.setDestinacijaPoletanja(destConv.convertToDTO(model.getDestinacijaPoletanja()));
@@ -119,6 +120,7 @@ public class LetConverter
 		model.setBrojOsoba(dto.getBrojOsoba());
 		model.setBrojMesta(dto.getBrojMesta());
 		model.setUkupanPrihod(dto.getUkupanPrihod());
+		model.setCenaKarte(dto.getCenaKarte());
 		
 		model.setAviokompanija(avioConv.convertFromDTO(dto.getAviokompanija()));
 		model.setDestinacijaPoletanja(destConv.convertFromDTO(dto.getDestinacijaPoletanja()));

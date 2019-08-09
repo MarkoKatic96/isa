@@ -1,6 +1,9 @@
 package com.acboot.aviocompany.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.ws.rs.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,6 +54,16 @@ public class KartaController
 		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<KartaDTO>>(listDto, HttpStatus.OK);
 	}
 	
+	@GetMapping("/getfree/{flightid}")
+	public ResponseEntity<List<KartaDTO>> getAllNerezervisaneKarte(@PathVariable("flightid") Long idLeta)
+	{
+		System.out.println("getAllNerezervisaneKarte()");
+		
+		List<KartaDTO> listDto = kartaService.getAllNerezervisaneKarte(idLeta);
+		
+		return (listDto == null) ? new ResponseEntity<List<KartaDTO>>(new ArrayList<KartaDTO>(), HttpStatus.NOT_FOUND) : new ResponseEntity<List<KartaDTO>>(listDto, HttpStatus.OK);
+	}
+	
 	
 	@PostMapping("/add/")
 	public ResponseEntity<KartaDTO> addKarta(@RequestBody KartaDTO dto)
@@ -88,17 +101,17 @@ public class KartaController
 	/*
 	 * Rezervacija jedne karte od strane korisnika
 	 */
-	@PostMapping("/reserveone/")
-	public ResponseEntity<Boolean> rezervisiJednuKartu(@RequestBody List<Long> rezervacija)
+	@PostMapping("/reserveone/{userid}/{ticketid}")
+	public ResponseEntity<Boolean> rezervisiJednuKartu(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte /*@RequestBody List<Long> rezervacija*/)
 	{
 		System.out.println("rezervisiJednuKartu()");
 		
-		Long idKorisnika, idKarte;
+//		Long idKorisnika, idKarte;
 		
-		Object[] rezz = rezervacija.toArray();
+//		Object[] rezz = rezervacija.toArray();
 		
-		idKorisnika = (Long) rezz[0];
-		idKarte = (Long) rezz[1];
+//		idKorisnika = (Long) rezz[0];
+//		idKarte = (Long) rezz[1];
 		
 		System.out.println("ID_KORISNIK: " + idKorisnika + "\nID_KARTE: " + idKarte);
 		
@@ -106,7 +119,18 @@ public class KartaController
 	}
 	
 	/*
-	 * Rezervacija vise karata odjednom od strane korisnika
+	 * Otkazivanje rezervacije od strane korisnika
+	 */
+	@PostMapping("/deletereservation/{userid}/{ticketid}")
+	public ResponseEntity<Boolean> obrisiRezervacijuJedneKarte(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte)
+	{
+		System.out.println("obrisiRezervacijuJedneKarte()");
+		
+		return (!kartaService.obrisiRezervacijuJedneKarte(idKorisnika, idKarte)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+	}
+	
+	/*
+	 * Rezervacija vise karata odjednom od strane korisnika (nije testirano)
 	 */
 	@PostMapping("/reservemore/{userid}")
 	public ResponseEntity<String> rezervisiViseKarata(@PathVariable("userid") Long idKorisnika, @RequestBody List<KartaDTO> karte)

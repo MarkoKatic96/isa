@@ -47,10 +47,13 @@ public class Let
 	@NotNull
 	private String tipPuta;
 	
-	private short brojOsoba;
+	private int brojOsoba;
 	
 	@NotNull
-	private short brojMesta;
+	private int brojMesta;
+	
+	@NotNull
+	private float cenaKarte;
 	
 	private float ukupanPrihod;
 	

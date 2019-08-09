@@ -14,7 +14,7 @@ public class KartaDTO
 	
 	private long idKarte;
 	private float cena;
-	private short ocena;
+	private int ocena;
 	private boolean brzaRezervacija;
 	private float popust;
 

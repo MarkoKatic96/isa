@@ -58,7 +58,8 @@ public class KorisnikController
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
-	public ResponseEntity<KorisnikDTO> getUserById(@PathVariable("id") Long id){
+	public ResponseEntity<KorisnikDTO> getUserById(@PathVariable("id") Long id)
+	{
 		if(korService.getUserById(id)!=null) {
 			KorisnikDTO dto = new KorisnikDTO(korService.getUserById(id));
 			return new ResponseEntity<KorisnikDTO>(dto, HttpStatus.OK);
@@ -68,7 +69,8 @@ public class KorisnikController
 	}
 	
 	@RequestMapping(value="/all/{email}", method = RequestMethod.GET)
-	public ResponseEntity<KorisnikDTO> getUserByEmail(@PathVariable("email") String email){
+	public ResponseEntity<KorisnikDTO> getUserByEmail(@PathVariable("email") String email)
+	{
 		
 		System.out.println("preuzmiRolu()");
 		
@@ -81,7 +83,8 @@ public class KorisnikController
 	}
 	
 	@RequestMapping(value="/", method = RequestMethod.POST)
-	public ResponseEntity<KorisnikDTO> createUser(@RequestBody KorisnikDTO dto){
+	public ResponseEntity<KorisnikDTO> createUser(@RequestBody KorisnikDTO dto)
+	{
 		Korisnik obj = new Korisnik(dto);
 		obj.setRola(Rola.KORISNIK);
 		KorisnikDTO returnType = korService.createKorisnika(obj);
@@ -93,12 +96,14 @@ public class KorisnikController
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteUserById(@PathVariable("id") Long id){
+	public ResponseEntity<String> deleteUserById(@PathVariable("id") Long id)
+	{
 		return new ResponseEntity<String>(korService.deleteKorisnika(id), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<KorisnikDTO> updateUserById(@PathVariable("id") Long id, @RequestBody KorisnikDTO dto){
+	public ResponseEntity<KorisnikDTO> updateUserById(@PathVariable("id") Long id, @RequestBody KorisnikDTO dto)
+	{
 		Korisnik obj = new Korisnik(dto);
 		KorisnikDTO returnTip = korService.updateKorisnika(obj, id);
 		if(returnTip!=null) {
@@ -109,7 +114,8 @@ public class KorisnikController
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<String> login(@RequestBody Login login){
+	public ResponseEntity<String> login(@RequestBody Login login)
+	{
 		
 		System.out.println("login()");
 		
@@ -151,4 +157,36 @@ public class KorisnikController
 		
 		return (!retVal.equals("SUCCESS")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.OK);
 	}
+	
+	
+	/*
+	 * Nakon zavrsenog leta korisnik ocenjuje let (preko karte koju je kupio)
+	 * Metoda prima id korisnika koji je kupio kartu kao i id karte, jer moze da postoji mogucnost
+	 * da je jedan korisnik kupio vise karata
+	 * 
+	 * Moze i bez korisnika, samo pitanje kako preuzeti id karte iz reacta
+	 */
+	@PutMapping("/rateflight/{userid}/{ticketid}")
+	public ResponseEntity<String> oceniLet(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte, @RequestBody Integer ocena)
+	{
+		System.out.println("oceniLet()");
+	
+		String retVal = korService.oceniLet(idKorisnika, idKarte, ocena);
+		
+		return (retVal.equals("FLIGHT_IS_ON")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.CREATED);
+	}
+	
+	/*
+	 * Vraca sve rezervisane karte za prosledjenog korisnika
+	 */
+	@GetMapping("/getallreservations/{userid}")
+	public ResponseEntity<List<KartaDTO>> getAllRezervisaneKarteZaTogKorisnika(@PathVariable("userid") Long idKorisnika)
+	{
+		System.out.println("getAllRezervisaneKarteZaTogKorisnika()");
+		
+		List<KartaDTO> listDto = korService.getAllRezervisaneKarteZaTogKorisnika(idKorisnika);
+		
+		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<KartaDTO>>(listDto, HttpStatus.OK);
+	}
+	
 }

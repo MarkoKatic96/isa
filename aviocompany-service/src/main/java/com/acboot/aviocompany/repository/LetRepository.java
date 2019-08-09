@@ -6,11 +6,15 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.acboot.aviocompany.model.Karta;
+import com.acboot.aviocompany.model.Korisnik;
 import com.acboot.aviocompany.model.Let;
 
+@EnableJpaRepositories(basePackageClasses = {Let.class})
 @Repository
 public interface LetRepository extends JpaRepository<Let, Long>
 {
@@ -38,5 +42,7 @@ public interface LetRepository extends JpaRepository<Let, Long>
 	 */
 	@Query(value = "select avg(t.ocena) from karta t, let f where f.id_leta = :id ;", nativeQuery = true)
 	Optional<Float> findAverageRating(@Param("id") Long id);
+
+	public Let findByBrojLeta(Long brojLeta);
 	
 }
