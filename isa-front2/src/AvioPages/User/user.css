@@ -14,3 +14,11 @@
     margin-top: -50px;
     margin-left: 300px;
 }
+
+#planelayout
+{
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}

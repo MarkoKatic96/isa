@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import './user.css';
@@ -9,22 +9,38 @@ class Reservation extends Component {
     state = {
         toggle: false,
         message: "",
-        brojMesta: ""
+        karte: [],
+        idKarte: "",
+        user: "",
+        idLeta: ""
     }
 
     componentDidMount() {
         let letid = this.props.match.params.flightid;
-        axios.get('http://localhost:8221/flight/getone/' + letid).then(res =>
-        {
-            this.setState({
-                brojMesta: res.data.brojMesta
-            })
-            console.log("BROJ MESTA" + this.state.brojMesta)
-        }).catch(error =>
+        this.setState({
+            idLeta: letid
+        })
+        axios.get('http://localhost:8221/flight/getone/' + letid).then(res => {
+        }).catch(error => {
+            console.log(error);
+        }).then(
+            axios.get('http://localhost:8221/ticket/getfree/' + letid).then(res =>
             {
-                console.log(error);
+                this.setState({
+                    karte: res.data
+                })
             })
-        
+        )
+
+        //uzmi korisnika
+        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+            .then(res => {
+                console.log(res)
+                this.setState({
+                    user: res.data
+                })
+            })
+
     }
 
     toggleFriends = () => {
@@ -52,40 +68,50 @@ class Reservation extends Component {
 
         let email = this.state.message; //ne salje dobro, treba promeniti na serveru
 
-        axios.post('http://localhost:8221/user/invitefriend/1', {email}, {headers: { 'Content-Type': 'text/plain' }}).then(res =>
-        {
+        axios.post('http://localhost:8221/user/invitefriend/1', { email }, { headers: { 'Content-Type': 'text/plain' } }).then(res => {
             console.log(res);
-        }).catch(error =>
-            {
-                console.log(error);
-            })
+        }).catch(error => {
+            console.log(error);
+        })
     }
 
-    confirmReservation = () =>
-    {
-        let list = [1, 1]; //ne salje dobro
-        axios.post('http://localhost:8221/ticket/reserveone/1/1').then(res =>
-        {
-            alert("Karta uspesno rezervisana")
-        }).catch(error =>
-            {
-                alert("Rezervacija nije uspela")
-            })
+    getTicket = (e) => {
+        this.setState({
+            idKarte: e.target.value
+        })
+    }
+
+    confirmReservation = () => {
+        let userid = this.state.user.id;
+        let ticketid = this.state.idKarte;
+        let flightid = this.state.idLeta;
+        axios.post('http://localhost:8221/ticket/reserveone/' + userid + '/' + ticketid).then(res => {
+            this.props.history.push('/flinfo/' + flightid);    
+            alert("Karta uspesno rezervisana");
+        }).catch(error => {
+            alert("Rezervacija nije uspela")
+        })
     }
 
     render() {
-        const brojMesta = this.state.brojMesta;
+        let i = 1;
+        const raspored = this.state.karte.length ? (this.state.karte.map(karta => {
+            
+            return (
+                <div id="planelayout" key={karta.idKarte}>
+                    <Fragment>
+                    <button  className="btn waves-effect waves-light blue" value={karta.idKarte} id="ticketbtn" onClick={(e) => { this.getTicket(e) }}>{i++}</button><br />
+                    </Fragment>
+                </div>
+            );
+        })) : (
+                <div></div>
+            )
+
         return (
             <div>
-    
-    <Rectangle aspectRatio={[5, 3]} id="1" value="5">
-      <div value="ej bre" style={{ background: 'white', width: '50px', height: '50px' }} />
-    </Rectangle>
 
-    <Rectangle  id="1" value="5">
-      <div value="ej bre" style={{ background: 'white', width: '50px', height: '50px' }} />
-    </Rectangle>
-    
+                {raspored}
 
                 <button className="btn waves-effect waves-light red" id="friendsbtn" onClick={() => { this.toggleFriends() }}>Pozovi prijatelje</button><br />
                 <button className="btn waves-effect waves-light red" id="reservationbtn" onClick={() => { this.confirmReservation() }}>Potvrdi rezervaciju</button><br />

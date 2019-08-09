@@ -34,6 +34,7 @@ import Reports from './AvioPages/Admin/Reports';
 import AdminInfo from './AvioPages/Admin/AdminInfo';
 import AddAdmin from './MasterAdminPages/AddAdmin';
 import FlightsEdit from './AvioPages/Admin/FlightsEdit';
+import Account from './AvioPages/User/Account';
 
 class App extends Component {
 
@@ -109,6 +110,7 @@ class App extends Component {
           <Route path = '/adprices' render={() => <Prices />} />
           <Route path = '/adreports' render={() => <Reports />} />
           <Route path = '/adinfo' render={() => <AdminInfo />} />
+          <Route path = '/account' render={() => <Account />} />
         </div>
       </BrowserRouter>
     );
