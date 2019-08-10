@@ -20,6 +20,7 @@ import com.acboot.aviocompany.model.Korisnik;
 import com.acboot.aviocompany.model.Let;
 import com.acboot.aviocompany.repository.KartaRepository;
 import com.acboot.aviocompany.repository.KorisnikRepository;
+import com.acboot.aviocompany.repository.LetRepository;
 import com.acboot.aviocompany.security.JwtTokenUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +33,9 @@ public class KorisnikService
 	
 	@Autowired
 	private KorisnikConverter korisnikConv;
+	
+	@Autowired
+	private LetRepository letRepo;
 	
 	@Autowired
 	private KartaRepository kartaRepo;
@@ -307,6 +311,32 @@ public class KorisnikService
 		{
 			karta.get().setOcena(ocena);
 			kartaRepo.save(karta.get());
+			
+			//uzimamo sve ocene
+			List<Integer> ocene = new ArrayList<Integer>();
+			for(Karta kartaTemp : let.getKarteLeta())
+			{
+				if(kartaTemp.getOcena() > 0) //default je 0
+				{
+					ocene.add(kartaTemp.getOcena());
+				}
+			}
+			
+			float prosecna = 0;
+			float suma = 0;
+			float uk = 0;
+			//racunamo prosecnu vrednost od njih
+			for(int i=0; i<ocene.size(); i++)
+			{
+				suma += ocene.get(i);
+				uk = i+1;
+			}
+			
+			prosecna = suma/uk;
+			System.out.println("PROSECNA: " + zaokruzi(prosecna,2));
+			let.setProsecnaOcena(zaokruzi(prosecna,2));
+			letRepo.save(let);
+			
 		}
 			
 		else
@@ -314,6 +344,10 @@ public class KorisnikService
 		
 			
 		return "SUCCESS";
+	}
+	
+	private float zaokruzi(float broj, int preciznost) {
+	    return (float) (Math.round(broj * Math.pow(10, preciznost)) / Math.pow(10, preciznost));
 	}
 	
 	

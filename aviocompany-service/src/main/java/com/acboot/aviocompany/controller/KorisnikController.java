@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -191,16 +192,14 @@ public class KorisnikController
 	/*
 	 * Nakon zavrsenog leta korisnik ocenjuje let (preko karte koju je kupio)
 	 * Metoda prima id korisnika koji je kupio kartu kao i id karte, jer moze da postoji mogucnost
-	 * da je jedan korisnik kupio vise karata
-	 * 
-	 * Moze i bez korisnika, samo pitanje kako preuzeti id karte iz reacta
+	 * da je jedan korisnik kupio vise karata, kao i ocenu (nije moglo preko body-ja)
 	 */
-	@PutMapping("/rateflight/{userid}/{ticketid}")
-	public ResponseEntity<String> oceniLet(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte, @RequestBody Integer ocena)
+	@PutMapping("/rateflight/{userid}/{ticketid}/{rate}")
+	public ResponseEntity<String> oceniLet(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte, @PathVariable("rate") Integer rate)
 	{
 		System.out.println("oceniLet()");
 	
-		String retVal = korService.oceniLet(idKorisnika, idKarte, ocena);
+		String retVal = korService.oceniLet(idKorisnika, idKarte, rate);
 		
 		return (retVal.equals("FLIGHT_IS_ON")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.CREATED);
 	}
