@@ -1,80 +1,72 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 class UserRequests extends Component {
-    state = {  
+    state = {
         userRequests: [],
         user: ""
     }
 
     componentDidMount() {
         axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
-        .then(res => {
-            this.setState({
-                user: res.data
-            })
-            let userid = res.data.id
-        console.log("USERID : " + userid)
-                axios.get('http://localhost:8221/user/getallrequests/' + userid).then(res =>
-                {
+            .then(res => {
+                this.setState({
+                    user: res.data
+                })
+                let userid = res.data.id
+                console.log("USERID : " + userid)
+                axios.get('http://localhost:8221/user/getallrequests/' + userid).then(res => {
                     this.setState({
                         userRequests: res.data
                     })
                     console.log(res);
                 })
+            })
+
+    }
+
+    acceptRequest = (userid) => {
+        let userSender = this.state.user.id;
+        axios.post('http://localhost:8221/user/acceptrequest/' + userid + '/' + userSender).then(res => {
+            console.log(res.data);
+            if (res.data === "SUCCESS") {
+                alert("Zahtev uspesno prihvacen")
+                this.componentDidMount();
+            }
+            else {
+                alert("Zahtev nije prihvacen")
+            }
+
+        }).catch(err => {
+            console.log(err)
+            alert("Zahtev uspesno prihvacen")   //baci exc al odradi posao
+            this.componentDidMount();
         })
-        
     }
 
-    acceptRequest = (userid) =>
-    {
+    refuseRequest = (userid) => {
         let userSender = this.state.user.id;
-        axios.post('http://localhost:8221/user/acceptrequest/' + userid + '/' + userSender).then(res =>
-                {
-                    console.log(res.data);
-                    if(res.data === "SUCCESS")
-                    {
-                        alert("Zahtev uspesno prihvacen")
-                         this.props.history.push('/account');
-                    }
-                    else
-                    {
-                        alert("Zahtev nije prihvacen")   
-                    }
-                    
-                }).catch(err => {
-                    console.log(err)
-                    alert("Zahtev uspesno prihvacen")   //baci exc al odradi posao
-                })
+        axios.post('http://localhost:8221/user/refuserequest/' + userid + '/' + userSender).then(res => {
+            console.log(res.data);
+            if (res.data === "SUCCESS") {
+                alert("Zahtev uspesno odbijen")
+                this.componentDidMount();
+            }
+            else {
+                alert("Zahtev neuspesno odbijen")
+            }
+
+        }).catch(err => {
+            console.log(err)
+            alert("Zahtev uspesno odbijen")
+        })
     }
 
-    refuseRequest = (userid) =>
-    {
-        let userSender = this.state.user.id;
-        axios.post('http://localhost:8221/user/acceptrequest/' + userid + '/' + userSender).then(res =>
-                {
-                    console.log(res.data);
-                    if(res.data === "SUCCESS")
-                    {
-                        alert("Zahtev uspesno odbijen")
-                         this.props.history.push('/account');
-                    }
-                    else
-                    {
-                        alert("Zahtev neuspesno odbijen")   
-                    }
-                    
-                }).catch(err => {
-                    console.log(err)
-                    alert("Zahtev uspesno odbijen")   
-                })
-    }
 
-    
 
     render() {
-         const allRequests = this.state.userRequests.length ? (this.state.userRequests.map(req => {
+        const allRequests = this.state.userRequests.length ? (this.state.userRequests.map(req => {
             return (
                 <div key={req.id}>
                     <div className="center container">
@@ -103,11 +95,11 @@ class UserRequests extends Component {
                 <h4>Nema novih zahteva za prijateljstvo</h4>
             )
 
-            return(
-                <div>
-                    {allRequests}
-                </div>
-            )
+        return (
+            <div>
+                {allRequests}
+            </div>
+        )
 
     }
 }
