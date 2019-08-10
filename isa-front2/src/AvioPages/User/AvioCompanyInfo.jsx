@@ -14,7 +14,6 @@ class FlightInfo extends Component {
         console.log(this.props.match.params.flightid);
         axios.get('http://localhost:8221/aviocompany/getone/' + this.props.match.params.flightid).then(
             res => {
-                console.log(res);
                 this.setState({
                     kompanija: res.data
                 })
@@ -23,7 +22,7 @@ class FlightInfo extends Component {
             //za prosecnu ocenu
         axios.get('http://localhost:8221/aviocompany/getavgrating/' + this.props.match.params.flightid).then(
             res => {
-                console.log(res);
+                console.log(res.data);
                 this.setState({
                     avgrating: res.data
                 })

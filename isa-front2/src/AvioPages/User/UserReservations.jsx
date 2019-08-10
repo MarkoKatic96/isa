@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 class UserReservations extends Component {
-    state = {  
+    state = {
         user: "",
-        userTickets: []
+        userTickets: [],
+        showRateFormFlag: false,
+        ocena: ""
     }
 
     componentDidMount() {
         axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
             .then(res => {
-                
+
                 this.setState({
                     user: res.data
                 })
 
-                axios.get('http://localhost:8221/user/getallreservations/' + res.data.id).then(res =>
-                {
+                axios.get('http://localhost:8221/user/getallreservations/' + res.data.id).then(res => {
                     this.setState({
                         userTickets: res.data
                     })
@@ -26,25 +27,60 @@ class UserReservations extends Component {
             })
     }
 
-    deleteReservation = (idKarte) =>
-    {
+    deleteReservation = (idKarte) => {
         let userid = this.state.user.id;
-        axios.post('http://localhost:8221/ticket/deletereservation/' + userid + '/' + idKarte).then(res =>
-                {
-                    // alert(res.data)
-                    if(res.data)
-                    {
-                        alert("Rezervacija uspesno otkazana")
-                        this.props.history.push('/account');  
-                    }
-                    else
-                    {
-                        alert("Vreme za otkazivanje rezervacije je isteklo")   
-                    }
-                    
-                }).catch(err => {
-                    alert("Vreme za otkazivanje rezervacije je isteklo")
-                })
+        axios.post('http://localhost:8221/ticket/deletereservation/' + userid + '/' + idKarte).then(res => {
+            // alert(res.data)
+            if (res.data) {
+                alert("Rezervacija uspesno otkazana")
+                this.componentDidMount();
+            }
+            else {
+                alert("Vreme za otkazivanje rezervacije je isteklo")
+            }
+
+        }).catch(err => {
+            alert("Vreme za otkazivanje rezervacije je isteklo")
+        })
+    }
+
+    rateFlight = (e, idKarte) => {
+        e.preventDefault();
+        let userid = this.state.user.id;
+        let ocena = this.state.ocena;
+
+        console.log(ocena)
+        axios.put('http://localhost:8221/user/rateflight/' + userid + '/' + idKarte + '/' + ocena).then(res => {
+            // alert(res.data)
+            if (res.data === "SUCCESS") {
+                alert("Ocena zabelezena")
+            }
+            else {
+                alert("Let jos traje ili nije krenuo")
+            }
+
+        }).catch(err => {
+            alert("ERROR")
+        })
+    }
+
+    changeInputField = (e) => {
+        this.setState({
+            [e.target.id]: e.target.value
+        })
+    }
+
+    showRateForm = () => {
+        if(this.state.showRateFormFlag) {
+            this.setState({
+                showRateFormFlag: false
+            })
+        }
+        else {
+            this.setState({
+                showRateFormFlag: true
+            })
+        }
     }
 
     render() {
@@ -68,6 +104,24 @@ class UserReservations extends Component {
                                     <div className="divider white"></div>
                                     <div className="card-action">
                                         <button className="btn waves-effect waves-light red" id="deletebtn" onClick={() => { this.deleteReservation(ticket.idKarte) }}>Ponisti</button>
+                                        <button className="btn waves-effect waves-light blue" id="ratebtn" onClick={() => { this.showRateForm() }}>Oceni</button>
+                                        {
+                                            (this.state.showRateFormFlag) ? (
+                                                <div>
+                                                    <form onSubmit={(e) => { this.rateFlight(e, ticket.idKarte) }}>
+                                                        <div >
+                                                            <label htmlFor="ocena">Ocena</label>
+                                                            <div className="input-field">
+                                                                <input type="text" id="ocena" defaultValue={ticket.ocena} className="browser-default" onChange={(e) => { this.changeInputField(e) }} />
+                                                            </div>
+                                                            <div className="input-field">
+                                                                <input type="submit" value="Sacuvaj" className="btn green lighten-1 z-depth-0" /> <br /> <br />
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>) : (<div></div>)
+                                        }
+
                                     </div>
                                 </div>
                             </div>
@@ -79,11 +133,11 @@ class UserReservations extends Component {
                 <h4>Nema rezervacija</h4>
             )
 
-            return(
-                <div>
-                    {reservationList}
-                </div>
-            )
+        return (
+            <div>
+                {reservationList}
+            </div>
+        )
 
     }
 }
