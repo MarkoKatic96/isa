@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import GoogleMap from './GoogleMap';
 
 
 class FlightInfo extends Component {
@@ -84,6 +85,7 @@ class FlightInfo extends Component {
                             </div>
                         </div>
                     </div>
+                    <GoogleMap />
                 </div>
             </div>
         );

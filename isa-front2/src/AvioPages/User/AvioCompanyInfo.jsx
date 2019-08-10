@@ -41,14 +41,12 @@ class FlightInfo extends Component {
                                     <span className="card-title"><b>Naziv aviokompanije: {this.state.kompanija.naziv}</b></span>
                                     <div className="divider white"></div>
                                     <br />
-                                    <p>Adresa: {this.state.kompanija.adresa}</p>
-                                    <p>Opis: {this.state.kompanija.opis}</p>
-                                    <p>Prosecna ocena: {this.state.avgrating}</p>
+                                    <p>Adresa: &nbsp;&nbsp;{this.state.kompanija.adresa}</p>
+                                    <p>Opis: &nbsp;&nbsp;{this.state.kompanija.opis}</p>
+                                    <p>Prosecna ocena: &nbsp;&nbsp;{this.state.avgrating}</p>
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                    {/* <button className="btn waves-effect waves-light green" id="avioinfo-btn" onClick={() => { this.showCompanyInfo(this.state.let.aviokompanija) }}>Informacije o aviokompaniji</button>
-                                    <button className="btn waves-effect waves-light red" id="rezervisi-btn" onClick={() => { this.reserveTicket(this.state.let.idLeta) }}>Rezervacija</button> */}
                                 </div>
                             </div>
                         </div>

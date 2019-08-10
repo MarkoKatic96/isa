@@ -43,6 +43,16 @@ class Reservation extends Component {
 
     }
 
+    componentDidUpdate(){
+        let letid = this.props.match.params.flightid;
+        axios.get('http://localhost:8221/ticket/getfree/' + letid).then(res =>
+            {
+                this.setState({
+                    karte: res.data
+                })
+            })
+    }
+
     toggleFriends = () => {
         if (this.state.toggle) {
             this.setState({
@@ -85,9 +95,9 @@ class Reservation extends Component {
         let userid = this.state.user.id;
         let ticketid = this.state.idKarte;
         let flightid = this.state.idLeta;
-        axios.post('http://localhost:8221/ticket/reserveone/' + userid + '/' + ticketid).then(res => {
-            this.props.history.push('/flinfo/' + flightid);    
+        axios.post('http://localhost:8221/ticket/reserveone/' + userid + '/' + ticketid).then(res => {   
             alert("Karta uspesno rezervisana");
+            this.componentDidUpdate();
         }).catch(error => {
             alert("Rezervacija nije uspela")
         })
