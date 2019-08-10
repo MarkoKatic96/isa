@@ -173,6 +173,20 @@ public class KorisnikController
 		return (!retVal.equals("SUCCESS")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.OK);
 	}
 	
+	/*
+	 * BRISANJE PRIJATELJA
+	 * Parametar1 = id korisnika na cijoj smo acc info stranici, parametar2 = id korisnika koji se brise
+	 */
+	@PostMapping("/deletefriend/{currentuserid}/{senderuserid}")
+	public ResponseEntity<String> obrisiPrijatelja(@PathVariable("currentuserid") Long idTrenutni, @PathVariable("senderuserid") Long idZaBrisanje)
+	{
+		System.out.println("obrisiPrijatelja()");
+		
+		String retVal = korService.obrisiPrijatelja(idTrenutni, idZaBrisanje);
+		
+		return (!retVal.equals("SUCCESS")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.OK);
+	}
+	
 	
 	/*
 	 * Nakon zavrsenog leta korisnik ocenjuje let (preko karte koju je kupio)
@@ -214,6 +228,19 @@ public class KorisnikController
 		System.out.println("getAllZahteviZaPrijateljstvo()");
 		
 		List<KorisnikDTO> listDto = korService.getAllZahteviZaPrijateljstvo(idKorisnika);
+		
+		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<KorisnikDTO>>(listDto, HttpStatus.OK);
+	}
+	
+	/*
+	 * Vraca sve prijatelje datog korisnika
+	 */
+	@GetMapping("/getallfriends/{userid}")
+	public ResponseEntity<List<KorisnikDTO>> getaAllPrijatelji(@PathVariable("userid") Long idKorisnika)
+	{
+		System.out.println("getaAllPrijatelji()");
+		
+		List<KorisnikDTO> listDto = korService.getaAllPrijatelji(idKorisnika);
 		
 		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<KorisnikDTO>>(listDto, HttpStatus.OK);
 	}

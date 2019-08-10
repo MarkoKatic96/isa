@@ -116,6 +116,7 @@ public class KorisnikService
 		return "SUCCESS";
 	}
 	
+	//moze i jednostavniji nacin al model nije ok
 	public String odbijZahtev(Long idTrenutni, Long idPosiljalac) 
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idTrenutni);
@@ -123,24 +124,173 @@ public class KorisnikService
 		
 		//brisanje iz liste zahteva
 		
-		List<Korisnik> zahteviKorisnika = korisnik.get().getZahteviKorisnika();
+
+		List<Korisnik> prijateljiKorisnika = korisnik.get().getZahteviKorisnika();
 		
-		List<Korisnik> sviZahtevi = korisnik.get().getZahteviKorisnika();
+		List<Korisnik> sviPrijatelji = korisnik.get().getZahteviKorisnika();
 		
-		for(Korisnik prijateljZaht : zahteviKorisnika)
+		for(Korisnik prijateljZaht : prijateljiKorisnika)
 		{
-			System.out.println(prijateljZaht.getIme());
 			if(prijateljZaht.getEmail().equals(prijateljKojiSalje.get().getEmail()))
 			{
-				sviZahtevi.remove(prijateljZaht);
-				korisnik.get().setZahteviKorisnika(sviZahtevi);
+				System.out.println("USAO U IF 1");
+				sviPrijatelji.remove(prijateljZaht);
+				korisnik.get().setZahteviKorisnika(sviPrijatelji);
 				korisnikRepo.save(korisnik.get());
+				
+				return "SUCCESS";
 			}
+			else
+				continue;
+		}
+		
+		List<Korisnik> prijateljiKorisnika2 = korisnik.get().getKorisniciZaht();
+		
+		List<Korisnik> sviPrijatelji2 = korisnik.get().getKorisniciZaht();
+		
+		for(Korisnik prijateljZaht : prijateljiKorisnika2)
+		{
+			if(prijateljZaht.getEmail().equals(korisnik.get().getEmail()))
+			{
+				System.out.println("USAO U IF 2");
+				sviPrijatelji2.remove(prijateljZaht);
+				korisnik.get().setKorisniciZaht(sviPrijatelji2);
+				korisnikRepo.save(korisnik.get());
+				
+				return "SUCCESS";
+			}
+			else
+				continue;
+		}
+		
+		
+		List<Korisnik> prijateljiKorisnika3 = prijateljKojiSalje.get().getZahteviKorisnika();
+		
+		List<Korisnik> sviPrijatelji3 = prijateljKojiSalje.get().getZahteviKorisnika();
+		
+		for(Korisnik prijateljZaht : prijateljiKorisnika3)
+		{
+			if(prijateljZaht.getEmail().equals(prijateljKojiSalje.get().getEmail()))
+			{
+				System.out.println("USAO U IF 3");
+				sviPrijatelji3.remove(prijateljZaht);
+				prijateljKojiSalje.get().setZahteviKorisnika(sviPrijatelji3);
+				korisnikRepo.save(prijateljKojiSalje.get());
+				
+				return "SUCCESS";
+			}
+			else
+				continue;
+		}
+		
+		List<Korisnik> prijateljiKorisnika4 = prijateljKojiSalje.get().getKorisniciZaht();
+		
+		List<Korisnik> sviPrijatelji4 = prijateljKojiSalje.get().getKorisniciZaht();
+		
+		for(Korisnik prijateljZaht : prijateljiKorisnika4)
+		{
+			if(prijateljZaht.getEmail().equals(korisnik.get().getEmail()))
+			{
+				System.out.println("USAO U IF 4");
+				sviPrijatelji4.remove(prijateljZaht);
+				prijateljKojiSalje.get().setKorisniciZaht(sviPrijatelji4);
+				korisnikRepo.save(prijateljKojiSalje.get());
+				
+				return "SUCCESS";
+			}
+			else
+				continue;
 		}
 		
 		return "SUCCESS";
 	}
 	
+	
+	public String obrisiPrijatelja(Long idTrenutni, Long idZaBrisanje)
+	{
+		Optional<Korisnik> korisnik = korisnikRepo.findById(idTrenutni);
+		Optional<Korisnik> prijateljKojiSalje = korisnikRepo.findById(idZaBrisanje);
+		
+		List<Korisnik> prijateljiKorisnika = korisnik.get().getPrijateljiKorisnika();
+		
+		List<Korisnik> sviPrijatelji = korisnik.get().getPrijateljiKorisnika();
+		
+		for(Korisnik prijateljZaht : prijateljiKorisnika)
+		{
+			if(prijateljZaht.getEmail().equals(prijateljKojiSalje.get().getEmail()))
+			{
+				System.out.println("USAO U IF 1");
+				sviPrijatelji.remove(prijateljZaht);
+				korisnik.get().setPrijateljiKorisnika(sviPrijatelji);
+				korisnikRepo.save(korisnik.get());
+				
+				return "SUCCESS";
+			}
+			else
+				continue;
+		}
+		
+		List<Korisnik> prijateljiKorisnika2 = korisnik.get().getKorisnici();
+		
+		List<Korisnik> sviPrijatelji2 = korisnik.get().getKorisnici();
+		
+		for(Korisnik prijateljZaht : prijateljiKorisnika2)
+		{
+			if(prijateljZaht.getEmail().equals(korisnik.get().getEmail()))
+			{
+				System.out.println("USAO U IF 2");
+				sviPrijatelji2.remove(prijateljZaht);
+				korisnik.get().setKorisnici(sviPrijatelji2);
+				korisnikRepo.save(korisnik.get());
+				
+				return "SUCCESS";
+			}
+			else
+				continue;
+		}
+		
+		
+		List<Korisnik> prijateljiKorisnika3 = prijateljKojiSalje.get().getPrijateljiKorisnika();
+		
+		List<Korisnik> sviPrijatelji3 = prijateljKojiSalje.get().getPrijateljiKorisnika();
+		
+		for(Korisnik prijateljZaht : prijateljiKorisnika3)
+		{
+			if(prijateljZaht.getEmail().equals(prijateljKojiSalje.get().getEmail()))
+			{
+				System.out.println("USAO U IF 3");
+				sviPrijatelji3.remove(prijateljZaht);
+				prijateljKojiSalje.get().setPrijateljiKorisnika(sviPrijatelji3);
+				korisnikRepo.save(prijateljKojiSalje.get());
+				
+				return "SUCCESS";
+			}
+			else
+				continue;
+		}
+		
+		List<Korisnik> prijateljiKorisnika4 = prijateljKojiSalje.get().getKorisnici();
+		
+		List<Korisnik> sviPrijatelji4 = prijateljKojiSalje.get().getKorisnici();
+		
+		for(Korisnik prijateljZaht : prijateljiKorisnika4)
+		{
+			if(prijateljZaht.getEmail().equals(korisnik.get().getEmail()))
+			{
+				System.out.println("USAO U IF 4");
+				sviPrijatelji4.remove(prijateljZaht);
+				prijateljKojiSalje.get().setKorisnici(sviPrijatelji4);
+				korisnikRepo.save(prijateljKojiSalje.get());
+				
+				return "SUCCESS";
+			}
+			else
+				continue;
+		}
+		
+		return "ERROR";
+		
+	}
 	
 	/*
 	 * OCENA KORISNIKA NAKON ZAVRSENOG LETA
@@ -287,6 +437,28 @@ public class KorisnikService
 		
 		return korisniciRet;
 	}
+
+	public List<KorisnikDTO> getaAllPrijatelji(Long idKorisnika)
+	{
+		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
+	
+		List<KorisnikDTO> korisniciRet = new ArrayList<KorisnikDTO>();
+		
+		for(Korisnik kor : korisnik.get().getPrijateljiKorisnika())
+		{
+			korisniciRet.add(korisnikConv.convertToDTO(kor));
+		}
+		
+		//mora i sa druge strane
+		for(Korisnik kor : korisnik.get().getKorisnici())
+		{
+			korisniciRet.add(korisnikConv.convertToDTO(kor));
+		}
+		
+		return korisniciRet;
+	}
+
+	
 
 	
 
