@@ -129,33 +129,47 @@ public class KorisnikController {
 	}
 	
 	@RequestMapping(value="/allHotelAdmins", method = RequestMethod.GET)
-	public ResponseEntity<List<KorisnikDTO>> getHotelAdmins(){
-		List<KorisnikDTO> dto = new ArrayList<>();
-		List<Korisnik> lista = korisnikService.getHotelAdmins();
-		for (Korisnik item : lista) {
-			dto.add(new KorisnikDTO(item));
+	public ResponseEntity<List<KorisnikDTO>> getHotelAdmins(HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.MASTER_ADMIN)) {
+			List<KorisnikDTO> dto = new ArrayList<>();
+			List<Korisnik> lista = korisnikService.getHotelAdmins();
+			for (Korisnik item : lista) {
+				dto.add(new KorisnikDTO(item));
+			}
+			return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/allAvioAdmins", method = RequestMethod.GET)
-	public ResponseEntity<List<KorisnikDTO>> getAvioAdmins(){
-		List<KorisnikDTO> dto = new ArrayList<>();
-		List<Korisnik> lista = korisnikService.getAvioAdmins();
-		for (Korisnik item : lista) {
-			dto.add(new KorisnikDTO(item));
+	public ResponseEntity<List<KorisnikDTO>> getAvioAdmins(HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.MASTER_ADMIN)) {
+			List<KorisnikDTO> dto = new ArrayList<>();
+			List<Korisnik> lista = korisnikService.getAvioAdmins();
+			for (Korisnik item : lista) {
+				dto.add(new KorisnikDTO(item));
+			}
+			return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
+
 	
 	@RequestMapping(value="/allRentAdmins", method = RequestMethod.GET)
-	public ResponseEntity<List<KorisnikDTO>> getRentAdmins(){
-		List<KorisnikDTO> dto = new ArrayList<>();
-		List<Korisnik> lista = korisnikService.getRentAdmins();
-		for (Korisnik item : lista) {
-			dto.add(new KorisnikDTO(item));
+	public ResponseEntity<List<KorisnikDTO>> getRentAdmins(HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.MASTER_ADMIN)) {
+			List<KorisnikDTO> dto = new ArrayList<>();
+			List<Korisnik> lista = korisnikService.getRentAdmins();
+			for (Korisnik item : lista) {
+				dto.add(new KorisnikDTO(item));
+			}
+			return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
+
 	
 }

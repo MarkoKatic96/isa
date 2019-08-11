@@ -36,6 +36,9 @@ import FlightsEdit from './AvioPages/Admin/FlightsEdit';
 import Account from './AvioPages/User/Account';
 import AddHotel from './MasterAdminPages/AddHotel';
 import Other from './AvioPages/Admin/Other';
+import AddRentACar from './MasterAdminPages/AddRentACar';
+import AddAvio from './MasterAdminPages/AddAvio';
+import ReservationForm from './HotelPages/ReservationForm';
 
 class App extends Component {
 
@@ -84,7 +87,7 @@ class App extends Component {
           <Route path = '/rent-a-cars' render={RentACars}/>
           <Route path = '/login' render={props => <Login setToken = {this.setToken} setEmail = {this.setEmail}  logIn={this.logIn}/>}/>
           <Route path = '/register' render={Register}/>
-          <Route path = '/rooms/:hotelId' render={Rooms}/>
+          <Route path = '/rooms/:hotelId' render={props => <Rooms loggedIn={this.state.loggedIn}/>}/>
           <Route path = '/services/:serviceId' render={Services}/>
           <Route path = '/edit/hotel' render={EditHotel}/>
           <Route path = '/admin/rooms' render={HotelRooms}/>
@@ -101,6 +104,9 @@ class App extends Component {
           <Route path = '/izvestaji' render={Izvestaji}/>
           <Route path = '/master/add_admin' render={AddAdmin}/>
           <Route path = '/master/add_hotel' render={AddHotel}/>
+          <Route path = '/master/add_rent_a_car' render={AddRentACar}/>
+          <Route path = '/master/add_avio_company' render={AddAvio}/>
+          <Route path = '/reserve/:sobaId' render={ReservationForm}/>
 
           <Route path = '/flsearch' render={() => <FlightsSearch />} />
           <Route path = '/flinfo/:flightid' render={() => <FlightInfo />} />

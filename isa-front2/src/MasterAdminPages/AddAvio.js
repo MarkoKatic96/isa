@@ -3,7 +3,7 @@ import axios from 'axios'
 import {withRouter} from 'react-router-dom';
 import Select from 'react-select';
 
-class AddHotel extends Component{
+class AddAvio extends Component{
 
     state = {
         naziv: "",
@@ -15,7 +15,7 @@ class AddHotel extends Component{
     }
 
     componentDidMount(){
-        axios.get("http://localhost:8080/korisnik/allHotelAdmins")
+        axios.get("http://localhost:8080/korisnik/allAvioAdmins")
         .then(res=>{
             console.log(res.data);
              this.setState({
@@ -46,15 +46,15 @@ class AddHotel extends Component{
             }
         }
         if(this.state.naziv!=="" && this.state.opis!=="" && this.state.adresa!=="" && this.state.selectedAdmin!=""){
-            axios.post("http://localhost:8080/hotel/" + this.state.selectedAdmin.value, {naziv: this.state.naziv, adresa:this.state.adresa, opis:this.state.opis})
+            axios.post("http://localhost:8080/rent/" + this.state.selectedAdmin.value, {naziv: this.state.naziv, adresa:this.state.adresa, opis:this.state.opis})
             .then(res =>{
                 console.log(res.data)
                 this.props.history.push("/");
             }).catch(error=>{
-                alert("Doslo je do greske prilikom kreiranja hotela.");
+                alert("Doslo je do greske prilikom kreiranja avio kompanije.");
             })
         }else{
-            alert("Morate ispravno popuniti sva polja da bi se uspesno kreirao hotel.");
+            alert("Morate ispravno popuniti sva polja da bi se uspesno kreirala kompanija.");
         }
     }
 
@@ -70,7 +70,7 @@ class AddHotel extends Component{
         })
         return(
             <div className="center container">
-                <h4 className="center">Dodaj hotel:</h4>
+                <h4 className="center">Dodaj aviokompaniju:</h4>
                 <div className="center container">
                     <form onSubmit={this.handleSubmit}>
                         <label className="left black-text" htmlFor="naziv">Naziv:</label>
@@ -93,4 +93,4 @@ class AddHotel extends Component{
     }
 }
 
-export default withRouter(AddHotel)
+export default withRouter(AddAvio)

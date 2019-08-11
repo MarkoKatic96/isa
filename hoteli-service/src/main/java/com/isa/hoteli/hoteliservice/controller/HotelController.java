@@ -91,17 +91,21 @@ public class HotelController {
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.POST)
-	public ResponseEntity<HotelDTO> createHotelAdmin(@PathVariable Long id, @RequestBody HotelDTO hotelDTO){
-		Hotel hotel = new Hotel(hotelDTO);
-		HotelDTO returnHotel = hotelService.createHotel(hotel);
-		Korisnik k = korisnikService.getUserById(id);
-		if(returnHotel!=null) {
-			k.setZaduzenZaId(returnHotel.getId());
-			korisnikRepository.save(k);
-			return new ResponseEntity<>(returnHotel, HttpStatus.OK);
+	public ResponseEntity<HotelDTO> createHotelAdmin(@PathVariable Long id, @RequestBody HotelDTO hotelDTO, HttpServletRequest req){
+		Korisnik korisnik = korisnikService.zaTokene(req);
+		if(korisnik!=null && korisnik.getRola().equals(Rola.MASTER_ADMIN)) {
+			Hotel hotel = new Hotel(hotelDTO);
+			HotelDTO returnHotel = hotelService.createHotel(hotel);
+			Korisnik k = korisnikService.getUserById(id);
+			if(returnHotel!=null) {
+				k.setZaduzenZaId(returnHotel.getId());
+				korisnikRepository.save(k);
+				return new ResponseEntity<>(returnHotel, HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
