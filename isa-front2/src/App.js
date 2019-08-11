@@ -29,13 +29,13 @@ import AvioCompanyInfo from './AvioPages/User/AvioCompanyInfo';
 import Reservation from './AvioPages/User/Reservation';
 import AvioCompanies from './AvioPages/Admin/AvioCompanies';
 import Flights from './AvioPages/Admin/Flights';
-import Prices from './AvioPages/Admin/Prices';
 import Reports from './AvioPages/Admin/Reports';
 import AdminInfo from './AvioPages/Admin/AdminInfo';
 import AddAdmin from './MasterAdminPages/AddAdmin';
 import FlightsEdit from './AvioPages/Admin/FlightsEdit';
 import Account from './AvioPages/User/Account';
 import AddHotel from './MasterAdminPages/AddHotel';
+import Other from './AvioPages/Admin/Other';
 
 class App extends Component {
 
@@ -109,7 +109,7 @@ class App extends Component {
           <Route path = '/adcompanies' render={() => <AvioCompanies />} />
           <Route path = '/adflights' render={() => <Flights />} />
           <Route path = '/adflightsedit/:flightid' render={() => <FlightsEdit />} />
-          <Route path = '/adprices' render={() => <Prices />} />
+          <Route path = '/adother' render={() => <Other />} />
           <Route path = '/adreports' render={() => <Reports />} />
           <Route path = '/adinfo' render={() => <AdminInfo />} />
           <Route path = '/account' render={() => <Account />} />

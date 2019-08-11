@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import Select from 'react-select';
 
 class AvioCompanies extends Component {
 
     state = {
         user: "",
+        destinacije: [],
         company: "",
-        name: "",
-        address: "",
-        description: "",
-        destinations: ""
+        naziv: "",
+        adresa: "",
+        opis: "",
+        destinacijeNaKojimaPosluje: []
         
     }
 
@@ -24,25 +26,44 @@ class AvioCompanies extends Component {
                 user: res.data
             })
             idKompanije = res.data.zaduzenZaId;
-            axios.get("http://localhost:8221/aviocompany/getone/" + idKompanije, { headers: { Authorization: `Bearer ${token}` } })
-            .then(res=>{
-                this.setState({
-                    company: res.data,
-                    name: res.data.naziv,
-                    address: res.data.adresa,
-                    description: res.data.opis,
-                    destinations: res.data.destinacijeNaKojimaPosluje
+
+            axios.put("http://localhost:8221/aviocompany/adddefaultdest/" + idKompanije).then(ress =>
+            {
+                axios.get("http://localhost:8221/aviocompany/getone/" + idKompanije, { headers: { Authorization: `Bearer ${token}` } })
+                .then(res=>{
+                    this.setState({
+                        company: res.data,
+                        naziv: res.data.naziv,
+                        adresa: res.data.adresa,
+                        opis: res.data.opis,
+                        destinacijeNaKojimaPosluje: res.data.destinacijeNaKojimaPosluje
+                    })
+                    console.log(res.data);
+                    axios.get("http://localhost:8221/destination/getall").then(res=>{
+                    console.log(res)
+                    this.setState({
+                        destinacije: res.data
+                    })
                 })
-                console.log(res.data);
+            })
+
+           
             })
         })
+
+        
     }
 
-    handleChange = (e) =>
+    changeInputField = (e) =>
     {
         this.setState({
             [e.target.id]: e.target.value
         })
+    }
+
+    changeDestinacijeNaKojimaPosluje = (destinacijeNaKojimaPosluje) => {
+        this.setState({ destinacijeNaKojimaPosluje });
+        console.log(this.state.destinacijeNaKojimaPosluje)
     }
 
     handleSubmit = (e) =>
@@ -50,12 +71,12 @@ class AvioCompanies extends Component {
         e.preventDefault();
         var token = localStorage.getItem('jwtToken');
 
-        if(this.state.name !== "" && this.state.address !== "" && this.state.description !== "")
+        if(this.state.naziv !== "" && this.state.adresa !== "" && this.state.opis !== "")
         {
-            console.log(localStorage.getItem('rola'))
+            console.log(this.state.destinacijeNaKojimaPosluje)
             axios.put("http://localhost:8221/aviocompany/update/" + this.state.company.idAvioKompanije, 
             {
-                naziv: this.state.name, adresa: this.state.address, opis: this.state.description
+                naziv: this.state.naziv, adresa: this.state.adresa, opis: this.state.opis, destinacijeNaKojimaPosluje: this.state.destinacijeNaKojimaPosluje
             },  { headers: { Authorization: `Bearer ${token}` } }).then(res =>
                 {
                     alert("Informacije aviokompanije su uspesno izmenjene.")
@@ -71,8 +92,19 @@ class AvioCompanies extends Component {
 
     }
 
-    render()
-    {
+    render() {
+
+        var { destinacijeNaKojimaPosluje } = this.state.destinacijeNaKojimaPosluje;
+
+        var { destinacije } = this.state;
+        var listaDestinacija = [];
+
+        destinacije.map(dest => {
+            let options = new Object();
+            options.value = dest.idDestinacije;
+            options.label = dest.naziv;
+            listaDestinacija.push(options);
+        })
         return(
             <div className="center container">
             {(localStorage.getItem('rola') !== 'ADMIN_AVIO_KOMPANIJE') ? (<h1>Nemate pristup ovoj stranici</h1>) : (<div><br/>
@@ -80,13 +112,21 @@ class AvioCompanies extends Component {
                 <br/>
                 <div className="center container">
                     <form onSubmit={this.handleSubmit}>
-                        <label className="left black-text" htmlFor="name">Naziv:</label>
-                        <input type="text" id="name" value={this.state.name} onChange={this.handleChange}/>
-                        <label className="left black-text" htmlFor="address">Adresa:</label>
-                        <input type="text" id="address" value={this.state.address} onChange={this.handleChange}/>
-                        <label className="left black-text" htmlFor="description">Opis:</label>
-                        <input type="text" id="description" value={this.state.description} onChange={this.handleChange}/>
+                        <label className="left black-text" htmlFor="naziv">Naziv:</label>
+                        <input type="text" id="naziv" value={this.state.naziv} onChange={(e) => { this.changeInputField(e) }}/>
+                        <label className="left black-text" htmlFor="adresa">Adresa:</label>
+                        <input type="text" id="adresa" value={this.state.adresa} onChange={(e) => { this.changeInputField(e) }}/>
+                        <label className="left black-text" htmlFor="opis">Opis:</label>
+                        <input type="text" id="opis" value={this.state.opis} onChange={(e) => { this.changeInputField(e) }}/>
+                        <label htmlFor="destinacijeNaKojimaPosluje">Destinacije na kojima posluje</label>
+                            <Select
+                                value={destinacijeNaKojimaPosluje}
+                                onChange={(destinacijeNaKojimaPosluje) => { this.changeDestinacijeNaKojimaPosluje(destinacijeNaKojimaPosluje) }}
+                                options={listaDestinacija}
+                                id="destinacijeNaKojimaPosluje" isMulti={true}/>
                         <button className="btn waves-effect waves-light green">Izmeni</button>
+                        
+
                     </form>
                 </div></div>)}
                 
