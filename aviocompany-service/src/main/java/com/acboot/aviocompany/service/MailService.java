@@ -43,7 +43,9 @@ public class MailService
 		mail.setSubject("Zahtev za prijateljstvo");
 		mail.setText("Pozdrav " + prijatelj.getIme() + ",\n\nImate novi zahtev za prijateljstvo. "
 				+ "Zahtev je poslao " + korisnik.getIme() + " " + korisnik.getPrezime() + ", \nEmail adresa: " + korisnik.getEmail() + ".\n\n"
-				+ "Zahtev mozete prihvatiti ili odbiti. \n\n\n Vas MegaTravel");
+				+ "Zahtev mozete prihvatiti ili odbiti.\n\n"
+				+ "Link za aktivaciju: http://localhost:3000/reservation/30"
+				+ " \n\n\n Vas MegaTravel");
 		javaMailSender.send(mail);
 		
 		//stilizovano

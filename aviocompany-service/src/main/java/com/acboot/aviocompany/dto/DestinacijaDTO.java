@@ -13,7 +13,7 @@ public class DestinacijaDTO
 	private String naziv;
 	private String informacije;
 	
-    private AvioKompanijaDTO aviokompanija;
+//    private AvioKompanijaDTO aviokompanija;
 	
 	
 //	@OneToOne(mappedBy = "destinacijaPoletanja")

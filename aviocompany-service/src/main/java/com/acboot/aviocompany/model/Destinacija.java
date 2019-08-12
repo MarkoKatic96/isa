@@ -29,6 +29,9 @@ public class Destinacija
 	@NotNull
 	private String informacije;
 	
+	@ManyToMany(mappedBy = "destinacijeNaKojimaPosluje")
+	private List<AvioKompanija> kompanija;
+	
 	@ManyToMany(mappedBy = "klaseKojeLetSadrzi")
 	private List<Let> destinacijeNaKojimaPosluje;
 	

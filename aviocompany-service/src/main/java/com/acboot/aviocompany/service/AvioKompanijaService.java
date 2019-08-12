@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import com.acboot.aviocompany.converter.AvioKompanijaConverter;
 import com.acboot.aviocompany.dto.AvioKompanijaDTO;
 import com.acboot.aviocompany.model.AvioKompanija;
+import com.acboot.aviocompany.model.Destinacija;
 import com.acboot.aviocompany.model.Let;
 import com.acboot.aviocompany.repository.AvioKompanijaRepository;
+import com.acboot.aviocompany.repository.DestinacijaRepository;
 
 @Service
 public class AvioKompanijaService 
@@ -23,6 +25,9 @@ public class AvioKompanijaService
 	
 	@Autowired
 	AvioKompanijaConverter avioConv;
+	
+	@Autowired
+	private DestinacijaRepository destRepo;
 	
 	@Autowired
 	private LetService letService;
@@ -69,13 +74,27 @@ public class AvioKompanijaService
 		}
 	}
 	
+	public boolean addDefaultDestination(Long id)
+	{
+		Optional<AvioKompanija> avio = avioRepo.findById(id);
+		Optional<Destinacija> dest = destRepo.findById((long) 1);
+		
+		List<Destinacija> lista = new ArrayList<Destinacija>();
+		lista.add(dest.get());
+		
+		avio.get().setDestinacijeNaKojimaPosluje(lista);
+		avioRepo.save(avio.get());
+		
+		return true;
+	}
+	
 	public AvioKompanijaDTO updateOne(Long id, AvioKompanijaDTO dto)
 	{
 		Optional<AvioKompanija> avio = avioRepo.findById(id);
 		
 		if(avio.isPresent())
 		{
-//			avio.get().setIdAvioKompanije(avioConv.convertFromDTO(dto).getIdAvioKompanije());
+			//avio.get().setIdAvioKompanije(avioConv.convertFromDTO(dto).getIdAvioKompanije());
 			avio.get().setNaziv(avioConv.convertFromDTO(dto).getNaziv());
 			avio.get().setAdresa(avioConv.convertFromDTO(dto).getAdresa());
 			avio.get().setOpis(avioConv.convertFromDTO(dto).getOpis());

@@ -2,6 +2,7 @@ package com.acboot.aviocompany.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,7 +36,7 @@ public class AvioKompanija
 	private String opis;
 	
 	
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(
 	  name = "destinacije_na_kojima_posluje", 
 	  joinColumns = @JoinColumn(name = "aviokompanija_id"), 

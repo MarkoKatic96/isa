@@ -70,9 +70,7 @@ public class PrtljagService
 		{
 			prtljag.get().setIdPrtljaga(prtljagConv.convertFromDTO(dto).getIdPrtljaga());
 			prtljag.get().setTezina(prtljagConv.convertFromDTO(dto).getTezina());
-			prtljag.get().setDuzina(prtljagConv.convertFromDTO(dto).getDuzina());
-			prtljag.get().setSirina(prtljagConv.convertFromDTO(dto).getSirina());
-			prtljag.get().setVisina(prtljagConv.convertFromDTO(dto).getVisina());
+			prtljag.get().setOpis(prtljagConv.convertFromDTO(dto).getOpis());
 			
 			prtljagRepo.save(prtljag.get());
 			

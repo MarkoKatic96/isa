@@ -75,6 +75,17 @@ public class AvioKompanijaController
 	}
 	
 	/*
+	 * Dodajemo difoltnu destinaciju na taj i taj aerodrom
+	 */
+	@PutMapping("/adddefaultdest/{companyid}")
+	public ResponseEntity<Boolean> addDifoltnaDestinacija(@PathVariable("companyid") Long id)
+	{
+		System.out.println("addDifoltnaDestinacija()");
+		
+		return (!avioService.addDefaultDestination(id)) ? new ResponseEntity<>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+	}
+	
+	/*
 	 * ADMIN
 	 */
 	@PutMapping("/update/{id}")

@@ -23,16 +23,10 @@ public class Prtljag
 	private long idPrtljaga;
 	
 	@NotNull
-	private long tezina;
+	private float tezina; //kg
 	
 	@NotNull
-	private long duzina;
-	
-	@NotNull
-	private long sirina;
-
-	@NotNull
-	private long visina;
+	private String opis;
 	
 	
 	@ManyToMany(mappedBy = "tipoviPrtljagaPoLetu")

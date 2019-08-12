@@ -1,3 +1,4 @@
+
 package com.acboot.aviocompany.converter;
 
 import org.springframework.stereotype.Component;
@@ -15,9 +16,7 @@ public class PrtljagConverter
 		
 		dto.setIdPrtljaga(model.getIdPrtljaga());
 		dto.setTezina(model.getTezina());
-		dto.setDuzina(model.getDuzina());
-		dto.setSirina(model.getSirina());
-		dto.setVisina(model.getVisina());
+		dto.setOpis(model.getOpis());
 		
 		return dto;
 	}
@@ -28,9 +27,7 @@ public class PrtljagConverter
 		
 		model.setIdPrtljaga(dto.getIdPrtljaga());
 		model.setTezina(dto.getTezina());
-		model.setDuzina(dto.getDuzina());
-		model.setSirina(dto.getSirina());
-		model.setVisina(dto.getVisina());
+		model.setOpis(dto.getOpis());
 		
 		return model;
 		

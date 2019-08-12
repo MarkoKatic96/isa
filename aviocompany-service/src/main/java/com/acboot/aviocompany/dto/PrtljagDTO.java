@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 public class PrtljagDTO
 {
 	private long idPrtljaga;
-	private long tezina;
-	private long duzina;
-	private long sirina;
-	private long visina;
+	private float tezina;
+	private String opis;
 }
