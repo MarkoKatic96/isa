@@ -9,7 +9,7 @@ class Other extends Component {
 
     componentDidMount() {
         axios.get("http://localhost:8221/aviocompany/getone/")
-                .then(res=>{
+                .then(res => {
                     
                 })
     }
