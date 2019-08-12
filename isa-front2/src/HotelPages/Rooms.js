@@ -37,7 +37,7 @@ class Rooms extends Component{
     }
 
     rezervisiClick=(sobaId)=>{
-        this.props.history.push("/reserve/" + sobaId);
+        this.props.history.push("/reserve/"+ this.props.match.params.hotelId +"/" + sobaId);
     }
 
     render(){

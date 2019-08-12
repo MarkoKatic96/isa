@@ -106,7 +106,7 @@ class App extends Component {
           <Route path = '/master/add_hotel' render={AddHotel}/>
           <Route path = '/master/add_rent_a_car' render={AddRentACar}/>
           <Route path = '/master/add_avio_company' render={AddAvio}/>
-          <Route path = '/reserve/:sobaId' render={ReservationForm}/>
+          <Route path = '/reserve/:hotelId/:sobaId' render={ReservationForm}/>
 
           <Route path = '/flsearch' render={() => <FlightsSearch />} />
           <Route path = '/flinfo/:flightid' render={() => <FlightInfo />} />
