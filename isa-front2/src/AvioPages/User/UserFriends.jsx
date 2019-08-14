@@ -28,7 +28,9 @@ class UserFriends extends Component {
 
     deleteFriend = (userid) =>
     {
+        
         let userSender = this.state.user.id;
+        console.log(userSender, userid)
         axios.post('http://localhost:8221/user/deletefriend/' + userid + '/' + userSender).then(res =>
                 {
                     console.log(res.data);
@@ -78,7 +80,7 @@ class UserFriends extends Component {
                 </div>
             );
         })) : (
-                <h4>Nema novih zahteva za prijateljstvo</h4>
+                <h4>Lista prijatelja je prazna</h4>
             )
 
             return(

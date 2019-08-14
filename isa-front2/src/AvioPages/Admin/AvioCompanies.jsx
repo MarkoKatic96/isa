@@ -27,8 +27,8 @@ class AvioCompanies extends Component {
             })
             idKompanije = res.data.zaduzenZaId;
 
-            axios.put("http://localhost:8221/aviocompany/adddefaultdest/" + idKompanije).then(ress =>
-            {
+            // axios.put("http://localhost:8221/aviocompany/adddefaultdest/" + idKompanije).then(ress =>
+            // {
                 axios.get("http://localhost:8221/aviocompany/getone/" + idKompanije, { headers: { Authorization: `Bearer ${token}` } })
                 .then(res=>{
                     this.setState({
@@ -49,7 +49,7 @@ class AvioCompanies extends Component {
 
            
             })
-        })
+        
 
         
     }
@@ -63,7 +63,6 @@ class AvioCompanies extends Component {
 
     changeDestinacijeNaKojimaPosluje = (destinacijeNaKojimaPosluje) => {
         this.setState({ destinacijeNaKojimaPosluje });
-        console.log(this.state.destinacijeNaKojimaPosluje)
     }
 
     handleSubmit = (e) =>
@@ -71,16 +70,35 @@ class AvioCompanies extends Component {
         e.preventDefault();
         var token = localStorage.getItem('jwtToken');
 
+        let destinacijeNaKojimaPosluje = [];
+        let object = new Object();
+        for(let i = 0; i<this.state.destinacijeNaKojimaPosluje.length; i++)
+        {
+            object.idDestinacije = this.state.destinacijeNaKojimaPosluje[i].value;
+            object.naziv = this.state.destinacijeNaKojimaPosluje[i].label;
+            object.informacije = "";
+            destinacijeNaKojimaPosluje.push(object)
+            object = {}
+        }
+
+        
+
+        console.log(destinacijeNaKojimaPosluje)
+
+        let naziv = this.state.naziv;
+        let adresa = this.state.adresa;
+        let opis = this.state.opis;
+        
+
         if(this.state.naziv !== "" && this.state.adresa !== "" && this.state.opis !== "")
         {
-            console.log(this.state.destinacijeNaKojimaPosluje)
             axios.put("http://localhost:8221/aviocompany/update/" + this.state.company.idAvioKompanije, 
             {
-                naziv: this.state.naziv, adresa: this.state.adresa, opis: this.state.opis, destinacijeNaKojimaPosluje: this.state.destinacijeNaKojimaPosluje
-            },  { headers: { Authorization: `Bearer ${token}` } }).then(res =>
+                naziv: naziv, adresa: adresa, opis: opis, destinacijeNaKojimaPosluje: destinacijeNaKojimaPosluje
+            },  { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }).then(res =>
                 {
                     alert("Informacije aviokompanije su uspesno izmenjene.")
-                    this.props.history.push("/");
+                    this.componentDidMount();
                 }).catch(error=>{
                     console.log(error)
                 })

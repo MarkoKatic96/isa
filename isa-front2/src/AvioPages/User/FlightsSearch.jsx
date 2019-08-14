@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import FlightInfo from './FlightInfo';
 import { Link } from 'react-router-dom';
+import Select from 'react-select';
 
 class FlightsSearch extends Component {
 
@@ -14,12 +15,8 @@ class FlightsSearch extends Component {
             landingDestination: "",
             type: "",
             number: "",
-            klase: [
-                {
-                    idKlase: "",
-                    naziv: ""
-                }
-            ],
+            klase: [],
+            klaseKojeLetSadrzi: [],
 
             datumPoletanja1: "",
             vremePoletanja1: "",
@@ -33,7 +30,7 @@ class FlightsSearch extends Component {
 
 
     componentDidMount() {
-        axios('http://localhost:8221/destination/getall').then(
+        axios.get('http://localhost:8221/destination/getall').then(
             res => {
                 this.setState({
                     destinacije: res.data
@@ -41,7 +38,7 @@ class FlightsSearch extends Component {
             }
         )
 
-        axios('http://localhost:8221/flight/getall').then(
+        axios.get('http://localhost:8221/flight/getall').then(
             res => {
                 this.setState({
                     letovi: res.data
@@ -49,10 +46,10 @@ class FlightsSearch extends Component {
             }
         )
 
-        axios('http://localhost:8221/class/getall').then(
+        axios.get('http://localhost:8221/class/getall').then(
             res => {
                 this.setState({
-                    classes: res.data
+                    klase: res.data
                 })
             }
         )
@@ -127,14 +124,16 @@ class FlightsSearch extends Component {
         console.log(e.target.value);
     }
 
-    changeKlaseLeta = (e) => {
-
-    }
 
     changeBrojOsoba = (e) => {
         this.setState({
             number: e.target.value
         })
+    }
+
+    changeKlaseKojeLetSadrzi = (klaseKojeLetSadrzi) => {
+        this.setState({ klaseKojeLetSadrzi });
+        console.log(this.state.klaseKojeLetSadrzi)
     }
 
     handleSubmit = (e) => {
@@ -147,13 +146,18 @@ class FlightsSearch extends Component {
         let type = this.state.type;
         let number = this.state.number;
         // let klase = this.state.klase; 
-        let klase = [{
-            idKlase: 3,
-            naziv: "klasa3"
-        }];
+        let klaseKojeLetSadrzi = [];
+        let object = new Object();
+        for(let i = 0; i<this.state.klaseKojeLetSadrzi.length; i++)
+        {
+            object.idKlase = this.state.klaseKojeLetSadrzi[i].value;
+            object.naziv = this.state.klaseKojeLetSadrzi[i].label;
+            klaseKojeLetSadrzi.push(object)
+            object = {}
+        }
 
         axios.post('http://localhost:8221/flight/searchflights', {
-           time1, time2, takeOffDestination, landingDestination, type, number, klase
+           time1, time2, takeOffDestination, landingDestination, type, number, klaseKojeLetSadrzi
         }).then(res => {
             console.log(res)
                 if(res.status == 200)
@@ -187,6 +191,24 @@ class FlightsSearch extends Component {
 
 
     render() {
+
+        //LISTE ZA SELECT
+         //KLASE
+         var { klaseKojeLetSadrzi } = this.state.klaseKojeLetSadrzi;
+         var { klase } = this.state.klase;
+ 
+         var listaKlasa = [];
+ 
+         this.state.klase.map(klasa => {
+             let options = new Object();
+             options.value = klasa.idKlase;
+             options.label = klasa.naziv;
+             listaKlasa.push(options);
+         })
+
+
+
+
         const flightsList = this.state.flightsRes.length ? (this.state.flightsRes.map(flight => {
             return (
                 <div className="center container" key={flight.idLeta}>
@@ -247,12 +269,12 @@ class FlightsSearch extends Component {
                                     )}
                                 </select>
                             </div>
-                            <label htmlFor="takeoff">Datum i vreme poletanja</label>
+                            <label htmlFor="takeoff">Datum i vreme poletanja OD:</label>
                             <div className="input-field">
                                 <input type="date" className="datepicker" id="takeoff" onChange={(e) => {this.changeDatum1(e)}} />
                                 <input type="time" className="timepicker" id="takeofftime" onChange={(e) => {this.changeVreme1(e)}} />
                             </div>
-                            <label htmlFor="landing">Datum i vreme sletanja</label>
+                            <label htmlFor="landing">Datum i vreme poletanja DO:</label>
                             <div className="input-field">
                                 <input type="date" className="datepicker" id="landing" onChange={(e) => {this.changeDatum2(e)}} />
                                 <input type="time" className="timepicker" id="landingtime" onChange={(e) => {this.changeVreme2(e)}} />
@@ -272,14 +294,12 @@ class FlightsSearch extends Component {
 
                             </div>
 
-                            <label htmlFor="flclass">Klase leta</label>
-                            <div className="input-field">
-                                <select id="flclass" className="browser-default" name="travelClass" onChange={(e) => {this.changeKlaseLeta(e)}}>
-                                    {this.state.classes.map(klasa =>
-                                        <option>{klasa.naziv}</option>
-                                    )}
-                                </select>
-                            </div>
+                            <label htmlFor="klaseKojeLetSadrzi">Klase u avionu</label>
+                            <Select
+                                value={klaseKojeLetSadrzi}
+                                onChange={(klaseKojeLetSadrzi) => { this.changeKlaseKojeLetSadrzi(klaseKojeLetSadrzi) }}
+                                options={listaKlasa}
+                                id="klaseKojeLetSadrzi" isMulti={true} />
 
                             <div className="input-field">
                                 <input type="submit" value="Pretrazi" className="btn blue lighten-1 z-depth-0" /> <br /> <br />

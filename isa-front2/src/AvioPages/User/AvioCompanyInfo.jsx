@@ -7,7 +7,8 @@ class FlightInfo extends Component {
 
     state = {
         kompanija: "",
-        avgrating: ""
+        avgrating: "",
+        destinacijeNaKojimaPosluje: []
     }
 
     componentDidMount() {
@@ -17,9 +18,24 @@ class FlightInfo extends Component {
                 this.setState({
                     kompanija: res.data
                 })
+
+                let kompanija = this.state.kompanija.idAvioKompanije;
+                axios.get('http://localhost:8221/destination/getalldestsbycompany/' + kompanija).then(
+                    res => {
+                        console.log("DESTINACIJE: ")
+                        console.log(res.data)
+                        this.setState({
+                            destinacijeNaKojimaPosluje: res.data
+                        })
+                    }
+
+
+                )
             }
+
+
         )
-            //za prosecnu ocenu
+        //za prosecnu ocenu
         axios.get('http://localhost:8221/aviocompany/getavgrating/' + this.props.match.params.flightid).then(
             res => {
                 console.log(res.data);
@@ -31,6 +47,16 @@ class FlightInfo extends Component {
     }
 
     render() {
+        const destinacijeNaKojimaPosluje = this.state.destinacijeNaKojimaPosluje.length ? (this.state.destinacijeNaKojimaPosluje.map(dest => {
+            return (
+                <div key={dest.idDestinacije}>
+                    <div><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{dest.naziv}</i></div>
+                </div>
+            );
+        })) : (
+                <h3>Nema destinacija</h3>
+            )
+
         return (
             <div>
                 <div className="center container">
@@ -44,6 +70,7 @@ class FlightInfo extends Component {
                                     <p>Adresa: &nbsp;&nbsp;{this.state.kompanija.adresa}</p>
                                     <p>Opis: &nbsp;&nbsp;{this.state.kompanija.opis}</p>
                                     <p>Prosecna ocena: &nbsp;&nbsp;{this.state.avgrating}</p>
+                                    <p>Destinacije na kojima posluje: &nbsp;&nbsp;</p> {destinacijeNaKojimaPosluje}
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">

@@ -74,16 +74,16 @@ public class AvioKompanijaController
 		return (avioService.saveOne(dto) == null) ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST) : new ResponseEntity<AvioKompanijaDTO>(dto, HttpStatus.CREATED);
 	}
 	
-	/*
-	 * Dodajemo difoltnu destinaciju na taj i taj aerodrom
-	 */
-	@PutMapping("/adddefaultdest/{companyid}")
-	public ResponseEntity<Boolean> addDifoltnaDestinacija(@PathVariable("companyid") Long id)
-	{
-		System.out.println("addDifoltnaDestinacija()");
-		
-		return (!avioService.addDefaultDestination(id)) ? new ResponseEntity<>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
-	}
+//	/*
+//	 * Dodajemo difoltnu destinaciju na taj i taj aerodrom
+//	 */
+//	@PutMapping("/adddefaultdest/{companyid}")
+//	public ResponseEntity<Boolean> addDifoltnaDestinacija(@PathVariable("companyid") Long id)
+//	{
+//		System.out.println("addDifoltnaDestinacija()");
+//		
+//		return (!avioService.addDefaultDestination(id)) ? new ResponseEntity<>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+//	}
 	
 	/*
 	 * ADMIN

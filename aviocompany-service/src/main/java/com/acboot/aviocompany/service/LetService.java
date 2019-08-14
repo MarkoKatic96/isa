@@ -96,13 +96,10 @@ public class LetService
 	
 	public LetDTO saveOne(LetDTO dto)
 	{
-		Optional<Let> let = letRepo.findById(dto.getIdLeta());
+		
 		Optional<Korisnik> korisnik = korisnikRepo.findById((long) 1);
 		
-		if(let.isPresent())
-			return null;
-		else
-		{			
+				
 			letRepo.save(letConv.convertFromDTO(dto));
 			Let lett = letRepo.findByBrojLeta(dto.getBrojLeta());
 			for(int i=0; i<lett.getBrojMesta(); i++)
@@ -119,7 +116,7 @@ public class LetService
 			}
 			
 			return dto;
-		}
+		
 	}
 	
 	public LetDTO updateOne(Long id, LetDTO dto)

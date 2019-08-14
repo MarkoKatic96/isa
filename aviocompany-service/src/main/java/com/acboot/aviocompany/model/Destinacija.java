@@ -23,10 +23,8 @@ public class Destinacija
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idDestinacije;
 	
-	@NotNull
 	private String naziv;
 	
-	@NotNull
 	private String informacije;
 	
 	@ManyToMany(mappedBy = "destinacijeNaKojimaPosluje")

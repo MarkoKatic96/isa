@@ -61,7 +61,7 @@ public class KartaController
 		
 		List<KartaDTO> listDto = kartaService.getAllNerezervisaneKarte(idLeta);
 		
-		return (listDto == null) ? new ResponseEntity<List<KartaDTO>>(new ArrayList<KartaDTO>(), HttpStatus.NOT_FOUND) : new ResponseEntity<List<KartaDTO>>(listDto, HttpStatus.OK);
+		return (listDto.isEmpty()) ? new ResponseEntity<List<KartaDTO>>(new ArrayList<KartaDTO>(), HttpStatus.NOT_FOUND) : new ResponseEntity<List<KartaDTO>>(listDto, HttpStatus.OK);
 	}
 	
 	
@@ -131,15 +131,16 @@ public class KartaController
 	
 	/*
 	 * Rezervacija vise karata odjednom od strane korisnika (nije testirano)
+	 * NECEMO NA OVAJ NACIN
 	 */
-	@PostMapping("/reservemore/{userid}")
-	public ResponseEntity<String> rezervisiViseKarata(@PathVariable("userid") Long idKorisnika, @RequestBody List<KartaDTO> karte)
-	{
-		System.out.println("rezervisiViseKarata()");
-	
-		String retVal = kartaService.rezervisiViseKarata(idKorisnika, karte);
-		
-		return (retVal.equals("REZERVISANE")) ? new ResponseEntity<String>(retVal, HttpStatus.CREATED) : new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST);
-	}
+//	@PostMapping("/reservemore/{userid}")
+//	public ResponseEntity<String> rezervisiViseKarata(@PathVariable("userid") Long idKorisnika, @RequestBody List<KartaDTO> karte)
+//	{
+//		System.out.println("rezervisiViseKarata()");
+//	
+//		String retVal = kartaService.rezervisiViseKarata(idKorisnika, karte);
+//		
+//		return (retVal.equals("REZERVISANE")) ? new ResponseEntity<String>(retVal, HttpStatus.CREATED) : new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST);
+//	}
 
 }

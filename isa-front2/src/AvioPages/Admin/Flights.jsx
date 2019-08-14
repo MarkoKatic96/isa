@@ -64,14 +64,19 @@ class Flights extends Component {
                 })
 
                 )
-            })
 
-        axios.get('http://localhost:8221/destination/getall').then(
+                let kompanija = this.state.user.zaduzenZaId;
+        axios.get('http://localhost:8221/destination/getalldestsbycompany/' + kompanija).then(
             res => {
+                console.log("DESTINACIJE: ")
+                console.log(res.data)
                 this.setState({
                     destinacije: res.data
                 })
             }
+        )}
+
+            
         )
 
         axios.get('http://localhost:8221/class/getall').then(

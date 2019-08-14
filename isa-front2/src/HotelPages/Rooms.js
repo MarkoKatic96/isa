@@ -36,13 +36,7 @@ class Rooms extends Component{
             })
     }
 
-    rezervisiClick=(sobaId)=>{
-        this.props.history.push("/reserve/"+ this.props.match.params.hotelId +"/" + sobaId);
-    }
-
     render(){
-        var isLogged = localStorage.getItem("isLogged")
-        var rola = localStorage.getItem('rola');
         var {sobe}=this.state;
         const sobeList = sobe.length ? (sobe.map(soba => {
             return(
@@ -58,15 +52,11 @@ class Rooms extends Component{
                                 <p>Broj kreveta: {soba.brojKreveta}</p>
                                 <p>Tip sobe: {soba.tipSobe.naziv}</p>
                                 <p>Ocena: {soba.ocena}</p>
-                                {soba.cenaNocenja==-1 ? (<p>Cena nocenja: {soba.originalnaCena}</p>) : (<p>Cena nocenja: {soba.cenaNocenja}</p>)}
+                                <p>Cena nocenja: {soba.cenaNocenja}</p>
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                {(isLogged && rola==="KORISNIK") ? (
-                                        <button className="btn waves-effect waves-light green" onClick={()=>{this.rezervisiClick(soba.id)}}>Rezrvisi</button>
-                                    ):(
-                                        <p/>
-                                    )}
+                                    <p>Potencijlni dugmici</p>
                                 </div>
                             </div>
                         </div>

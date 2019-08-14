@@ -51,7 +51,7 @@ class AddHotel extends Component{
                 console.log(res.data)
                 this.props.history.push("/");
             }).catch(error=>{
-                alert("Doslo je do greske prilikom kreiranja hotela.");
+                alert("DOslo je do greske prilikom kreiranja hotela.");
             })
         }else{
             alert("Morate ispravno popuniti sva polja da bi se uspesno kreirao hotel.");

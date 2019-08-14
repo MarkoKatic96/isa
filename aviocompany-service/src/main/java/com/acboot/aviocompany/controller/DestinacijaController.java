@@ -51,6 +51,16 @@ public class DestinacijaController
 		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<DestinacijaDTO>>(listDto, HttpStatus.OK);
 	}
 	
+	@GetMapping("/getalldestsbycompany/{avioid}")
+	public ResponseEntity<List<DestinacijaDTO>> getAllDestinacijeByAvioKompanija(@PathVariable("avioid") Long idAvioKompanije)
+	{
+		System.out.println("getAllDestinacijeByAvioKompanija()");
+		
+		List<DestinacijaDTO> listDto = destService.getAllDestinacijeByAvioKompanija(idAvioKompanije);
+		
+		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<DestinacijaDTO>>(listDto, HttpStatus.OK);
+	}
+	
 	
 	@PostMapping("/add/")
 	public ResponseEntity<DestinacijaDTO> addDestinacija(@RequestBody DestinacijaDTO dto)

@@ -141,7 +141,11 @@ public class KorisnikController
 		System.out.println("posaljiZahtev()");
 		System.out.println(email);
 		
-		String retVal = korService.posaljiZahtev(idKorisnika, email);
+		String emaill = email.split(":")[1];
+		emaill = emaill.replace('"', ' ');
+		emaill = emaill.replace('}', ' ');
+		
+		String retVal = korService.posaljiZahtev(idKorisnika, emaill.trim());
 		
 		return (!retVal.equals("SUCCESS")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.OK);
 	}
@@ -243,5 +247,7 @@ public class KorisnikController
 		
 		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<KorisnikDTO>>(listDto, HttpStatus.OK);
 	}
+	
+	
 	
 }

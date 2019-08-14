@@ -14,7 +14,9 @@ class Account extends Component {
         grad: "",
         telefon: "",
         prijateljiKorisnika: [],
-        zahteviKorisnika: []
+        zahteviKorisnika: [],
+
+        emailnovi: ""
     }
 
     componentDidMount() {
@@ -35,11 +37,33 @@ class Account extends Component {
 
     changeInputField = (e) =>
     {
+        this.setState({
+            [e.target.id]: e.target.value
+        })
+    }
+
+    handleUserInformationsSubmit = (e) => {
 
     }
 
-    handleSubmit = (e) => {
 
+    //dodavanje novog prijatelja
+    handleFriendRequestSubmit = (e) =>
+    {
+        e.preventDefault();
+        let idKor = this.state.user.id;
+        let email = this.state.emailnovi;
+        console.log(email)
+        axios.post("http://localhost:8221/user/invitefriend/" + idKor, {email}, {headers: {
+            'Content-Type': 'text/plain'
+          },})
+            .then(res => {
+                if(res.data === "SUCCESS")
+                    alert("Zahtev uspesno poslat")
+                else
+                    alert("Zahtev nije poslat")
+                })
+            
     }
 
     render() {
@@ -48,7 +72,7 @@ class Account extends Component {
 
         return (
             <div>
-                <form className="white" onSubmit={(e) => { this.handleSubmit(e) }}>
+                <form className="white" onSubmit={(e) => { this.handleUserInformationsSubmit(e) }}>
                     <h2 className="red-text lighten-1 center">Informacije o korisniku</h2>
                     <div className="container">
 
@@ -86,7 +110,16 @@ class Account extends Component {
                         </div>
                     </div>
                 </form>
+
                 <h3>Zahtevi za prijateljstvo:</h3>
+                <form className="white" onSubmit={(e) => { this.handleFriendRequestSubmit(e) }}>
+                    <label htmlFor="emailnovi">Dodaj novog prijatelja:</label>
+                        <div className="input-field">
+                            <input type="text" id="emailnovi" placeholder="Email adresa" className="browser-default" name="emailnovi" onChange={(e) => { this.changeInputField(e) }} />
+                        </div>
+                        <input type="submit" value="Posalji" className="btn blue lighten-1 z-depth-0" /> <br /> <br />
+                </form>
+                
                 <UserRequests userid={this.state.user.id} />
                 <h3>Vasi prijatelji:</h3>
                 <UserFriends userid={this.state.user.id} />

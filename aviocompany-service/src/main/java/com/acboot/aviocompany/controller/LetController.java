@@ -91,6 +91,9 @@ public class LetController
 	{
 		System.out.println("addLet()");
 		
+		System.out.println("KOMPANIJA: " + dto.getAviokompanija());
+		System.out.println("ID LETA: " + dto.getIdLeta());
+		
 		return (letService.saveOne(dto) == null) ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST) : new ResponseEntity<LetDTO>(dto, HttpStatus.CREATED);
 	}
 	

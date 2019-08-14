@@ -227,8 +227,6 @@ public class KartaService
 			{
 				retVal.add(kartaConv.convertToDTO(karta));
 			}
-			else
-				continue;
 		}
 		
 		return retVal;

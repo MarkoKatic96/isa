@@ -29,7 +29,7 @@ public class MailService
 	 * Vise informacija na: https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#scheduling
 	 */
 	@Async
-	public void sendNotificaitionAsync(Korisnik korisnik, Korisnik prijatelj) throws MailException, InterruptedException {
+	public void sendNotificaitionAsync(Korisnik korisnik, Korisnik prijatelj, String type) throws MailException, InterruptedException {
 
 		//Simulacija duze aktivnosti da bi se uocila razlika
 		//Thread.sleep(10000);
@@ -37,16 +37,20 @@ public class MailService
 		
 
 		//String link = "https://localhost:8443/#/registracija/aktiviranjeNaloga/" + korisnik.getId(); 
-		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(prijatelj.getEmail());
-		mail.setFrom(env.getProperty("spring.mail.username"));
-		mail.setSubject("Zahtev za prijateljstvo");
-		mail.setText("Pozdrav " + prijatelj.getIme() + ",\n\nImate novi zahtev za prijateljstvo. "
-				+ "Zahtev je poslao " + korisnik.getIme() + " " + korisnik.getPrezime() + ", \nEmail adresa: " + korisnik.getEmail() + ".\n\n"
-				+ "Zahtev mozete prihvatiti ili odbiti.\n\n"
-				+ "Link za aktivaciju: http://localhost:3000/reservation/30"
-				+ " \n\n\n Vas MegaTravel");
-		javaMailSender.send(mail);
+		if(type.equals("FR_REQ"))
+		{
+			SimpleMailMessage mail = new SimpleMailMessage();
+			mail.setTo(prijatelj.getEmail());
+			mail.setFrom(env.getProperty("spring.mail.username"));
+			mail.setSubject("Zahtev za prijateljstvo");
+			mail.setText("Pozdrav " + prijatelj.getIme() + ",\n\nImate novi zahtev za prijateljstvo. "
+					+ "Zahtev je poslao " + korisnik.getIme() + " " + korisnik.getPrezime() + ", \nEmail adresa: " + korisnik.getEmail() + ".\n\n"
+					+ "Zahtev mozete prihvatiti ili odbiti.\n\n"
+					+ "Link: http://localhost:3000/account"
+					+ " \n\n\n Vas MegaTravel");
+			javaMailSender.send(mail);
+		}
+		
 		
 		//stilizovano
 //		mail.setText("<h1>Pozdrav <strong>" + agent.getIme() + "</strong></h1>,\n\nUspešno ste se registrovali na MegaTravel servis."

@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.acboot.aviocompany.converter.DestinacijaConverter;
 import com.acboot.aviocompany.dto.DestinacijaDTO;
+import com.acboot.aviocompany.model.AvioKompanija;
 import com.acboot.aviocompany.model.Destinacija;
+import com.acboot.aviocompany.repository.AvioKompanijaRepository;
 import com.acboot.aviocompany.repository.DestinacijaRepository;
 
 @Service
@@ -20,6 +22,9 @@ public class DestinacijaService
 	
 	@Autowired
 	DestinacijaConverter destConv;
+	
+	@Autowired
+	private AvioKompanijaRepository avioRepo;
 	
 	
 	public DestinacijaDTO findById(Long id)
@@ -47,6 +52,21 @@ public class DestinacijaService
 		}
 		else
 			return null;
+	}
+	
+	public List<DestinacijaDTO> getAllDestinacijeByAvioKompanija(Long idAvioKompanije)
+	{
+		Optional<AvioKompanija> avio = avioRepo.findById(idAvioKompanije);
+		
+		List<DestinacijaDTO> listDto = new ArrayList<DestinacijaDTO>();
+		
+		
+			for(Destinacija dest : avio.get().getDestinacijeNaKojimaPosluje())
+			{
+				listDto.add(destConv.convertToDTO(dest));
+			}
+				
+			return listDto;
 	}
 	
 	public DestinacijaDTO saveOne(DestinacijaDTO dto)
@@ -93,5 +113,7 @@ public class DestinacijaService
 		else
 			return false;
 	}
+
+	
 	
 }

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 
 class ActivationPage extends Component {
-    state = {  }
+    state = {
+        
+      }
     render() {
         return (
             <div>

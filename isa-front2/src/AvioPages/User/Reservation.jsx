@@ -8,6 +8,7 @@ import Rectangle from 'react-rectangle';
 class Reservation extends Component {
     state = {
         toggle: false,
+        podaciOLetu: "",
         message: "",
         karte: [],
         idKarte: "",
@@ -21,6 +22,9 @@ class Reservation extends Component {
             idLeta: letid
         })
         axios.get('http://localhost:8221/flight/getone/' + letid).then(res => {
+            this.setState({
+                podaciOLetu: res.data
+            })
         }).catch(error => {
             console.log(error);
         }).then(
@@ -130,9 +134,8 @@ class Reservation extends Component {
                         <div>
                             <form onSubmit={(e) => { this.handleMessageSubmit(e) }}>
                                 <div className="container">
-                                    <label htmlFor="friend" className="black">Unesite ime prijatelja:</label>
                                     <div className="input-field">
-                                        <input type="text" id="friend" className="browser-default" name="friend" onChange={(e) => { this.sendMessage(e) }} /><br />
+                                        <input type="text" id="friend" placeholder="Ime prijatelja" className="browser-default" name="friend" onChange={(e) => { this.sendMessage(e) }} /><br />
                                         <button className="btn waves-effect waves-light red" type="submit">Potvrdi</button><br />
                                     </div>
                                 </div>

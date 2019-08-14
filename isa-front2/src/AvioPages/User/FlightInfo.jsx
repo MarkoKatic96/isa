@@ -15,8 +15,8 @@ class FlightInfo extends Component {
 
     componentDidMount() {
 
-        let local = localStorage.getItem("email");
-        if(local !== 'undefined')
+        let local = localStorage.getItem("rola");
+        if(local === 'KORISNIK')
         {
             this.setState({
                 showResBtn: true

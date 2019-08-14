@@ -63,6 +63,9 @@ public class KorisnikService
 		if(korisnik.get().getPrijateljiKorisnika().contains(prijatelj.get()))
 			return "EXISTS_ERR";
 		
+		else if(korisnik.get().getEmail().equals(prijatelj.get().getEmail()))
+			return "EXISTS_ERR";
+		
 		List<Korisnik> insert = new ArrayList<Korisnik>();
 		insert.add(prijatelj.get());
 		
@@ -71,7 +74,7 @@ public class KorisnikService
 		
 		
 		try {
-			mailService.sendNotificaitionAsync(korisnik.get(), prijatelj.get());
+			mailService.sendNotificaitionAsync(korisnik.get(), prijatelj.get(), "FR_REQ");
 		} catch (MailException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,6 +96,7 @@ public class KorisnikService
 		
 		if(korisnik.get().getPrijateljiKorisnika().contains(prijateljKojiSalje.get()))
 			return "EXISTS_ERR";
+		
 		
 		List<Korisnik> insert = new ArrayList<Korisnik>();
 		insert.add(prijateljKojiSalje.get());
@@ -215,17 +219,17 @@ public class KorisnikService
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idTrenutni);
 		Optional<Korisnik> prijateljKojiSalje = korisnikRepo.findById(idZaBrisanje);
 		
-		List<Korisnik> prijateljiKorisnika = korisnik.get().getPrijateljiKorisnika();
+		//samo if 1 i 3 trebaju, ovo se moze brisati
 		
-		List<Korisnik> sviPrijatelji = korisnik.get().getPrijateljiKorisnika();
+		List<Korisnik> prijateljiKorisnika = korisnik.get().getPrijateljiKorisnika();
 		
 		for(Korisnik prijateljZaht : prijateljiKorisnika)
 		{
 			if(prijateljZaht.getEmail().equals(prijateljKojiSalje.get().getEmail()))
 			{
 				System.out.println("USAO U IF 1");
-				sviPrijatelji.remove(prijateljZaht);
-				korisnik.get().setPrijateljiKorisnika(sviPrijatelji);
+				prijateljiKorisnika.remove(prijateljZaht);
+				korisnik.get().setPrijateljiKorisnika(prijateljiKorisnika);
 				korisnikRepo.save(korisnik.get());
 				
 				return "SUCCESS";
@@ -236,15 +240,13 @@ public class KorisnikService
 		
 		List<Korisnik> prijateljiKorisnika2 = korisnik.get().getKorisnici();
 		
-		List<Korisnik> sviPrijatelji2 = korisnik.get().getKorisnici();
-		
 		for(Korisnik prijateljZaht : prijateljiKorisnika2)
 		{
 			if(prijateljZaht.getEmail().equals(korisnik.get().getEmail()))
 			{
 				System.out.println("USAO U IF 2");
-				sviPrijatelji2.remove(prijateljZaht);
-				korisnik.get().setKorisnici(sviPrijatelji2);
+				prijateljiKorisnika2.remove(prijateljZaht);
+				korisnik.get().setKorisnici(prijateljiKorisnika2);
 				korisnikRepo.save(korisnik.get());
 				
 				return "SUCCESS";
@@ -256,15 +258,13 @@ public class KorisnikService
 		
 		List<Korisnik> prijateljiKorisnika3 = prijateljKojiSalje.get().getPrijateljiKorisnika();
 		
-		List<Korisnik> sviPrijatelji3 = prijateljKojiSalje.get().getPrijateljiKorisnika();
-		
 		for(Korisnik prijateljZaht : prijateljiKorisnika3)
 		{
-			if(prijateljZaht.getEmail().equals(prijateljKojiSalje.get().getEmail()))
+			if(prijateljZaht.getEmail().equals(korisnik.get().getEmail()))
 			{
 				System.out.println("USAO U IF 3");
-				sviPrijatelji3.remove(prijateljZaht);
-				prijateljKojiSalje.get().setPrijateljiKorisnika(sviPrijatelji3);
+				prijateljiKorisnika3.remove(prijateljZaht);
+				prijateljKojiSalje.get().setPrijateljiKorisnika(prijateljiKorisnika3);
 				korisnikRepo.save(prijateljKojiSalje.get());
 				
 				return "SUCCESS";
@@ -275,15 +275,13 @@ public class KorisnikService
 		
 		List<Korisnik> prijateljiKorisnika4 = prijateljKojiSalje.get().getKorisnici();
 		
-		List<Korisnik> sviPrijatelji4 = prijateljKojiSalje.get().getKorisnici();
-		
 		for(Korisnik prijateljZaht : prijateljiKorisnika4)
 		{
 			if(prijateljZaht.getEmail().equals(korisnik.get().getEmail()))
 			{
 				System.out.println("USAO U IF 4");
-				sviPrijatelji4.remove(prijateljZaht);
-				prijateljKojiSalje.get().setKorisnici(sviPrijatelji4);
+				prijateljiKorisnika4.remove(prijateljZaht);
+				prijateljKojiSalje.get().setKorisnici(prijateljiKorisnika4);
 				korisnikRepo.save(prijateljKojiSalje.get());
 				
 				return "SUCCESS";
