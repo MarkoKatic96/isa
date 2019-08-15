@@ -249,5 +249,45 @@ public class KorisnikController
 	}
 	
 	
+	/*
+	 * Vraca sve pozivnice za rezervaciju karte u avionu (za datog korisnika)
+	 */
+	@GetMapping("/getallinvitations/{userid}")
+	public ResponseEntity<List<KartaDTO>> getAllPozivniceZaPutovanje(@PathVariable("userid") Long idKorisnika)
+	{
+		System.out.println("getAllPozivniceZaPutovanje()");
+		
+		List<KartaDTO> listDto = korService.getAllPozivniceZaPutovanje(idKorisnika);
+		
+		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<KartaDTO>>(listDto, HttpStatus.OK);
+	}
 	
+	
+	/*
+	 * PRIHVATANJE POZIVNICE ZA LET
+	 * id karte koju prihvatamo
+	 */
+	@PostMapping("/acceptinvrequest/{ticketid}")
+	public ResponseEntity<String> prihvatiPozivnicu(@PathVariable("ticketid") Long idKarte)
+	{
+		System.out.println("prihvatiPozivnicu()");
+		
+		String retVal = korService.prihvatiPozivnicu(idKarte);
+		
+		return (!retVal.equals("SUCCESS")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.OK);
+	}
+	
+	/*
+	 * ODBIJANJE POZIVNICE ZA LET	
+	 * Parametar1 = id korisnika na cijoj smo acc info stranici, parametar2 = id korisnika koji salje zahtev
+	 */
+	@PostMapping("/refuseinvrequest/{ticketid}")
+	public ResponseEntity<String> odbijPozivnicu(@PathVariable("ticketid") Long idKarte)
+	{
+		System.out.println("odbijPozivnicu()");
+		
+		String retVal = korService.odbijPozivnicu(idKarte);
+		
+		return (!retVal.equals("SUCCESS")) ? new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(retVal, HttpStatus.OK);
+	}
 }

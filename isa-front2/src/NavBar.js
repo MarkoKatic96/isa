@@ -14,15 +14,16 @@ class NavBar extends Component{
 
     render(){
         //var isLogged = this.props.loggedIn;
-        var isLogged = localStorage.getItem("isLogged")
+        //var isLogged = localStorage.getItem("isLogged")
         var rola = localStorage.getItem('rola');
         var ispis="";
-        if(rola=="KORISNIK"){
+        if(rola==="KORISNIK"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
+                        <li><Link to="/userinvitations">Pozivnice za putovanje</Link></li>
                         <li><Link to="/account">Nalog</Link></li>
                         <li><Link to="/" onClick={this.odjava}>Odjava</Link></li>
                     </ul>
-        }else if(rola=="ADMIN_AVIO_KOMPANIJE"){
+        }else if(rola==="ADMIN_AVIO_KOMPANIJE"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><Link to="/adcompanies/edit">Avio kompanije</Link></li>
                         <li><Link to="/adflights">Letovi</Link></li>
@@ -31,7 +32,7 @@ class NavBar extends Component{
                         <li><Link to="/adinfo">Profil</Link></li>
                         <li><Link to="/" onClick={this.odjava}>Odjava</Link></li>
                     </ul>
-        }else if(rola=="ADMIN_HOTELA"){
+        }else if(rola==="ADMIN_HOTELA"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><Link to="/edit/hotel">Izmeni hotel</Link></li>
                         <li><Link to="/admin/rooms">Sobe</Link></li>
@@ -41,12 +42,12 @@ class NavBar extends Component{
                         <li><Link to="/profile">Profil</Link></li>
                         <li><Link to="/" onClick={this.odjava}>Odjava</Link></li>
                     </ul>
-        }else if(rola=="ADMIN_RENT_A_CAR"){
+        }else if(rola==="ADMIN_RENT_A_CAR"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><Link to="/login">Rent</Link></li>
                         <li><Link to="/" onClick={this.odjava}>Odjava</Link></li>
                     </ul>
-        }else if(rola=="MASTER_ADMIN"){
+        }else if(rola==="MASTER_ADMIN"){
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><Link to="/master/add_admin">Dodaj admina</Link></li>
                         <li><Link to="/master/add_avio">Kreiraj aviokompaniju</Link></li>
@@ -59,7 +60,7 @@ class NavBar extends Component{
             <nav className="nav-wrapper red darken-3">
                 <div className="container">
                     <Link to='/' className="brand-logo">Home</Link>
-                    { (localStorage.getItem("isLogged") && ispis!="") ? (
+                    { (localStorage.getItem("isLogged") && ispis!=="") ? (
                         <div>
                             {ispis}
                         </div>

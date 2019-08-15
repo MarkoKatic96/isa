@@ -35,11 +35,10 @@ public class MailService
 		//Thread.sleep(10000);
 		System.out.println("Slanje emaila...");
 		
-
+		SimpleMailMessage mail = new SimpleMailMessage();
 		//String link = "https://localhost:8443/#/registracija/aktiviranjeNaloga/" + korisnik.getId(); 
 		if(type.equals("FR_REQ"))
 		{
-			SimpleMailMessage mail = new SimpleMailMessage();
 			mail.setTo(prijatelj.getEmail());
 			mail.setFrom(env.getProperty("spring.mail.username"));
 			mail.setSubject("Zahtev za prijateljstvo");
@@ -48,6 +47,16 @@ public class MailService
 					+ "Zahtev mozete prihvatiti ili odbiti.\n\n"
 					+ "Link: http://localhost:3000/account"
 					+ " \n\n\n Vas MegaTravel");
+			javaMailSender.send(mail);
+		}
+		else if(type.equals("FR_INV"))
+		{
+			mail.setTo(prijatelj.getEmail());
+			mail.setFrom(env.getProperty("spring.mail.username"));
+			mail.setSubject("Pozivnica za putovanje");
+			mail.setText("Pozdrav " + prijatelj.getIme() + ",\n\nPozivam te na nezaboravno zajednicko putovanje. Pozivnicu mozes prihvatiti cime rezervises mesto u avionu. U slucaju da nisi zainteresovan/a vrlo jednostavno mozes odbiti rezervaciju. \n\n"
+					+ "Svako dobro, \n " + korisnik.getIme() + " " + korisnik.getPrezime() + ", \nEmail adresa: " + korisnik.getEmail() + ".\n\n"
+					+ " \n\n\nLink za rezervaciju: http://localhost:3000/userinvitations");
 			javaMailSender.send(mail);
 		}
 		

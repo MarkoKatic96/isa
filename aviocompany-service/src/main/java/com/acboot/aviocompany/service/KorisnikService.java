@@ -490,9 +490,47 @@ public class KorisnikService
 		return korisniciRet;
 	}
 
-	
+	public List<KartaDTO> getAllPozivniceZaPutovanje(Long idKorisnika)
+	{
+		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
+		List<Karta> sveKarte = kartaRepo.findAll();
+		
+		List<KartaDTO> karteRet = new ArrayList<KartaDTO>();
+		
+		for(Karta karta : sveKarte)
+		{
+			if(karta.getKorisnikKojiSaljePozivnicu().getId() == korisnik.get().getId())
+			{
+				karteRet.add(kartaConv.convertToDTO(karta));
+			}
+		}
+		
+		return karteRet;
+	}
 
-	
+	public String prihvatiPozivnicu(Long idKarte)
+	{
+		Optional<Karta> karta = kartaRepo.findById(idKarte);
+		
+		LocalDateTime date = LocalDateTime.now();
+		
+		if(karta.get().getLet().getVremePoletanja().isBefore(date))
+			return "ZAKASNIO";
+		
+		karta.get().setVremeRezervisanja(date);
+		kartaRepo.save(karta.get());
+		
+		return "SUCCESS";
+	}
 
-	
+	public String odbijPozivnicu(Long idKarte)
+	{
+		Optional<Korisnik> kor = korisnikRepo.findById((long) 1);
+		Optional<Karta> karta = kartaRepo.findById(idKarte);
+		
+		karta.get().setKorisnik(kor.get());
+		karta.get().setKorisnikKojiSaljePozivnicu(kor.get());
+		
+		return null;
+	}
 }

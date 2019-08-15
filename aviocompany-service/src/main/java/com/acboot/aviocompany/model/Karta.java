@@ -55,5 +55,9 @@ public class Karta
     @JoinColumn(name="id_korisnika", nullable=true)
     private Korisnik korisnik;
 	
+	@ManyToOne
+    @JoinColumn(name="id_korisnika_koji_salje_poz", nullable=true)
+    private Korisnik korisnikKojiSaljePozivnicu;
+	
 	
 }

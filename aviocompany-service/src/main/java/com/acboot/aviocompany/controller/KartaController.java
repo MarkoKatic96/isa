@@ -144,5 +144,19 @@ public class KartaController
 		
 		return (retVal.equals("REZERVISANE")) ? new ResponseEntity<String>(retVal, HttpStatus.CREATED) : new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST);
 	}
+	
+//	/*
+//	 * Rezervacija vise karata odjednom od strane korisnika (nije testirano)
+//	 * Prima id korisnika koji rezervise sve to, prima listu karata koja je rezervisana kao i listu prijatelja koje je korisnik pozvao
+//	 */
+//	@PutMapping("/acceptfriendinv/{userid}")
+//	public ResponseEntity<String> rezervisiViseKarata(@PathVariable("userid") Long idKorisnika, @RequestBody SlanjePozivniceZaRezervacijuDTO pozivnica)
+//	{
+//		System.out.println("rezervisiViseKarata()");
+//	
+//		String retVal = kartaService.rezervisiViseKarata(idKorisnika, pozivnica);
+//		
+//		return (retVal.equals("REZERVISANE")) ? new ResponseEntity<String>(retVal, HttpStatus.CREATED) : new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST);
+//	}
 
 }

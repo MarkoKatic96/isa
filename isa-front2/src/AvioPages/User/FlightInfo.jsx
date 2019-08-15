@@ -74,7 +74,7 @@ class FlightInfo extends Component {
                                     <p>Vreme sletanja: {this.state.let.vremeSletanja}</p>
                                     <p>Broj slobodnih mesta: {this.state.let.brojMesta - this.state.let.brojOsoba}</p>
                                     <p>Broj presedanja: {this.state.let.brojPresedanja}</p>
-                                    <p>Duzina putovanja: {this.state.let.duzinaPutovanja}</p>
+                                    <p>Duzina putovanja: {this.state.let.duzinaPutovanja} km</p>
                                     <p>Tip puta: {this.state.let.tipPuta}</p>
                                 </div>
                                 <div className="divider white"></div>

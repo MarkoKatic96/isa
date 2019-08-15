@@ -42,6 +42,9 @@ public class Korisnik
 	@OneToMany(mappedBy="korisnik")
     private List<Karta> spisakRezervisanihKarata;
 	
+	@OneToMany(mappedBy="korisnikKojiSaljePozivnicu")
+    private List<Karta> spisakKarataZaPrijatelje;
+	
 	//treba dodati rezervacije (rezervacije je entitet povezan sa kartom)
 	
 	@ManyToMany
@@ -67,18 +70,6 @@ public class Korisnik
 	@ManyToMany(mappedBy = "zahteviKorisnika")
 	private List<Korisnik> korisniciZaht;
 	
-	/*
-	 * POZIVNICE ZA REZERVISANJE KARATA
-	 */
-	@ManyToMany
-	@JoinTable(
-	  name = "korisnik_pozivnice", 
-	  joinColumns = @JoinColumn(name = "korisnik_id"), 
-	  inverseJoinColumns = @JoinColumn(name = "prijatelj_id"))
-	private List<Korisnik> pozivniceKorisnika;
-	
-	@ManyToMany(mappedBy = "pozivniceKorisnika")
-	private List<Korisnik> prijateljiDobijajuPozivnice;
 
 	
 	public Korisnik(KorisnikDTO korisnik) {

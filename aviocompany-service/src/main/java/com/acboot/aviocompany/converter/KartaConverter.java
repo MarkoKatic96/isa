@@ -27,6 +27,7 @@ public class KartaConverter
 		dto.setLet(letConv.convertToDTO(model.getLet()));
 		dto.setVremeRezervisanja(model.getVremeRezervisanja());
 		dto.setKorisnik(korConv.convertToDTO(model.getKorisnik()));
+		dto.setKorisnikKojiSaljePozivnicu(korConv.convertToDTO(model.getKorisnikKojiSaljePozivnicu()));
 		
 		return dto;
 	}
@@ -43,6 +44,7 @@ public class KartaConverter
 		model.setLet(letConv.convertFromDTO(dto.getLet()));
 		model.setVremeRezervisanja(dto.getVremeRezervisanja());
 		model.setKorisnik(korConv.convertFromDTO(dto.getKorisnik()));
+		model.setKorisnikKojiSaljePozivnicu(korConv.convertFromDTO(dto.getKorisnikKojiSaljePozivnicu()));
 		
 		
 		return model;

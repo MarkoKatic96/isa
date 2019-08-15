@@ -3,7 +3,6 @@ package com.acboot.aviocompany.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.acboot.aviocompany.dto.DestinacijaDTO;
@@ -49,15 +48,6 @@ public class KorisnikConverter
 		
 		dto.setZahteviKorisnika(zkorList);
 		
-		List<KorisnikDTO> pozList = new ArrayList<KorisnikDTO>();
-		
-		for(Korisnik kor : model.getPozivniceKorisnika())
-		{
-			pozList.add(this.convertToDTO(kor));
-		}
-		
-		dto.setPozivniceKorisnika(pozList);
-
 		
 		return dto;
 	}
@@ -101,20 +91,7 @@ public class KorisnikConverter
 			}
 		}
 		model.setZahteviKorisnika(zkorList);
-		
-		
-		List<Korisnik> pozList = new ArrayList<Korisnik>();
-		
-		if(dto.getPozivniceKorisnika() != null)
-		{
-			for(KorisnikDTO kor : dto.getPozivniceKorisnika())
-			{
-				pozList.add(this.convertFromDTO(kor));
-			}
-		}
-		
-		model.setPozivniceKorisnika(pozList);
-		
+				
 		
 		return model;
 	}

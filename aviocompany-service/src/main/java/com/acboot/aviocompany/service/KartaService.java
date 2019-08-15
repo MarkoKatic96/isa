@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import com.acboot.aviocompany.converter.KartaConverter;
@@ -39,6 +40,9 @@ public class KartaService
 	
 	@Autowired
 	private LetRepository letRepo;
+	
+	@Autowired
+	private MailService mailService;
 	
 	
 	public KartaDTO findById(Long id)
@@ -177,9 +181,7 @@ public class KartaService
 		
 		//za te prijatelje koje dobijemo ovde (npr rezervisali smo 5 karata a pozvali 2 prijatelja, preostale 3 ce ici na nas)
 		//jedan prijatelj = jedna rezervacija
-		
-		//trebamo poslati i pozivnice usput
-		List<Korisnik> pozivnice = korisnik.get().getPozivniceKorisnika();
+
 		
 		//izbacujemo duplikate iz prijatelja (nisam uspeo u reactu)
 		Set<KorisnikDTO> dist = new LinkedHashSet<KorisnikDTO>(); 
@@ -196,12 +198,25 @@ public class KartaService
 				
 				for(KorisnikDTO prijatelj : prijatelji)
 				{
-						pozivnice.add(korisnikConv.convertFromDTO(prijatelj));
 						if(karta.getKorisnik().getId() == 1)
 						{
 							karta.setKorisnik(prijatelj);
-							karta.setVremeRezervisanja(date);
+							karta.setKorisnikKojiSaljePozivnicu(korisnikConv.convertToDTO(korisnik.get()));
+							//necemo ovde rezervisati vreme, to cemo tek kad prijatelj prihvati rezervaciju
+							//karta.setVremeRezervisanja(date); 
 							kartaRepo.save(kartaConv.convertFromDTO(karta));
+							
+							//slanje mail-a sa linkom
+							try {
+								mailService.sendNotificaitionAsync(korisnik.get(), korisnikConv.convertFromDTO(prijatelj), "FR_INV");
+							} catch (MailException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
 							prijatelji.remove(prijatelj);
 							if(prijatelji.isEmpty())
 							{
@@ -218,14 +233,11 @@ public class KartaService
 		
 		for(KartaDTO karta : karte)
 		{
-			if(karta.getKorisnik().getId() == 1 || karta.getVremeRezervisanja().getYear() < 2002)
+			if(karta.getKorisnik().getId() == 1)
 			{
 				novaListaKarata.add(karta);
 			}
 		}
-		
-		korisnik.get().setPozivniceKorisnika(pozivnice);
-		korisnikRepo.save(korisnik.get());
 		
 		boolean flag = false;
 		//ostale idu na nas
@@ -239,11 +251,13 @@ public class KartaService
 					letRepo.save(let.get());
 				}
 				
+				Karta card = kartaConv.convertFromDTO(dto);
+				card.setKorisnik(korisnik.get()); //sad je ovde cepno
+				//to je zbog one fore u many to many, treba sad i ovde da pravim kao za brisanje
+				//prijatelja, ono sa druge strane da idu pozivnice
+				card.setVremeRezervisanja(date);
 				
-				dto.setKorisnik(korisnikConv.convertToDTO(korisnik.get())); //sad je ovde cepno
-				dto.setVremeRezervisanja(date);
-				
-				kartaRepo.save(kartaConv.convertFromDTO(dto));
+				kartaRepo.save(card);
 				flag = true;
 			}
 			

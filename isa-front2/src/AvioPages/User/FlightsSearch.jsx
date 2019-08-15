@@ -80,10 +80,6 @@ class FlightsSearch extends Component {
             }
         )
 
-        
-
-        
-
     }
 
     changeMestoPolaska = (e) => {
@@ -92,7 +88,7 @@ class FlightsSearch extends Component {
 
         this.state.destinacije.map(dest =>
             {
-                if(e.target.value == dest.naziv)
+                if(e.target.value === dest.naziv)
                 {
                     mestoPolaska = dest.idDestinacije
                 }
@@ -110,7 +106,7 @@ class FlightsSearch extends Component {
 
         this.state.destinacije.map(dest =>
             {
-                if(e.target.value == dest.naziv)
+                if(e.target.value === dest.naziv)
                 {
                     mestoDolaska = dest.idDestinacije
                 }
@@ -204,7 +200,7 @@ class FlightsSearch extends Component {
            time1, time2, takeOffDestination, landingDestination, type, number, klase, prtljag
         }).then(res => {
             console.log(res)
-                if(res.status == 200)
+                if(res.status === 200)
                 {
                     this.setState({
                         flightsRes: res.data

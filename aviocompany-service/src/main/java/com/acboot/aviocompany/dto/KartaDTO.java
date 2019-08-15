@@ -22,4 +22,5 @@ public class KartaDTO
 	
 	private LocalDateTime vremeRezervisanja;
 	private KorisnikDTO korisnik;
+	private KorisnikDTO korisnikKojiSaljePozivnicu;
 }

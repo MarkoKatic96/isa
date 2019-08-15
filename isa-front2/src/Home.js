@@ -20,7 +20,7 @@ class Home extends Component{
                             <div className="col s12 m7">
                                 <div className="card z-depth-3" id="cardHome1">
                                 <div className="card-image">
-                                    <img className="slike" src={avioSlika}/>
+                                    <img className="slike" src={avioSlika} alt="a"/>
                                     <span className="card-title">Aviokompanije</span>
                                 </div>
                                 <div className="card-content">
@@ -38,7 +38,7 @@ class Home extends Component{
                             <div className="col s12 m7">
                                 <div className="card z-depth-3" id="cardHome2">
                                 <div className="card-image">
-                                    <img src={hotelSlika} className="slike"/>
+                                    <img src={hotelSlika} className="slike" alt="a"/>
                                     <span className="card-title">Hoteli</span>
                                 </div>
                                 <div className="card-content">
@@ -56,7 +56,7 @@ class Home extends Component{
                             <div className="col s12 m7">
                                 <div className="card z-depth-3" id="cardHome3">
                                 <div className="card-image">
-                                    <img src={carSlika} className="slike"/>
+                                    <img src={carSlika} className="slike" alt="a"/>
                                     <span className="card-title">Rent-a-car</span>
                                 </div>
                                 <div className="card-content">

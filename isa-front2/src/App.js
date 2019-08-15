@@ -36,10 +36,10 @@ import FlightsEdit from './AvioPages/Admin/FlightsEdit';
 import Account from './AvioPages/User/Account';
 import AddHotel from './MasterAdminPages/AddHotel';
 import Other from './AvioPages/Admin/Other';
-import ActivationPage from './AvioPages/User/ActivationPage';
 import AddAvio from './MasterAdminPages/AddAvio';
 import AddRent from './MasterAdminPages/AddRent';
 import ReservationForm from './HotelPages/ReservationForm';
+import UserInvitations from './AvioPages/User/UserInvitations';
 
 class App extends Component {
 
@@ -81,47 +81,47 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App grey lighten-1" id="divApp">
-          <NavBar token = {this.state.token} setToken = {this.setToken} loggedIn={this.state.loggedIn} setEmail = {this.setEmail} logOut={this.logOut}/>
-          <Route exact path = '/' render={Home}/>
-          <Route path = '/hotels' render={props => <Hotels loggedIn={this.state.loggedIn}/>}/>
-          <Route path = '/companies' render={AirlineIndex}/>
-          <Route path = '/rent-a-cars' render={RentACars}/>
-          <Route path = '/login' render={props => <Login setToken = {this.setToken} setEmail = {this.setEmail}  logIn={this.logIn}/>}/>
-          <Route path = '/register' render={Register}/>
-          <Route path = '/rooms/:hotelId' render={props => <Rooms loggedIn={this.state.loggedIn}/>}/>
-          <Route path = '/services/:serviceId' render={Services}/>
-          <Route path = '/edit/hotel' render={EditHotel}/>
-          <Route path = '/admin/rooms' render={HotelRooms}/>
-          <Route path = '/admin/add_room/:hotelId' render={AddRoom}/>
-          <Route path = '/admin/edit_room/:sobaId' render={EditRoom}/>
-          <Route path = '/admin/services' render={HotelServices}/>
-          <Route path = '/admin/add_services/:hotelId' render={AddService}/>
-          <Route path = '/admin/edit_services/:serviceId' render={EditService}/>
-          <Route path = '/profile' render={AdminProfile}/>
-          <Route path = '/cenovnik' render={Cenovnik}/>
-          <Route path = '/admin/edit_price/:sobaId' render={EditPrice}/>
-          <Route path = '/admin/single_prices/:sobaId' render={SinglePrices}/>
-          <Route path = '/admin/add_price/:sobaId' render={AddSinglePrice}/>
-          <Route path = '/izvestaji' render={Izvestaji}/>
-          <Route path = '/master/add_admin' render={AddAdmin}/>
-          <Route path = '/master/add_hotel' render={AddHotel}/>
-          <Route path = '/master/add_avio' render={AddAvio}/>
-          <Route path = '/master/add_rent' render={AddRent}/>
-          <Route path = '/reserve/:hotelId/:sobaId' render={ReservationForm}/>
+          <NavBar token={this.state.token} setToken={this.setToken} loggedIn={this.state.loggedIn} setEmail={this.setEmail} logOut={this.logOut}/>
+          <Route exact path='/' render={Home}/>
+          <Route path='/hotels' render={props => <Hotels loggedIn={this.state.loggedIn}/>}/>
+          <Route path='/companies' render={AirlineIndex}/>
+          <Route path='/rent-a-cars' render={RentACars}/>
+          <Route path='/login' render={props => <Login setToken={this.setToken} setEmail={this.setEmail}  logIn={this.logIn}/>}/>
+          <Route path='/register' render={Register}/>
+          <Route path='/rooms/:hotelId' render={props => <Rooms loggedIn={this.state.loggedIn}/>}/>
+          <Route path='/services/:serviceId' render={Services}/>
+          <Route path='/edit/hotel' render={EditHotel}/>
+          <Route path='/admin/rooms' render={HotelRooms}/>
+          <Route path='/admin/add_room/:hotelId' render={AddRoom}/>
+          <Route path='/admin/edit_room/:sobaId' render={EditRoom}/>
+          <Route path='/admin/services' render={HotelServices}/>
+          <Route path='/admin/add_services/:hotelId' render={AddService}/>
+          <Route path='/admin/edit_services/:serviceId' render={EditService}/>
+          <Route path='/profile' render={AdminProfile}/>
+          <Route path='/cenovnik' render={Cenovnik}/>
+          <Route path='/admin/edit_price/:sobaId' render={EditPrice}/>
+          <Route path='/admin/single_prices/:sobaId' render={SinglePrices}/>
+          <Route path='/admin/add_price/:sobaId' render={AddSinglePrice}/>
+          <Route path='/izvestaji' render={Izvestaji}/>
+          <Route path='/master/add_admin' render={AddAdmin}/>
+          <Route path='/master/add_hotel' render={AddHotel}/>
+          <Route path='/master/add_avio' render={AddAvio}/>
+          <Route path='/master/add_rent' render={AddRent}/>
+          <Route path='/reserve/:hotelId/:sobaId' render={ReservationForm}/>
 
 
-          <Route path = '/flsearch' render={() => <FlightsSearch />} />
-          <Route path = '/flinfo/:flightid' render={() => <FlightInfo />} />
-          <Route path = '/companyinfo/:flightid' render={() => <AvioCompanyInfo />} />
-          <Route path = '/reservation/:flightid' render={() => <Reservation />} />
-          <Route path = '/adcompanies' render={() => <AvioCompanies />} />
-          <Route path = '/adflights' render={() => <Flights />} />
-          <Route path = '/adflightsedit/:flightid' render={() => <FlightsEdit />} />
-          <Route path = '/adother' render={() => <Other />} />
-          <Route path = '/adreports' render={() => <Reports />} />
-          <Route path = '/adinfo' render={() => <AdminInfo />} />
-          <Route path = '/account' render={() => <Account />} />
-          <Route path = '/actpage' render={() => <ActivationPage />} />
+          <Route path='/flsearch' render={() => <FlightsSearch />} />
+          <Route path='/flinfo/:flightid' render={() => <FlightInfo />} />
+          <Route path='/companyinfo/:flightid' render={() => <AvioCompanyInfo />} />
+          <Route path='/reservation/:flightid' render={() => <Reservation />} />
+          <Route path='/adcompanies' render={() => <AvioCompanies />} />
+          <Route path='/adflights' render={() => <Flights />} />
+          <Route path='/adflightsedit/:flightid' render={() => <FlightsEdit />} />
+          <Route path='/adother' render={() => <Other />} />
+          <Route path='/adreports' render={() => <Reports />} />
+          <Route path='/adinfo' render={() => <AdminInfo />} />
+          <Route path='/account' render={() => <Account />} />
+          <Route path='/userinvitations' render={() => <UserInvitations />} />
         </div>
       </BrowserRouter>
     );

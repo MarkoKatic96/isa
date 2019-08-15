@@ -114,6 +114,7 @@ public class LetService
 				karta.setBrzaRezervacija(false);
 				karta.setCena(letConv.convertFromDTO(dto).getCenaKarte());
 				karta.setKorisnik(korisnik.get());
+				karta.setKorisnikKojiSaljePozivnicu(korisnik.get());
 				karta.setOcena(0);
 				karta.setPopust(0);
 				karta.setVremeRezervisanja(LocalDateTime.of(2000, 10, 10, 10, 10));
