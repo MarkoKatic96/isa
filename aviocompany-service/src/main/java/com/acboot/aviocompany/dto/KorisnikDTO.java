@@ -27,6 +27,7 @@ public class KorisnikDTO
 	private boolean prviPutLogovan;
 	private List<KorisnikDTO> prijateljiKorisnika;
 	private List<KorisnikDTO> zahteviKorisnika;
+	private List<KorisnikDTO> pozivniceKorisnika;
 	
 	public KorisnikDTO(Korisnik korisnik) {
 		super();

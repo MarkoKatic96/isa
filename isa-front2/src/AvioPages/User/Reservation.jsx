@@ -9,11 +9,17 @@ class Reservation extends Component {
     state = {
         toggle: false,
         podaciOLetu: "",
-        message: "",
+        
         karte: [],
         idKarte: "",
         user: "",
-        idLeta: ""
+        idLeta: "",
+
+        listaRezervisanihMesta: [],
+
+        sviKorisnici: [], //lista svih povucenih korisnika
+        friend: "", //sadrzi samo email korisnika (ili ime ce vidimo)
+        listaPrijatelja: [] //ovo saljemo - lista objekata korisnika
     }
 
     componentDidMount() {
@@ -45,16 +51,24 @@ class Reservation extends Component {
                 })
             })
 
+            axios.get("http://localhost:8221/user/all")
+            .then(res => {
+                console.log(res.data)
+                this.setState({
+                    sviKorisnici: res.data
+                })
+            })  
+
     }
 
     componentDidUpdate(){
-        let letid = this.props.match.params.flightid;
-        axios.get('http://localhost:8221/ticket/getfree/' + letid).then(res =>
-            {
-                this.setState({
-                    karte: res.data
-                })
-            })
+        // let letid = this.props.match.params.flightid;
+        // axios.get('http://localhost:8221/ticket/getfree/' + letid).then(res =>
+        //     {
+        //         this.setState({
+        //             karte: res.data
+        //         })
+        //     })
     }
 
     toggleFriends = () => {
@@ -70,40 +84,74 @@ class Reservation extends Component {
         }
     }
 
-    sendMessage = (e) => {
+    sendInvitationFieldChange = (e) => {
         this.setState({
-            message: e.target.value
+            friend: e.target.value
         })
     }
 
-    //ovo ce za sad da bude za slanje zahteva prijatelju
-    handleMessageSubmit = (e) => {
+    handleInvitation = (e) => {
         e.preventDefault();
 
-        let email = this.state.message; //ne salje dobro, treba promeniti na serveru
+        let listaZaSlanje = this.state.listaPrijatelja;
+        let friendEmail = this.state.friend;
+        let sviKorisnici = this.state.sviKorisnici;
+        console.log(sviKorisnici)
+        sviKorisnici.map(user => {
+            if(friendEmail === user.email)
+            {
+                listaZaSlanje.push(user);
+            }
+        }) 
 
-        axios.post('http://localhost:8221/user/invitefriend/1', { email }, { headers: { 'Content-Type': 'text/plain' } }).then(res => {
-            console.log(res);
-        }).catch(error => {
-            console.log(error);
-        })
-    }
-
-    getTicket = (e) => {
+        console.log(listaZaSlanje)
         this.setState({
-            idKarte: e.target.value
+            listaPrijatelja: listaZaSlanje
         })
+
     }
 
-    confirmReservation = () => {
+    getTicket = (karta) => {
+
+        let lista = this.state.listaRezervisanihMesta;
+        lista.push(karta)
+
+       
+
+        this.setState({
+            listaRezervisanihMesta: lista
+        })
+
+        console.log(lista);
+    }
+
+    confirmMoreTicketsReservation = () =>
+    {
         let userid = this.state.user.id;
-        let ticketid = this.state.idKarte;
-        let flightid = this.state.idLeta;
-        axios.post('http://localhost:8221/ticket/reserveone/' + userid + '/' + ticketid).then(res => {   
-            alert("Karta uspesno rezervisana");
+        let listaKarata = this.state.listaRezervisanihMesta;
+        let listaPrijatelja = this.state.listaPrijatelja;
+
+        console.log("ZA SLANJE: ")
+        console.log(listaKarata)
+        console.log(listaPrijatelja)
+
+        axios.post('http://localhost:8221/ticket/reservemore/' + userid, {listaKarata, listaPrijatelja}).then(res => { 
+            if(res.data === "REZERVISANE")
+            {
+                alert("Karte uspesno rezervisane");
+                this.setState({
+                    listaRezervisanihMesta: []
+                })
+                this.componentDidMount();
+            }
+            else if(res.data === "NOT_FRIEND_ERR")
+                alert("Osoba koju pozivate nije u prijateljima")
+            else
+                alert("Rezervacija nije uspela")
             this.componentDidUpdate();
         }).catch(error => {
-            alert("Rezervacija nije uspela")
+            console.log(error);
+            alert("Osoba koju pozivate nije u prijateljima")
         })
     }
 
@@ -114,7 +162,7 @@ class Reservation extends Component {
             return (
                 <div id="planelayout" key={karta.idKarte}>
                     <Fragment>
-                    <button  className="btn waves-effect waves-light blue" value={karta.idKarte} id="ticketbtn" onClick={(e) => { this.getTicket(e) }}>{i++}</button><br />
+                            <button  className="btn waves-effect waves-light blue" id="ticketbtn" onClick={() => { this.getTicket(karta) }}>{i++}</button>
                     </Fragment>
                 </div>
             );
@@ -128,14 +176,14 @@ class Reservation extends Component {
                 {raspored}
 
                 <button className="btn waves-effect waves-light red" id="friendsbtn" onClick={() => { this.toggleFriends() }}>Pozovi prijatelje</button><br />
-                <button className="btn waves-effect waves-light red" id="reservationbtn" onClick={() => { this.confirmReservation() }}>Potvrdi rezervaciju</button><br />
+                <button className="btn waves-effect waves-light red" id="reservationbtn" onClick={() => { this.confirmMoreTicketsReservation() }}>Potvrdi rezervaciju</button><br />
                 {
                     (this.state.toggle) ? (
                         <div>
-                            <form onSubmit={(e) => { this.handleMessageSubmit(e) }}>
+                            <form onSubmit={(e) => { this.handleInvitation(e) }}>
                                 <div className="container">
                                     <div className="input-field">
-                                        <input type="text" id="friend" placeholder="Ime prijatelja" className="browser-default" name="friend" onChange={(e) => { this.sendMessage(e) }} /><br />
+                                        <input type="text" id="friend" placeholder="Ime prijatelja" className="browser-default" name="friend" onChange={(e) => { this.sendInvitationFieldChange(e) }} /><br />
                                         <button className="btn waves-effect waves-light red" type="submit">Potvrdi</button><br />
                                     </div>
                                 </div>

@@ -44,10 +44,19 @@ public class KorisnikConverter
 		
 		for(Korisnik kor : model.getZahteviKorisnika())
 		{
-			korList.add(this.convertToDTO(kor));
+			zkorList.add(this.convertToDTO(kor));
 		}
 		
 		dto.setZahteviKorisnika(zkorList);
+		
+		List<KorisnikDTO> pozList = new ArrayList<KorisnikDTO>();
+		
+		for(Korisnik kor : model.getPozivniceKorisnika())
+		{
+			pozList.add(this.convertToDTO(kor));
+		}
+		
+		dto.setPozivniceKorisnika(pozList);
 
 		
 		return dto;
@@ -69,25 +78,44 @@ public class KorisnikConverter
 		model.setZaduzenZaId(dto.getZaduzenZaId());
 		model.setPrviPutLogovan(dto.isPrviPutLogovan());
 		
+		
 		List<Korisnik> korList = new ArrayList<Korisnik>();
 		
-		for(KorisnikDTO kor : dto.getPrijateljiKorisnika())
+		if(dto.getPrijateljiKorisnika() != null)
 		{
-			korList.add(this.convertFromDTO(kor));
+			for(KorisnikDTO kor : dto.getPrijateljiKorisnika())
+			{
+				korList.add(this.convertFromDTO(kor));
+			}
 		}
-		
 		model.setPrijateljiKorisnika(korList);
+		
 		
 		List<Korisnik> zkorList = new ArrayList<Korisnik>();
 		
-		for(KorisnikDTO kor : dto.getZahteviKorisnika())
+		if(dto.getZahteviKorisnika() != null)
 		{
-			korList.add(this.convertFromDTO(kor));
+			for(KorisnikDTO kor : dto.getZahteviKorisnika())
+			{
+				zkorList.add(this.convertFromDTO(kor));
+			}
 		}
-		
 		model.setZahteviKorisnika(zkorList);
 		
-		return model;
 		
+		List<Korisnik> pozList = new ArrayList<Korisnik>();
+		
+		if(dto.getPozivniceKorisnika() != null)
+		{
+			for(KorisnikDTO kor : dto.getPozivniceKorisnika())
+			{
+				pozList.add(this.convertFromDTO(kor));
+			}
+		}
+		
+		model.setPozivniceKorisnika(pozList);
+		
+		
+		return model;
 	}
 }

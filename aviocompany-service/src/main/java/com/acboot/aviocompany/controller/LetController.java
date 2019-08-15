@@ -87,14 +87,13 @@ public class LetController
 	 * ADMIN
 	 */
 	@PostMapping("/add/")
-	public ResponseEntity<LetDTO> addLet(@RequestBody LetDTO dto)
+	public ResponseEntity<Boolean> addLet(@RequestBody LetDTO dto)
 	{
 		System.out.println("addLet()");
 		
-		System.out.println("KOMPANIJA: " + dto.getAviokompanija());
-		System.out.println("ID LETA: " + dto.getIdLeta());
+		System.out.println("LET: " + dto);
 		
-		return (letService.saveOne(dto) == null) ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST) : new ResponseEntity<LetDTO>(dto, HttpStatus.CREATED);
+		return (!letService.saveOne(dto)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
 	}
 	
 	

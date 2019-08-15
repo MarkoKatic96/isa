@@ -66,7 +66,7 @@ public class KorisnikService
 		else if(korisnik.get().getEmail().equals(prijatelj.get().getEmail()))
 			return "EXISTS_ERR";
 		
-		List<Korisnik> insert = new ArrayList<Korisnik>();
+		List<Korisnik> insert = korisnik.get().getZahteviKorisnika();
 		insert.add(prijatelj.get());
 		
 		korisnik.get().setZahteviKorisnika(insert);
@@ -98,7 +98,7 @@ public class KorisnikService
 			return "EXISTS_ERR";
 		
 		
-		List<Korisnik> insert = new ArrayList<Korisnik>();
+		List<Korisnik> insert = korisnik.get().getPrijateljiKorisnika();
 		insert.add(prijateljKojiSalje.get());
 		
 		korisnik.get().setPrijateljiKorisnika(insert);

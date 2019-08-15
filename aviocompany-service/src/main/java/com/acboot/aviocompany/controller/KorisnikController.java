@@ -42,10 +42,10 @@ public class KorisnikController
 	@GetMapping("/all")
 	public ResponseEntity<List<KorisnikDTO>> getKorisnici(HttpServletRequest req)
 	{
-		Korisnik k = korService.zaTokene(req);
-		
-		if(k != null && k.getRola().equals(Rola.MASTER_ADMIN))
-		{
+//		Korisnik k = korService.zaTokene(req);
+//		
+//		if(k != null && k.getRola().equals(Rola.MASTER_ADMIN))
+//		{
 			List<KorisnikDTO> dto = new ArrayList<KorisnikDTO>();
 			List<Korisnik> lista = korService.getUsers();
 			
@@ -54,8 +54,8 @@ public class KorisnikController
 				dto.add(new KorisnikDTO(item));
 			}
 			return new ResponseEntity<List<KorisnikDTO>>(dto, HttpStatus.OK);
-		}
-		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//		}
+//		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)

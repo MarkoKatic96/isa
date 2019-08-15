@@ -19,4 +19,6 @@ public class PretragaDTO
 	private String type;
 	private Integer number; //broj preostalih mesta
 	private List<KlasaDTO> klase; //pretraga po klasama
+	private List<DodatnaUslugaDTO> dodatneUsluge;
+	private List<PrtljagDTO> prtljag;
 }

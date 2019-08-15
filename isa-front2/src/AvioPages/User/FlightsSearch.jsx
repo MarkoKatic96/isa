@@ -1,22 +1,24 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import FlightInfo from './FlightInfo';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
+import { withRouter } from 'react-router-dom';
 
 class FlightsSearch extends Component {
 
     state = {
         destinacije: [],
             letovi: [],
-            classes: [],
+            aviokompanija: "",
+            klaseKojeLetSadrzi: [],
+            tipoviPrtljagaPoLetu: [],
 
             takeOffDestination: "",
             landingDestination: "",
             type: "",
             number: "",
             klase: [],
-            klaseKojeLetSadrzi: [],
+            prtljag: [],
 
             datumPoletanja1: "",
             vremePoletanja1: "",
@@ -24,12 +26,28 @@ class FlightsSearch extends Component {
             vremePoletanja2: "",
 
             showFlightInfo: true,
+            showResBtn: false,
 
             flightsRes: []
     }
 
 
     componentDidMount() {
+
+        let local = localStorage.getItem("rola");
+        if(local === 'KORISNIK')
+        {
+            this.setState({
+                showResBtn: true
+            })
+        }
+        else
+        {
+            this.setState({
+                showResBtn: false
+            })
+        }
+
         axios.get('http://localhost:8221/destination/getall').then(
             res => {
                 this.setState({
@@ -49,10 +67,22 @@ class FlightsSearch extends Component {
         axios.get('http://localhost:8221/class/getall').then(
             res => {
                 this.setState({
-                    klase: res.data
+                    klaseKojeLetSadrzi: res.data
                 })
             }
         )
+
+        axios.get('http://localhost:8221/luggage/getall').then(
+            res => {
+                this.setState({
+                    tipoviPrtljagaPoLetu: res.data
+                })
+            }
+        )
+
+        
+
+        
 
     }
 
@@ -131,9 +161,14 @@ class FlightsSearch extends Component {
         })
     }
 
-    changeKlaseKojeLetSadrzi = (klaseKojeLetSadrzi) => {
-        this.setState({ klaseKojeLetSadrzi });
-        console.log(this.state.klaseKojeLetSadrzi)
+    changeKlaseKojeLetSadrzi = (klase) => {
+        this.setState({ klase });
+        console.log(this.state.klase)
+    }
+
+    changePrtljag = (prtljag) => {
+        this.setState({ prtljag });
+        console.log(this.state.prtljag)
     }
 
     handleSubmit = (e) => {
@@ -146,18 +181,27 @@ class FlightsSearch extends Component {
         let type = this.state.type;
         let number = this.state.number;
         // let klase = this.state.klase; 
-        let klaseKojeLetSadrzi = [];
+        let klase = [];
         let object = new Object();
-        for(let i = 0; i<this.state.klaseKojeLetSadrzi.length; i++)
+        for(let i = 0; i<this.state.klase.length; i++)
         {
-            object.idKlase = this.state.klaseKojeLetSadrzi[i].value;
-            object.naziv = this.state.klaseKojeLetSadrzi[i].label;
-            klaseKojeLetSadrzi.push(object)
+            object.idKlase = this.state.klase[i].value;
+            object.naziv = this.state.klase[i].label;
+            klase.push(object)
+            object = {}
+        }
+
+        let prtljag = [];
+        for(let i = 0; i<this.state.prtljag.length; i++)
+        {
+            object.idPrtljaga = this.state.prtljag[i].value;
+            object.opis = this.state.prtljag[i].label;
+            prtljag.push(object)
             object = {}
         }
 
         axios.post('http://localhost:8221/flight/searchflights', {
-           time1, time2, takeOffDestination, landingDestination, type, number, klaseKojeLetSadrzi
+           time1, time2, takeOffDestination, landingDestination, type, number, klase, prtljag
         }).then(res => {
             console.log(res)
                 if(res.status == 200)
@@ -182,11 +226,24 @@ class FlightsSearch extends Component {
 
     }
 
-    showFlightInfo = () =>
+  
+
+    showCompanyInfo = (idLeta) => {
+        axios.get('http://localhost:8221/flight/getcompanyid/' + idLeta).then(
+            res => {
+                console.log(res);
+                this.setState({
+                    aviokompanija: res.data
+                })
+                this.props.history.push('/companyinfo/' + res.data);
+            }
+        )
+        
+    }
+
+    reserveTicket = (idLeta) =>
     {
-        this.setState({
-            showFlightInfo: true
-        })
+        this.props.history.push('/reservation/' + idLeta);
     }
 
 
@@ -194,20 +251,31 @@ class FlightsSearch extends Component {
 
         //LISTE ZA SELECT
          //KLASE
-         var { klaseKojeLetSadrzi } = this.state.klaseKojeLetSadrzi;
          var { klase } = this.state.klase;
- 
+
          var listaKlasa = [];
  
-         this.state.klase.map(klasa => {
+         this.state.klaseKojeLetSadrzi.map(klasa => {
              let options = new Object();
              options.value = klasa.idKlase;
              options.label = klasa.naziv;
              listaKlasa.push(options);
          })
 
+         //TIP PRTLJAGA
+         var { prtljag } = this.state.prtljag;
+ 
+         var listaPrtljaga = [];
+ 
+         this.state.tipoviPrtljagaPoLetu.map(prt => {
+             let options = new Object();
+             options.value = prt.idPrtljaga;
+             options.label = prt.opis;
+             listaPrtljaga.push(options);
+         })
 
 
+        let show = this.state.showResBtn;
 
         const flightsList = this.state.flightsRes.length ? (this.state.flightsRes.map(flight => {
             return (
@@ -231,8 +299,10 @@ class FlightsSearch extends Component {
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                <button className="btn waves-effect waves-light blue" id="letinfo-btn" onClick={() => {this.showFlightInfo()}}>Informacije o letu</button>
-                                {(this.state.showFlightInfo) ? (<FlightInfo idLeta={flight.brojLeta}/>) : null}
+                                <button className="btn waves-effect waves-light green" id="avioinfo-btn" onClick={() => { this.showCompanyInfo(flight.idLeta) }}>Informacije o aviokompaniji</button>
+                                {
+                                    (show) ? (<button className="btn waves-effect waves-light red" id="rezervisi-btn" onClick={() => { this.reserveTicket(flight.idLeta) }}>Rezervacija</button>) : (<div></div>)
+                                }
                                 </div>
                             </div>
                         </div>
@@ -294,12 +364,19 @@ class FlightsSearch extends Component {
 
                             </div>
 
-                            <label htmlFor="klaseKojeLetSadrzi">Klase u avionu</label>
+                            <label htmlFor="klase">Klase u avionu</label>
                             <Select
-                                value={klaseKojeLetSadrzi}
-                                onChange={(klaseKojeLetSadrzi) => { this.changeKlaseKojeLetSadrzi(klaseKojeLetSadrzi) }}
+                                value={klase}
+                                onChange={(klase) => { this.changeKlaseKojeLetSadrzi(klase) }}
                                 options={listaKlasa}
-                                id="klaseKojeLetSadrzi" isMulti={true} />
+                                id="klase" isMulti={true} />
+
+                                <label htmlFor="prtljag">Tipovi prtljaga</label>
+                            <Select
+                                value={prtljag}
+                                onChange={(prtljag) => { this.changePrtljag(prtljag) }}
+                                options={listaPrtljaga}
+                                id="prtljag" isMulti={true} />
 
                             <div className="input-field">
                                 <input type="submit" value="Pretrazi" className="btn blue lighten-1 z-depth-0" /> <br /> <br />
@@ -319,4 +396,4 @@ class FlightsSearch extends Component {
 
 };
 
-export default FlightsSearch
+export default withRouter(FlightsSearch)

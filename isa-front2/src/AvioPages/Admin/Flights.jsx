@@ -11,6 +11,7 @@ class Flights extends Component {
         destinacije: [],
         klase: [],
         dodatneUsluge: [],
+        prtljag: [],
         clickAdd: false,
 
         brojLeta: "",
@@ -26,7 +27,7 @@ class Flights extends Component {
         brojMesta: "",
         cenaKarte: "",
 
-        tipoviPrtljagaPoLetu: "", //au brt kako ovo.
+        tipoviPrtljagaPoLetu: [], //au brt kako ovo.
         klaseKojeLetSadrzi: [],
         dodatneUslugeKojeLetSadrzi: [],
 
@@ -73,9 +74,10 @@ class Flights extends Component {
                 this.setState({
                     destinacije: res.data
                 })
+                
             }
-        )}
-
+        )
+    }
             
         )
 
@@ -86,6 +88,15 @@ class Flights extends Component {
                 })
             }
         )
+
+        axios.get('http://localhost:8221/luggage/getall').then(
+            res => {
+                console.log("PRTLJAG: ")
+                console.log(res.data);
+                this.setState({
+                    prtljag: res.data
+                })
+            })
 
         axios.get('http://localhost:8221/service/getall').then(
             res => {
@@ -173,6 +184,11 @@ class Flights extends Component {
         console.log(this.state.dodatneUslugeKojeLetSadrzi)
     }
 
+    changeTipoviPrtljagaPoLetu = (tipoviPrtljagaPoLetu) => {
+        this.setState({ tipoviPrtljagaPoLetu });
+        console.log(this.state.tipoviPrtljagaPoLetu)
+    }
+
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -190,7 +206,9 @@ class Flights extends Component {
         let aviokompanija = {
             idAvioKompanije: this.state.user.zaduzenZaId,
             naziv: this.state.aviokompanijaPovucena.naziv,
-            opis: this.state.aviokompanijaPovucena.opis
+            adresa: this.state.aviokompanijaPovucena.adresa,
+            opis: this.state.aviokompanijaPovucena.opis,
+            destinacijeNaKojimaPosluje: this.state.aviokompanijaPovucena.destinacijeNaKojimaPosluje
         }
 
         let destinacijaPoletanja = {
@@ -235,6 +253,15 @@ class Flights extends Component {
             object = {}
         }
 
+        let tipoviPrtljagaPoLetu = []
+        for(let i = 0; i<this.state.tipoviPrtljagaPoLetu.length; i++)
+        {
+            object.idPrtljaga = this.state.tipoviPrtljagaPoLetu[i].value;
+            object.opis = this.state.tipoviPrtljagaPoLetu[i].label;
+            tipoviPrtljagaPoLetu.push(object)
+            object = {}
+        }
+
         
 
 
@@ -243,14 +270,17 @@ class Flights extends Component {
             klaseKojeLetSadrzi !== "" && dodatneUslugeKojeLetSadrzi !== "") {
             axios.post("http://localhost:8221/flight/add/", {
                 idLeta, brojLeta, vremePoletanja, vremeSletanja, duzinaPutovanja, brojPresedanja, tipPuta, brojMesta, cenaKarte,
-                aviokompanija, destinacijaPoletanja, destinacijaSletanja, destinacijePresedanja, klaseKojeLetSadrzi,
-                dodatneUslugeKojeLetSadrzi, prosecnaOcena: null, brojOsoba: 0, ukupanPrihod: 0
+                aviokompanija, destinacijaPoletanja, destinacijaSletanja, destinacijePresedanja, klaseKojeLetSadrzi, tipoviPrtljagaPoLetu,
+                dodatneUslugeKojeLetSadrzi, prosecnaOcena: 0, brojOsoba: 0, ukupanPrihod: 0
             }, { headers: { Authorization: `Bearer ${token}` } })
                 .then(res => {
-                    alert("Uspesno ste dodali novi let")
+                    if(res.data)
+                        alert("Uspesno ste dodali novi let")
+                    else
+                    alert("Broj leta vec postoji")
                     this.props.history.push("/adflights");
                 }).catch(error => {
-                    alert("GRESKA!?.");
+                    alert("Broj leta vec postoji ili postoje prazna polja!?.");
                 })
         } else {
             alert("Sva polja moraju biti ispravno popunjena.")
@@ -330,6 +360,18 @@ class Flights extends Component {
             listaDodatnihUsluga.push(options);
         })
 
+        //PRTLJAG
+        var { tipoviPrtljagaPoLetu } = this.state.tipoviPrtljagaPoLetu;
+
+        var listaPrtljaga = [];
+
+        this.state.prtljag.map(usl => {
+            let options = new Object();
+            options.value = usl.idPrtljaga;
+            options.label = usl.opis;
+            listaPrtljaga.push(options);
+        })
+
 
         return (
             <div>
@@ -407,6 +449,13 @@ class Flights extends Component {
                                 onChange={(dodatneUslugeKojeLetSadrzi) => { this.changeDodatneUslugeKojeLetSadrzi(dodatneUslugeKojeLetSadrzi) }}
                                 options={listaDodatnihUsluga}
                                 id="dodatneUslugeKojeLetSadrzi" isMulti={true} />
+
+                                <label htmlFor="tipoviPrtljagaPoLetu">Tipovi prtljaga koji su dozvoljeni na letu</label>
+                            <Select
+                                value={tipoviPrtljagaPoLetu}
+                                onChange={(tipoviPrtljagaPoLetu) => { this.changeTipoviPrtljagaPoLetu(tipoviPrtljagaPoLetu) }}
+                                options={listaPrtljaga}
+                                id="tipoviPrtljagaPoLetu" isMulti={true} />
 
                             <div className="input-field">
                                 <input type="submit" value="Sacuvaj" className="btn blue lighten-1 z-depth-0" /> <br /> <br />

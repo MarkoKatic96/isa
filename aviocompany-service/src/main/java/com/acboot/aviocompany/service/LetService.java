@@ -13,11 +13,13 @@ import com.acboot.aviocompany.converter.LetConverter;
 import com.acboot.aviocompany.dto.KlasaDTO;
 import com.acboot.aviocompany.dto.LetDTO;
 import com.acboot.aviocompany.dto.PretragaDTO;
+import com.acboot.aviocompany.dto.PrtljagDTO;
 import com.acboot.aviocompany.model.AvioKompanija;
 import com.acboot.aviocompany.model.Karta;
 import com.acboot.aviocompany.model.Klasa;
 import com.acboot.aviocompany.model.Korisnik;
 import com.acboot.aviocompany.model.Let;
+import com.acboot.aviocompany.model.Prtljag;
 import com.acboot.aviocompany.repository.AvioKompanijaRepository;
 import com.acboot.aviocompany.repository.KartaRepository;
 import com.acboot.aviocompany.repository.KorisnikRepository;
@@ -94,13 +96,17 @@ public class LetService
 		return retList;
 	}
 	
-	public LetDTO saveOne(LetDTO dto)
+	public Boolean saveOne(LetDTO dto)
 	{
 		
 		Optional<Korisnik> korisnik = korisnikRepo.findById((long) 1);
+		if(letRepo.existsByBrojLeta(dto.getBrojLeta()))
+			return false;
 		
+		Let let = new Let();
+		let = letConv.convertFromDTO(dto);
 				
-			letRepo.save(letConv.convertFromDTO(dto));
+			letRepo.save(let);
 			Let lett = letRepo.findByBrojLeta(dto.getBrojLeta());
 			for(int i=0; i<lett.getBrojMesta(); i++)
 			{
@@ -115,7 +121,7 @@ public class LetService
 				kartaRepo.save(karta);
 			}
 			
-			return dto;
+			return true;
 		
 	}
 	
@@ -246,6 +252,7 @@ public class LetService
 		ArrayList<LetDTO> letoviType = new ArrayList<LetDTO>();
 		ArrayList<LetDTO> letoviNumber = new ArrayList<LetDTO>();
 		ArrayList<LetDTO> letoviClass = new ArrayList<LetDTO>();
+		ArrayList<LetDTO> letoviLuggage = new ArrayList<LetDTO>();
 		
 		//treba naci presek svih ovih
 		
@@ -325,6 +332,26 @@ public class LetService
 				}
 			}
 			retVal.retainAll(letoviClass);
+		}
+		
+		if(!dto.getPrtljag().isEmpty())
+		{
+			List<Let> letoviPrtljag = letRepo.findAll();
+			
+			for(Let let : letoviPrtljag)
+			{
+				for(Prtljag prtljag : let.getTipoviPrtljagaPoLetu())
+				{
+					for(PrtljagDTO str : dto.getPrtljag())
+					{
+						if(prtljag.getOpis().equals(str.getOpis()))
+						{
+							letoviLuggage.add(letConv.convertToDTO(let));
+						}
+					}
+				}
+			}
+			retVal.retainAll(letoviLuggage);
 		}
 		
 		return retVal;

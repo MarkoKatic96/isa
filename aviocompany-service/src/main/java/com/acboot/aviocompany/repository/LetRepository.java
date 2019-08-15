@@ -44,5 +44,6 @@ public interface LetRepository extends JpaRepository<Let, Long>
 	Optional<Float> findAverageRating(@Param("id") Long id);
 
 	public Let findByBrojLeta(Long brojLeta);
+	public Boolean existsByBrojLeta(Long brojLeta);
 	
 }

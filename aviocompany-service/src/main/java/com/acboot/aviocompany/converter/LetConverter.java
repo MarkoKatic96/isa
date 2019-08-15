@@ -137,15 +137,15 @@ public class LetConverter
 		model.setDestinacijePresedanja(destList);
 		
 		
-//		//TIPOVI PRTLJAGA
-//		List<Prtljag> prtljagList = new ArrayList<Prtljag>();
-//		
-//		for(PrtljagDTO prtljag : dto.getTipoviPrtljagaPoLetu())
-//		{
-//			prtljagList.add(prtljagConv.convertFromDTO(prtljag));
-//		}
-//		
-//		model.setTipoviPrtljagaPoLetu(prtljagList);
+		//TIPOVI PRTLJAGA
+		List<Prtljag> prtljagList = new ArrayList<Prtljag>();
+		
+		for(PrtljagDTO prtljag : dto.getTipoviPrtljagaPoLetu())
+		{
+			prtljagList.add(prtljagConv.convertFromDTO(prtljag));
+		}
+		
+		model.setTipoviPrtljagaPoLetu(prtljagList);
 		
 		
 		//KLASE LETA

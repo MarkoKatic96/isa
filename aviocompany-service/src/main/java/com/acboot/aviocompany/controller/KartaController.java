@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.acboot.aviocompany.dto.KartaDTO;
+import com.acboot.aviocompany.dto.KorisnikDTO;
+import com.acboot.aviocompany.dto.SlanjePozivniceZaRezervacijuDTO;
 import com.acboot.aviocompany.service.KartaService;
 
 import io.swagger.annotations.Api;
@@ -131,16 +133,16 @@ public class KartaController
 	
 	/*
 	 * Rezervacija vise karata odjednom od strane korisnika (nije testirano)
-	 * NECEMO NA OVAJ NACIN
+	 * Prima id korisnika koji rezervise sve to, prima listu karata koja je rezervisana kao i listu prijatelja koje je korisnik pozvao
 	 */
-//	@PostMapping("/reservemore/{userid}")
-//	public ResponseEntity<String> rezervisiViseKarata(@PathVariable("userid") Long idKorisnika, @RequestBody List<KartaDTO> karte)
-//	{
-//		System.out.println("rezervisiViseKarata()");
-//	
-//		String retVal = kartaService.rezervisiViseKarata(idKorisnika, karte);
-//		
-//		return (retVal.equals("REZERVISANE")) ? new ResponseEntity<String>(retVal, HttpStatus.CREATED) : new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST);
-//	}
+	@PostMapping("/reservemore/{userid}")
+	public ResponseEntity<String> rezervisiViseKarata(@PathVariable("userid") Long idKorisnika, @RequestBody SlanjePozivniceZaRezervacijuDTO pozivnica)
+	{
+		System.out.println("rezervisiViseKarata()");
+	
+		String retVal = kartaService.rezervisiViseKarata(idKorisnika, pozivnica);
+		
+		return (retVal.equals("REZERVISANE")) ? new ResponseEntity<String>(retVal, HttpStatus.CREATED) : new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST);
+	}
 
 }

@@ -2,8 +2,10 @@ package com.acboot.aviocompany.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.acboot.aviocompany.converter.KartaConverter;
 import com.acboot.aviocompany.converter.KorisnikConverter;
 import com.acboot.aviocompany.dto.KartaDTO;
+import com.acboot.aviocompany.dto.KorisnikDTO;
+import com.acboot.aviocompany.dto.SlanjePozivniceZaRezervacijuDTO;
 import com.acboot.aviocompany.model.Karta;
 import com.acboot.aviocompany.model.Korisnik;
 import com.acboot.aviocompany.model.Let;
@@ -153,23 +157,94 @@ public class KartaService
 	}
 
 	/*
-	 * Rezervacija vise karata (nisam testirao)
+	 * Rezervacija vise karata 
 	 */
-	public String rezervisiViseKarata(Long idKorisnika, List<KartaDTO> karte)
+	public String rezervisiViseKarata(Long idKorisnika, SlanjePozivniceZaRezervacijuDTO pozivnica)
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
 		
+		List<KorisnikDTO> prijatelji = pozivnica.getListaPrijatelja();
+		List<KartaDTO> karte = pozivnica.getListaKarata();
+		
+		//ako postoji neka osoba da nije u prijateljima
+		for(KorisnikDTO dto : prijatelji)
+		{
+			//nez zasto ovakav uslov al radi tako da ne diraj nista :D
+			if(korisnik.get().getPrijateljiKorisnika().contains(korisnikConv.convertFromDTO(dto)))
+				return "NOT_FRIEND_ERR";
+		}
+			
+		
+		//za te prijatelje koje dobijemo ovde (npr rezervisali smo 5 karata a pozvali 2 prijatelja, preostale 3 ce ici na nas)
+		//jedan prijatelj = jedna rezervacija
+		
+		//trebamo poslati i pozivnice usput
+		List<Korisnik> pozivnice = korisnik.get().getPozivniceKorisnika();
+		
+		//izbacujemo duplikate iz prijatelja (nisam uspeo u reactu)
+		Set<KorisnikDTO> dist = new LinkedHashSet<KorisnikDTO>(); 
+		dist.addAll(prijatelji); 
+		prijatelji.clear(); 
+		prijatelji.addAll(dist);
+		
 		LocalDateTime date = LocalDateTime.now();
 		
-			for(KartaDTO dto : karte)
-			{
-				if(dto.getKorisnik().getId() != 1 || dto.getVremeRezervisanja().getYear() > 2002)
-					return "POSTOJI vec rezervisana karta za let broj " + dto.getLet().getBrojLeta();
+		for(KartaDTO karta : karte)
+		{
+			if(prijatelji.isEmpty())
+				break;
 				
-				dto.setKorisnik(korisnikConv.convertToDTO(korisnik.get()));
+				for(KorisnikDTO prijatelj : prijatelji)
+				{
+						pozivnice.add(korisnikConv.convertFromDTO(prijatelj));
+						if(karta.getKorisnik().getId() == 1)
+						{
+							karta.setKorisnik(prijatelj);
+							karta.setVremeRezervisanja(date);
+							kartaRepo.save(kartaConv.convertFromDTO(karta));
+							prijatelji.remove(prijatelj);
+							if(prijatelji.isEmpty())
+							{
+								break;
+							}
+						}
+				}
+		}
+		
+		
+		//sad pravimo novu listu karata koje su preostale, dakle koje nisu otisle kao pozivnice
+		
+		List<KartaDTO> novaListaKarata = new ArrayList<KartaDTO>();
+		
+		for(KartaDTO karta : karte)
+		{
+			if(karta.getKorisnik().getId() == 1 || karta.getVremeRezervisanja().getYear() < 2002)
+			{
+				novaListaKarata.add(karta);
+			}
+		}
+		
+		korisnik.get().setPozivniceKorisnika(pozivnice);
+		korisnikRepo.save(korisnik.get());
+		
+		boolean flag = false;
+		//ostale idu na nas
+			for(KartaDTO dto : novaListaKarata)
+			{
+				if(!flag)
+				{
+					//postavljamo broj zauzetih mesta za konkretan let
+					Optional<Let> let = letRepo.findById(dto.getLet().getIdLeta());
+					let.get().setBrojOsoba(let.get().getBrojOsoba() + karte.size());
+					letRepo.save(let.get());
+				}
+				
+				
+				dto.setKorisnik(korisnikConv.convertToDTO(korisnik.get())); //sad je ovde cepno
 				dto.setVremeRezervisanja(date);
 				
 				kartaRepo.save(kartaConv.convertFromDTO(dto));
+				flag = true;
 			}
 			
 			return "REZERVISANE";

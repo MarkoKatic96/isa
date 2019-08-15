@@ -67,7 +67,18 @@ public class Korisnik
 	@ManyToMany(mappedBy = "zahteviKorisnika")
 	private List<Korisnik> korisniciZaht;
 	
+	/*
+	 * POZIVNICE ZA REZERVISANJE KARATA
+	 */
+	@ManyToMany
+	@JoinTable(
+	  name = "korisnik_pozivnice", 
+	  joinColumns = @JoinColumn(name = "korisnik_id"), 
+	  inverseJoinColumns = @JoinColumn(name = "prijatelj_id"))
+	private List<Korisnik> pozivniceKorisnika;
 	
+	@ManyToMany(mappedBy = "pozivniceKorisnika")
+	private List<Korisnik> prijateljiDobijajuPozivnice;
 
 	
 	public Korisnik(KorisnikDTO korisnik) {
@@ -81,7 +92,7 @@ public class Korisnik
 		this.telefon = korisnik.getTelefon();
 		this.aktiviran = korisnik.isAktiviran();
 		this.rola = korisnik.getRola();
-//		this.zaduzenZaId = korisnik.getZaduzenZaId();
+		this.zaduzenZaId = korisnik.getZaduzenZaId();
 		this.prviPutLogovan = korisnik.isPrviPutLogovan();
 	}
 	
