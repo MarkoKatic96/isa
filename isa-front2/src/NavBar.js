@@ -21,6 +21,7 @@ class NavBar extends Component{
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><Link to="/userinvitations">Pozivnice za putovanje</Link></li>
                         <li><Link to="/account">Nalog</Link></li>
+                        <li><Link to="/my_reservations">Moje rezervacije</Link></li>
                         <li><Link to="/" onClick={this.odjava}>Odjava</Link></li>
                     </ul>
         }else if(rola==="ADMIN_AVIO_KOMPANIJE"){

@@ -32,4 +32,7 @@ public interface RezervacijeRepository extends JpaRepository<Rezervacije, Long>{
 	@Query(value = "SELECT SUM(ukupna_cena) FROM rezervacije WHERE (hotel_id = ?1) AND (datum_do >= ?2 AND datum_do <= ?3)", nativeQuery=true)
 	Float nedeljniMesecniGodisnjiPrihod(Long id, Date date, Date datumDo);
 	
+	@Query(value = "SELECT * FROM rezervacije WHERE korisnik_id = ?1", nativeQuery=true)
+	List<Rezervacije> findByKorisnik(Long id);
+	
 }

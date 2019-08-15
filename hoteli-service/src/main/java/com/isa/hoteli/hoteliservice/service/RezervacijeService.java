@@ -33,6 +33,10 @@ public class RezervacijeService {
 		return rezervacijeRepository.getAllFromHotelRoom(id);
 	}
 	
+	public List<Rezervacije> getReservationsFromUser(Long id){
+		return rezervacijeRepository.findByKorisnik(id);
+	}
+	
 	public Rezervacije getReservationById(Long id){
 		return rezervacijeRepository.getOne(id);
 	}

@@ -56,6 +56,16 @@ public class RezervacijeController {
 		return new ResponseEntity<List<RezervacijeDTO>>(dto, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="/user/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<RezervacijeDTO>> getReservationsFromUser(@PathVariable("id") Long id){
+		List<RezervacijeDTO> dto = new ArrayList<>();
+		List<Rezervacije> lista = rezervacijeService.getReservationsFromUser(id);
+		for (Rezervacije item : lista) {
+			dto.add(new RezervacijeDTO(item));
+		}
+		return new ResponseEntity<List<RezervacijeDTO>>(dto, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	public ResponseEntity<RezervacijeDTO> getReservationsById(@PathVariable("id") Long id){
 		if(rezervacijeService.getReservationById(id)!=null) {
@@ -67,7 +77,7 @@ public class RezervacijeController {
 	}
 	
 	@RequestMapping(value="/", method = RequestMethod.POST)
-	public ResponseEntity<RezervacijeDTO> createReservation(@RequestBody RezervacijeDTO dto){
+	public ResponseEntity<RezervacijeDTO> createReservation(@RequestBody RezervacijeDTO dto, HttpServletRequest req){
 		Rezervacije obj = new Rezervacije(dto);
 		RezervacijeDTO returnType = rezervacijeService.createReservation(obj);
 		if(returnType!=null) {

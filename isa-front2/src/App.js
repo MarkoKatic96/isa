@@ -40,6 +40,7 @@ import AddAvio from './MasterAdminPages/AddAvio';
 import AddRent from './MasterAdminPages/AddRent';
 import ReservationForm from './HotelPages/ReservationForm';
 import UserInvitations from './AvioPages/User/UserInvitations';
+import MyReservations from './MyReservations';
 
 class App extends Component {
 
@@ -108,6 +109,7 @@ class App extends Component {
           <Route path='/master/add_avio' render={AddAvio}/>
           <Route path='/master/add_rent' render={AddRent}/>
           <Route path='/reserve/:hotelId/:sobaId' render={ReservationForm}/>
+          <Route path='/my_reservations' render={MyReservations}/>
 
 
           <Route path='/flsearch' render={() => <FlightsSearch />} />

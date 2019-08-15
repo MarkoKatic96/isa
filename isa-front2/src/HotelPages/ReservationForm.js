@@ -8,12 +8,13 @@ class ReservationForm extends Component{
     state = {
         datumOd:"",
         datumDo:"",
-        datumDo:"",
         soba:"",
         korisnik:"",
         services:[],
         selectedUsluge:[],
-        ukupnaCena:""
+        ukupnaCena:"",
+        popust:"",
+        hotel:""
     }
 
     componentDidMount(){
@@ -21,6 +22,13 @@ class ReservationForm extends Component{
             .then(res => {
                 this.setState({
                     services: res.data
+                })
+            })
+
+            axios.get("http://localhost:8080/hotel/" + this.props.match.params.hotelId)
+            .then(res => {
+                this.setState({
+                    hotel: res.data
                 })
             })
 
@@ -67,7 +75,19 @@ class ReservationForm extends Component{
 
     handleSubmit = (e) => {
         e.preventDefault();
-        //dodaj post i vidi za popuste kako cu
+        if(this.state.datumOd!=="" && this.state.datumDo!==""){
+            var iznos = this.state.ukupnaCena - (this.state.ukupnaCena/100) * this.state.popust;
+            console.log(iznos);
+            axios.post("http://localhost:8080/rezervacija/", {datumDo: this.state.datumDo, datumOd: this.state.datumOd, hotelskaSoba:this.state.soba, korisnik: this.state.korisnik, ukupnaCena: iznos, hotel: this.state.hotel, brojOsoba:1})
+            .then(res =>{
+                console.log(res.data)
+                this.props.history.push("/hotels");
+            }).catch(error=>{
+                alert("Doslo je do greske prilikom rezervacije.");
+            })
+        }else{
+            alert("Morate ispravno popuniti sva polja da bi uspesno rezervisali sobu.");
+        }
     }
 
     handleCBChange = (e) =>{
@@ -87,7 +107,9 @@ class ReservationForm extends Component{
                 if(servisi[h].id==e.target.value){
                     console.log("EVO ME")
                     cenaDodatne+=servisi[h].cena
-                    popust = (+this.state.ukupnaCena/100) * servisi[h].popust;
+                    this.setState({
+                        popust: +this.state.popust - servisi[h].popust
+                    })
                 }
             }
             this.setState({
@@ -102,8 +124,9 @@ class ReservationForm extends Component{
                 console.log(servisi[h].id + "==" + e.target.value)
                 if(servisi[h].id==e.target.value){
                     cenaDodatne+=servisi[h].cena
-                    popust = (+this.state.ukupnaCena/100) * servisi[h].popust;
-                    console.log(popust);
+                    this.setState({
+                        popust: +this.state.popust + servisi[h].popust
+                    })
                 }
             }
             this.setState({
@@ -118,6 +141,7 @@ class ReservationForm extends Component{
     render(){
         var {services} = this.state;
         var {ukupnaCena} = this.state;
+        var {popust} = this.state;
         return(
             //ne zaboravi da dodas dodtne usluge i racunanje ukupne cene
             <div className = "center container">
@@ -138,7 +162,7 @@ class ReservationForm extends Component{
                                 </p>
                             )
                         })}
-                        <h5 id="ukupnaCena">Ukupna cena: {ukupnaCena}</h5>
+                        <h5 id="ukupnaCena">Ukupna cena: {ukupnaCena} (popust {popust}%)</h5>
                         <button className="btn waves-effect waves-light green">Rezervisi</button>
                     </form>
                 </div>
