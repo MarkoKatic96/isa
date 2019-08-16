@@ -56,11 +56,11 @@ class UserReservations extends Component {
                 alert("Ocena zabelezena")
             }
             else {
-                alert("Let jos traje ili nije krenuo")
+                alert("Let jos traje ili nije zapoceo")
             }
 
         }).catch(err => {
-            alert("ERROR")
+            alert("Let jos traje ili nije zapoceo")
         })
     }
 

@@ -17,4 +17,5 @@ public interface AvioKompanijaRepository extends JpaRepository<AvioKompanija, Lo
 	 */
 	@Query(value = "select avg(l.prosecna_ocena) from let l, avio_kompanija a where a.id_avio_kompanije = :id ;", nativeQuery = true)
 	Optional<Float> findAverageRating(@Param("id") Long id);
+
 }

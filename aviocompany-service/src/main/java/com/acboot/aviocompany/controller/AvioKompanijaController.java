@@ -1,5 +1,7 @@
 package com.acboot.aviocompany.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.acboot.aviocompany.dto.AvioKompanijaDTO;
+import com.acboot.aviocompany.dto.BrojKarataDnevnoDTO;
 import com.acboot.aviocompany.model.Korisnik;
 import com.acboot.aviocompany.model.Rola;
 import com.acboot.aviocompany.service.AvioKompanijaService;
@@ -128,6 +131,55 @@ public class AvioKompanijaController
 		Float avg = avioService.getSrednjaOcenaAvioKompanije(id);
 		
 		return(avg == null) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<Float>(avg, HttpStatus.OK);
+	}
+	
+	/*
+	 * Vraca listu objekata za grafik za 5 dana - broj prodatih karata
+	 * Prima id kompanije za koju trazimo broj prodatih karata
+	 */
+	@GetMapping("/getsoldcardsbyday/{id}")
+	public ResponseEntity<List<BrojKarataDnevnoDTO>> getBrojProdatihKarataDnevno(@PathVariable("id") Long id)
+	{
+		System.out.println("getBrojProdatihKarataDnevno()");
+		
+		List<BrojKarataDnevnoDTO> karte = avioService.getBrojProdatihKarataDnevno(id);
+		
+		return(karte == null) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<List<BrojKarataDnevnoDTO>>(karte, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getsoldcardsbyweek/{id}")
+	public ResponseEntity<List<BrojKarataDnevnoDTO>> getBrojProdatihKarataNedeljno(@PathVariable("id") Long id)
+	{
+		System.out.println("getBrojProdatihKarataNedeljno()");
+		
+		List<BrojKarataDnevnoDTO> karte = avioService.getBrojProdatihKarataNedeljno(id);
+		
+		return(karte == null) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<List<BrojKarataDnevnoDTO>>(karte, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getsoldcardsbymonth/{id}")
+	public ResponseEntity<List<BrojKarataDnevnoDTO>> getBrojProdatihKarataMesecno(@PathVariable("id") Long id)
+	{
+		System.out.println("getBrojProdatihKarataMesecno()");
+		
+		List<BrojKarataDnevnoDTO> karte = avioService.getBrojProdatihKarataMesecno(id);
+		
+		return(karte == null) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<List<BrojKarataDnevnoDTO>>(karte, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getincomebydate/{id}/{date1}/{date2}")
+	public ResponseEntity<Float> getPrihodZaOdredjeniPeriod(@PathVariable("id") Long id, @PathVariable("date1") String datumOd, @PathVariable("date2") String datumDo)
+	{
+		System.out.println("getPrihodZaOdredjeniPeriod()");
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		
+		LocalDate datum1 = LocalDate.parse(datumOd, formatter);
+		LocalDate datum2 = LocalDate.parse(datumDo, formatter);
+		
+		Float prihod = avioService.getPrihodZaOdredjeniPeriod(id, datum1, datum2);
+		
+		return(prihod == null) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<Float>(prihod, HttpStatus.OK);
 	}
 
 }

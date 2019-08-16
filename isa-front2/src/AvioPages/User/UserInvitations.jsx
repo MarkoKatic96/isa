@@ -73,7 +73,7 @@ class UserInvitations extends Component {
                             <div className="col s12 m12">
                                 <div className="card grey darken-2 card-panel hoverable">
                                     <div className="card-content white-text left-align">
-                                        <span className="card-title"><b>Korisnik koji salje pozivnicu: {inv.korisnik.ime} {inv.korisnik.prezime}</b></span>
+                                        <span className="card-title"><b>Korisnik koji salje pozivnicu: {inv.korisnikKojiSaljePozivnicu.ime} {inv.korisnikKojiSaljePozivnicu.prezime}</b></span>
                                         <div className="divider white"></div>
                                         <br />
                                         <p>Broj leta: {inv.let.brojLeta}</p>

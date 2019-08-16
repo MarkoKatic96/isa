@@ -49,6 +49,7 @@ public class KorisnikService
 	@Autowired
 	private JwtTokenUtils jwtTokenProvider;
 	
+	
 	public String posaljiZahtev(Long idKorisnika, String email)
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
@@ -442,7 +443,7 @@ public class KorisnikService
 		
 		for(Karta karta : karte)
 		{
-			if(karta.getKorisnik().equals(korisnik.get()))
+			if(karta.getKorisnik().equals(korisnik.get()) && karta.getVremeRezervisanja().getYear() > 2002)
 			{
 				karteRet.add(kartaConv.convertToDTO(karta));
 			}
@@ -499,7 +500,8 @@ public class KorisnikService
 		
 		for(Karta karta : sveKarte)
 		{
-			if(karta.getKorisnikKojiSaljePozivnicu().getId() == korisnik.get().getId())
+			//drugi deo uslova je da ne prikazuje karte kao pozivnicu za korisnika koji je sam sebi rezervisao
+			if(karta.getKorisnik().getId() == korisnik.get().getId() && karta.getKorisnikKojiSaljePozivnicu().getId() != 1 && karta.getVremeRezervisanja().getYear() < 2002)
 			{
 				karteRet.add(kartaConv.convertToDTO(karta));
 			}
@@ -530,7 +532,10 @@ public class KorisnikService
 		
 		karta.get().setKorisnik(kor.get());
 		karta.get().setKorisnikKojiSaljePozivnicu(kor.get());
+		karta.get().getLet().setBrojOsoba(karta.get().getLet().getBrojOsoba() - 1);
 		
-		return null;
+		kartaRepo.save(karta.get());
+		
+		return "SUCCESS";
 	}
 }
