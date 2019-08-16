@@ -22,6 +22,7 @@ class FlightsEdit extends Component {
         destinacije: [],
         klase: [],
         dodatneUsluge: [],
+        prtljag: [],
         clickAdd: false,
 
         brojLeta: "",
@@ -37,7 +38,7 @@ class FlightsEdit extends Component {
         brojMesta: "",
         cenaKarte: "",
 
-        tipoviPrtljagaPoLetu: "", //au brt kako ovo.
+        tipoviPrtljagaPoLetu: [], //au brt kako ovo.
         klaseKojeLetSadrzi: [],
         dodatneUslugeKojeLetSadrzi: [],
 
@@ -107,6 +108,14 @@ class FlightsEdit extends Component {
             res => {
                 this.setState({
                     dodatneUsluge: res.data
+                })
+            }
+        )
+
+        axios.get('http://localhost:8221/luggage/getall').then(
+            res => {
+                this.setState({
+                    prtljag: res.data
                 })
             }
         )
@@ -189,6 +198,11 @@ class FlightsEdit extends Component {
         console.log(this.state.dodatneUslugeKojeLetSadrzi)
     }
 
+    changeTipoviPrtljagaPoLetu = (tipoviPrtljagaPoLetu) => {
+        this.setState({ tipoviPrtljagaPoLetu });
+        console.log(this.state.tipoviPrtljagaPoLetu)
+    }
+
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -259,6 +273,13 @@ class FlightsEdit extends Component {
         }
 
         let tipoviPrtljagaPoLetu = [];
+        for(let i = 0; i<this.state.tipoviPrtljagaPoLetu.length; i++)
+        {
+            object.idPrtljaga = this.state.tipoviPrtljagaPoLetu[i].value;
+            object.opis = this.state.tipoviPrtljagaPoLetu[i].label;
+            tipoviPrtljagaPoLetu.push(object)
+            object = {}
+        }
 
 
         axios.put("http://localhost:8221/flight/update/" + LET_ID, {
@@ -314,6 +335,19 @@ class FlightsEdit extends Component {
             options.value = usl.idDodatneUsluge;
             options.label = usl.naziv;
             listaDodatnihUsluga.push(options);
+        })
+
+        //TIPOVI PRTLJAGA
+        var { tipoviPrtljagaPoLetu } = this.state;
+        var { prtljag } = this.state;
+
+        var listaPrtljaga = [];
+
+        prtljag.map(usl => {
+            let options = new Object();
+            options.value = usl.idPrtljaga;
+            options.label = usl.opis;
+            listaPrtljaga.push(options);
         })
 
 
@@ -391,6 +425,13 @@ class FlightsEdit extends Component {
                                 onChange={(dodatneUslugeKojeLetSadrzi) => { this.changeDodatneUslugeKojeLetSadrzi(dodatneUslugeKojeLetSadrzi) }}
                                 options={listaDodatnihUsluga}
                                 id="dodatneUslugeKojeLetSadrzi" isMulti={true} />
+
+                                <label htmlFor="tipoviPrtljagaPoLetu">Tipovi prtljaga dozvoljeni na letu</label>
+                                <Select
+                                value={tipoviPrtljagaPoLetu}
+                                onChange={(tipoviPrtljagaPoLetu) => { this.changeTipoviPrtljagaPoLetu(tipoviPrtljagaPoLetu) }}
+                                options={listaPrtljaga}
+                                id="tipoviPrtljagaPoLetu" isMulti={true} />
 
                             <div className="input-field">
                                 <input type="submit" value="Sacuvaj" className="btn blue lighten-1 z-depth-0" /> <br /> <br />

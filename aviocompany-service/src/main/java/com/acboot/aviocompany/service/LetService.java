@@ -117,6 +117,7 @@ public class LetService
 				karta.setKorisnikKojiSaljePozivnicu(korisnik.get());
 				karta.setOcena(0);
 				karta.setPopust(0);
+				karta.setBrojPasosa("0");
 				karta.setVremeRezervisanja(LocalDateTime.of(2000, 10, 10, 10, 10));
 				karta.setLet(lett);
 				kartaRepo.save(karta);

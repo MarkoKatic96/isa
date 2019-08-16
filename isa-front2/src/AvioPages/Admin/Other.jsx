@@ -16,11 +16,9 @@ class Other extends Component {
 
     render() {
 
-
-
         return (
             <div>
-                <h3>Uredjivanje klasa, dodatnih usluga i podataka o dozvoljenom prtljagu</h3>
+                <h3>Uredjivanje prtljaga i brzih rezervacija</h3>
                 <h4>Klase</h4>
 
             </div>

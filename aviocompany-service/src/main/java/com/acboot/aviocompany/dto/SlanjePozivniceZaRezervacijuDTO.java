@@ -13,5 +13,5 @@ public class SlanjePozivniceZaRezervacijuDTO
 {
 	private List<KartaDTO> listaKarata;
 	private List<KorisnikDTO> listaPrijatelja;
-
+	private List<String> brojeviPasosa;
 }

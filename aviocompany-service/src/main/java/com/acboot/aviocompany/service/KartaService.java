@@ -169,6 +169,7 @@ public class KartaService
 		
 		List<KorisnikDTO> prijatelji = pozivnica.getListaPrijatelja();
 		List<KartaDTO> karte = pozivnica.getListaKarata();
+		List<String> brojeviPasosa = pozivnica.getBrojeviPasosa();
 		
 		//ako postoji neka osoba da nije u prijateljima
 		for(KorisnikDTO dto : prijatelji)
@@ -201,6 +202,7 @@ public class KartaService
 						if(karta.getKorisnik().getId() == 1)
 						{
 							karta.setKorisnik(prijatelj);
+							karta.setBrojPasosa(prijatelj.getBrojPasosa());
 							karta.setKorisnikKojiSaljePozivnicu(korisnikConv.convertToDTO(korisnik.get()));
 							//necemo ovde rezervisati vreme, to cemo tek kad prijatelj prihvati rezervaciju
 							//karta.setVremeRezervisanja(date); 
@@ -240,22 +242,32 @@ public class KartaService
 		}
 		
 		boolean flag = false;
-		//ostale idu na nas
+		//Jedna ide na nas, ostale idu na prosledjene brojeve pasosa
 			for(KartaDTO dto : novaListaKarata)
 			{
+				Karta card = kartaConv.convertFromDTO(dto);
 				if(!flag)
 				{
 					//postavljamo broj zauzetih mesta za konkretan let
 					Optional<Let> let = letRepo.findById(dto.getLet().getIdLeta());
 					let.get().setBrojOsoba(let.get().getBrojOsoba() + karte.size());
 					letRepo.save(let.get());
-				}
-				
-				Karta card = kartaConv.convertFromDTO(dto);
-				card.setKorisnik(korisnik.get()); //sad je ovde cepno
-				//to je zbog one fore u many to many, treba sad i ovde da pravim kao za brisanje
-				//prijatelja, ono sa druge strane da idu pozivnice
+					
+					//prvi broj pasosa ide na korisnika
+					card.setBrojPasosa(korisnik.get().getBrojPasosa());
+					card.setKorisnik(korisnik.get()); 
+					card.setVremeRezervisanja(date);
+					kartaRepo.save(card);
+				}				
+				card.setKorisnik(korisnik.get()); 
 				card.setVremeRezervisanja(date);
+				
+				for(String pasos : brojeviPasosa)
+				{
+					card.setBrojPasosa(pasos);
+					brojeviPasosa.remove(pasos);
+					break;
+				}
 				
 				kartaRepo.save(card);
 				flag = true;

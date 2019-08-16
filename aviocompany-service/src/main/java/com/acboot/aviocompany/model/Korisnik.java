@@ -38,6 +38,7 @@ public class Korisnik
 	private Rola rola;
 	private Long zaduzenZaId;
 	private boolean prviPutLogovan;
+	private String brojPasosa;
 	
 	@OneToMany(mappedBy="korisnik")
     private List<Karta> spisakRezervisanihKarata;

@@ -17,6 +17,7 @@ public class KartaDTO
 	private int ocena;
 	private boolean brzaRezervacija;
 	private float popust;
+	private String brojPasosa;
 
 	private LetDTO let;
 	

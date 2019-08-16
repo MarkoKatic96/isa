@@ -25,6 +25,7 @@ public class KorisnikDTO
 	private Rola rola;
 	private Long zaduzenZaId;
 	private boolean prviPutLogovan;
+	private String brojPasosa;
 	private List<KorisnikDTO> prijateljiKorisnika;
 	private List<KorisnikDTO> zahteviKorisnika;
 	

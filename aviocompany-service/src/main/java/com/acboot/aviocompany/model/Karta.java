@@ -42,6 +42,8 @@ public class Karta
 	@NotNull
 	private float popust;
 	
+	private String brojPasosa;
+	
 	@ManyToOne
     @JoinColumn(name="id_leta", nullable=false)
     private Let let;
