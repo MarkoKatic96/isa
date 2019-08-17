@@ -101,12 +101,12 @@ public class KartaController
 	 */
 
 	/*
-	 * Rezervacija jedne karte od strane korisnika
+	 * BRZA REZERVACIJA
 	 */
-	@PostMapping("/reserveone/{userid}/{ticketid}")
-	public ResponseEntity<Boolean> rezervisiJednuKartu(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte /*@RequestBody List<Long> rezervacija*/)
+	@PostMapping("/expressreservation/{userid}/{ticketid}")
+	public ResponseEntity<Boolean> brzaRezervacijaJedneKarte(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte)
 	{
-		System.out.println("rezervisiJednuKartu()");
+		System.out.println("brzaRezervacijaJedneKarte()");
 		
 //		Long idKorisnika, idKarte;
 		
@@ -117,7 +117,31 @@ public class KartaController
 		
 		System.out.println("ID_KORISNIK: " + idKorisnika + "\nID_KARTE: " + idKarte);
 		
-		return (!kartaService.rezervisiJednuKartu(idKorisnika, idKarte)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+		return (!kartaService.brzaRezervacijaJedneKarte(idKorisnika, idKarte)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+	}
+	
+	/*
+	 * POSTAVLJANJE KARTE NA BRZU REZERVACIJU OD STRANE ADMINA
+	 */
+	@PutMapping("/settoexpress/{ticketid}/{discount}")
+	public ResponseEntity<Boolean> postaviKartuNaBrzuRezervaciju(@PathVariable("ticketid") Long idKarte, @PathVariable("discount") Integer popust)
+	{
+		System.out.println("postaviKartuNaBrzuRezervaciju()");
+		
+		return (!kartaService.postaviKartuNaBrzuRezervaciju(idKarte, popust)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+	}
+	
+	/*
+	 * Vraca sve karte koje su za brzu rezervaciju
+	 */
+	@GetMapping("/getexpress")
+	public ResponseEntity<List<KartaDTO>> getAllBrzaRezervacijaKarte()
+	{
+		System.out.println("getAllBrzaRezervacijaKarte()");
+		
+		List<KartaDTO> listDto = kartaService.getAllNerezervisaneKarte();
+		
+		return (listDto.isEmpty()) ? new ResponseEntity<List<KartaDTO>>(new ArrayList<KartaDTO>(), HttpStatus.NOT_FOUND) : new ResponseEntity<List<KartaDTO>>(listDto, HttpStatus.OK);
 	}
 	
 	/*

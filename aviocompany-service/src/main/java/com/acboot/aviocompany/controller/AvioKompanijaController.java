@@ -147,6 +147,9 @@ public class AvioKompanijaController
 		return(karte == null) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<List<BrojKarataDnevnoDTO>>(karte, HttpStatus.OK);
 	}
 	
+	/*
+	 * prethodnih 7 dana bez danasnjeg dana 
+	 */
 	@GetMapping("/getsoldcardsbyweek/{id}")
 	public ResponseEntity<List<BrojKarataDnevnoDTO>> getBrojProdatihKarataNedeljno(@PathVariable("id") Long id)
 	{

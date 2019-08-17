@@ -519,6 +519,12 @@ public class KorisnikService
 		if(karta.get().getLet().getVremePoletanja().isBefore(date))
 			return "ZAKASNIO";
 		
+		try {
+			mailService.sendNotificaitionAsync(karta.get().getKorisnik(), null, "RESERVATION");
+		} catch (MailException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		karta.get().setVremeRezervisanja(date);
 		kartaRepo.save(karta.get());
 		
@@ -532,6 +538,7 @@ public class KorisnikService
 		
 		karta.get().setKorisnik(kor.get());
 		karta.get().setKorisnikKojiSaljePozivnicu(kor.get());
+		karta.get().setBrojPasosa("0");
 		karta.get().getLet().setBrojOsoba(karta.get().getLet().getBrojOsoba() - 1);
 		
 		kartaRepo.save(karta.get());

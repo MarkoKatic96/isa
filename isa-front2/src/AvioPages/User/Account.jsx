@@ -9,6 +9,7 @@ class Account extends Component {
     state = {
         user: "",
         email: "",
+        lozinka: "",
         ime: "",
         prezime: "",
         grad: "",
@@ -43,7 +44,27 @@ class Account extends Component {
     }
 
     handleUserInformationsSubmit = (e) => {
+        e.preventDefault();
 
+        let ime = this.state.ime;
+        let prezime = this.state.prezime;
+        let email = this.state.email;
+        let lozinka = this.state.lozinka;
+        let grad = this.state.grad;
+        let telefon = this.state.telefon;
+
+        axios.put("http://localhost:8221/user/" + this.state.user.id, {ime, prezime, email, lozinka, grad, telefon, aktiviran: true, rola: this.state.user.rola, 
+            zaduzenZaId: this.state.user.zaduzenZaId, prviPutLogovan: false, brojPasosa: this.state.user.brojPasosa,       
+            prijateljiKorisnika: this.state.user.prijateljiKorisnika, zahteviKorisnika: this.state.user.zahteviKorisnika  
+    }, {headers: {
+            'Content-Type': 'application/json'
+          },})
+            .then(res => {
+               alert("Podaci uspesno azurirani")
+                }).catch(error =>
+                    {
+                        alert("Greska u azuriranju podataka!")
+                    })
     }
 
 

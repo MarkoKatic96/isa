@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.print.attribute.standard.Destination;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.quartz.LocalDataSourceJobStore;
 import org.springframework.stereotype.Service;
 
 import com.acboot.aviocompany.converter.AvioKompanijaConverter;
@@ -206,13 +207,20 @@ public class AvioKompanijaService
 		for(int i=5; i>0; i--)
 		{
 			BrojKarataDnevnoDTO obj = new BrojKarataDnevnoDTO();
-			LocalDate datum = date.minusWeeks(i-1);
+			LocalDate datum = date.minusDays((i-1)*7);
+			
+			LocalDateTime datumTime = datum.atStartOfDay();
 			
 			for(Karta karta : karte)
 			{
 				if(karta.getVremeRezervisanja().getYear() == datum.getYear() && karta.getLet().getAviokompanija().getIdAvioKompanije() == id)
 				{
-					suma++;
+					System.out.println("USO UIU IF");
+					if(datumTime.isAfter(karta.getVremeRezervisanja()) && karta.getVremeRezervisanja().isAfter(datumTime.minusDays(7)))
+					{
+						System.out.println("USOOSU U NEKI DRUGI HF");
+						suma++;
+					}
 				}
 			}
 			

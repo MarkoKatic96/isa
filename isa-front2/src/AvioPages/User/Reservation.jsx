@@ -221,9 +221,10 @@ class Reservation extends Component {
             
             return (
                 <div id="planelayout" key={karta.idKarte}>
-                    <Fragment>
-                            <button  className="btn waves-effect waves-light blue" id="ticketbtn" onClick={() => { this.getTicket(karta) }}>RBR: {i++} - {karta.idKarte}</button>
-                    </Fragment>
+                        {(!karta.brzaRezervacija) ? (<button  className="btn waves-effect waves-light blue" id="ticketbtn" onClick={() => { this.getTicket(karta) }}>RBR: {i++} - {karta.idKarte}</button>) : (
+                            <button  className="btn waves-effect waves-light red" id="ticketbtn" >RBR: {i++} - {karta.idKarte}</button>
+                        )}
+                            
                 </div>
             );
         })) : (

@@ -126,7 +126,7 @@ public class KartaService
 
 	////////////////////////
 	
-	public Boolean rezervisiJednuKartu(Long idKorisnika, Long idKarte)
+	public Boolean brzaRezervacijaJedneKarte(Long idKorisnika, Long idKarte)
 	{
 		System.out.println("USAO U SERVIS");
 		Optional<Karta> karta = kartaRepo.findById(idKarte);
@@ -147,7 +147,15 @@ public class KartaService
 				
 				karta.get().setVremeRezervisanja(date);
 				karta.get().setKorisnik(korisnik.get());
+				karta.get().setBrojPasosa(korisnik.get().getBrojPasosa());
 				karta.get().getLet().setBrojOsoba(karta.get().getLet().getBrojOsoba()+1);
+				karta.get().getLet().setUkupanPrihod(karta.get().getLet().getUkupanPrihod() + karta.get().getCena() - (karta.get().getCena() * karta.get().getPopust()/100));
+				try {
+					mailService.sendNotificaitionAsync(korisnik.get(), null, "RESERVATION");
+				} catch (MailException | InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 				kartaRepo.save(karta.get());
 			}
@@ -158,6 +166,35 @@ public class KartaService
 			return false;
 		
 		return true;
+	}
+	
+	public boolean postaviKartuNaBrzuRezervaciju(Long idKarte, Integer popust)
+	{
+		Optional<Karta> karta = kartaRepo.findById(idKarte);
+		
+		karta.get().setBrzaRezervacija(true);
+		karta.get().setPopust(popust);
+		
+		kartaRepo.save(karta.get());
+		
+		return true;
+	}
+
+	public List<KartaDTO> getAllNerezervisaneKarte() 
+	{
+		List<Karta> karte = kartaRepo.findAll();
+		
+		List<KartaDTO> retList = new ArrayList<KartaDTO>();
+		
+		for(Karta karta : karte)
+		{
+			if(karta.isBrzaRezervacija() && karta.getKorisnik().getId() == 1)
+			{
+				retList.add(kartaConv.convertToDTO(karta));
+			}
+		}
+		
+		return retList;
 	}
 
 	/*
@@ -273,6 +310,16 @@ public class KartaService
 				flag = true;
 			}
 			
+			try {
+				mailService.sendNotificaitionAsync(korisnik.get(), null, "RESERVATION");
+			} catch (MailException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			return "REZERVISANE";
 	}
 	
@@ -332,6 +379,8 @@ public class KartaService
 		
 		return retVal;
 	}
+
+	
 
 	
 

@@ -56,7 +56,17 @@ public class MailService
 			mail.setSubject("Pozivnica za putovanje");
 			mail.setText("Pozdrav " + prijatelj.getIme() + ",\n\nPozivam te na nezaboravno zajednicko putovanje. Pozivnicu mozes prihvatiti cime rezervises mesto u avionu. U slucaju da nisi zainteresovan/a vrlo jednostavno mozes odbiti rezervaciju. \n\n"
 					+ "Svako dobro, \n " + korisnik.getIme() + " " + korisnik.getPrezime() + ", \nEmail adresa: " + korisnik.getEmail() + ".\n\n"
-					+ " \n\n\nLink za rezervaciju: http://localhost:3000/userinvitations");
+					+ "\nLink za rezervaciju: http://localhost:3000/userinvitations");
+			javaMailSender.send(mail);
+		}
+		else if(type.equals("RESERVATION"))
+		{
+			mail.setTo(korisnik.getEmail());
+			mail.setFrom(env.getProperty("spring.mail.username"));
+			mail.setSubject("Uspesna rezervacija");
+			mail.setText("Postovani " + korisnik.getIme() + ",\n\nObavestavamo te da je rezervacija uspesno izvrsena. Vasu rezervaciju kao i eventualne promene leta mozete pratiti na Vasem nalogu. \n\n"
+					+ "Svako dobro, \nVas MegaTravel.\n\n"
+					+ " \nLink za pracenje rezervacije: http://localhost:3000/account");
 			javaMailSender.send(mail);
 		}
 		

@@ -41,6 +41,7 @@ import AddRent from './MasterAdminPages/AddRent';
 import ReservationForm from './HotelPages/ReservationForm';
 import UserInvitations from './AvioPages/User/UserInvitations';
 import MyReservations from './MyReservations';
+import ExpressTicket from './AvioPages/User/ExpressTicket';
 
 class App extends Component {
 
@@ -124,6 +125,7 @@ class App extends Component {
           <Route path='/adinfo' render={() => <AdminInfo />} />
           <Route path='/account' render={() => <Account />} />
           <Route path='/userinvitations' render={() => <UserInvitations />} />
+          <Route path='/expticket' render={() => <ExpressTicket />} />
         </div>
       </BrowserRouter>
     );
