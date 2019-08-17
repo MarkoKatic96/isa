@@ -11,14 +11,14 @@ class UserReservations extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
             .then(res => {
 
                 this.setState({
                     user: res.data
                 })
 
-                axios.get('http://localhost:8221/user/getallreservations/' + res.data.id).then(res => {
+                axios.get('http://localhost:8080/korisnik/getallreservations/' + res.data.id).then(res => {
                     this.setState({
                         userTickets: res.data
                     })
@@ -29,7 +29,7 @@ class UserReservations extends Component {
 
     deleteReservation = (idKarte) => {
         let userid = this.state.user.id;
-        axios.post('http://localhost:8221/ticket/deletereservation/' + userid + '/' + idKarte).then(res => {
+        axios.post('http://localhost:8080/ticket/deletereservation/' + userid + '/' + idKarte).then(res => {
             // alert(res.data)
             if (res.data) {
                 alert("Rezervacija uspesno otkazana")
@@ -50,7 +50,7 @@ class UserReservations extends Component {
         let ocena = this.state.ocena;
 
         console.log(ocena)
-        axios.put('http://localhost:8221/user/rateflight/' + userid + '/' + idKarte + '/' + ocena).then(res => {
+        axios.put('http://localhost:8080/korisnik/rateflight/' + userid + '/' + idKarte + '/' + ocena).then(res => {
             // alert(res.data)
             if (res.data === "SUCCESS") {
                 alert("Ocena zabelezena")

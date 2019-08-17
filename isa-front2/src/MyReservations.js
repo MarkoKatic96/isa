@@ -10,7 +10,7 @@ class MyReservations extends Component{
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8080/rezervacija/user/3")
+        axios.get("http://localhost:8080/rezervacija/user/6")
         .then(res=>{
             this.setState({
                 rezervacije: res.data

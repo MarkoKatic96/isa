@@ -43,14 +43,14 @@ class Flights extends Component {
     componentDidMount() {
         var token = localStorage.getItem('jwtToken');
         var idKompanije = "";
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
             .then(res => {
                 console.log(res)
                 this.setState({
                     user: res.data
                 })
                 idKompanije = res.data.zaduzenZaId;
-                axios.get('http://localhost:8221/flight/getall/' + idKompanije, { headers: { Authorization: `Bearer ${token}` } }).then( //treba da vrati samo letove za datu aviokompaniju
+                axios.get('http://localhost:8080/flight/getall/' + idKompanije, { headers: { Authorization: `Bearer ${token}` } }).then( //treba da vrati samo letove za datu aviokompaniju
                     res => {
                         this.setState({
                             letovi: res.data
@@ -58,7 +58,7 @@ class Flights extends Component {
                     }
 
 
-                ).then(axios.get('http://localhost:8221/aviocompany/getone/' + idKompanije, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
+                ).then(axios.get('http://localhost:8080/aviocompany/getone/' + idKompanije, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
                     this.setState({
                         aviokompanijaPovucena: res.data
                     })
@@ -67,7 +67,7 @@ class Flights extends Component {
                 )
 
                 let kompanija = this.state.user.zaduzenZaId;
-        axios.get('http://localhost:8221/destination/getalldestsbycompany/' + kompanija).then(
+        axios.get('http://localhost:8080/destination/getalldestsbycompany/' + kompanija).then(
             res => {
                 console.log("DESTINACIJE: ")
                 console.log(res.data)
@@ -81,7 +81,7 @@ class Flights extends Component {
             
         )
 
-        axios.get('http://localhost:8221/class/getall').then(
+        axios.get('http://localhost:8080/class/getall').then(
             res => {
                 this.setState({
                     klase: res.data
@@ -89,7 +89,7 @@ class Flights extends Component {
             }
         )
 
-        axios.get('http://localhost:8221/luggage/getall').then(
+        axios.get('http://localhost:8080/luggage/getall').then(
             res => {
                 console.log("PRTLJAG: ")
                 console.log(res.data);
@@ -98,7 +98,7 @@ class Flights extends Component {
                 })
             })
 
-        axios.get('http://localhost:8221/service/getall').then(
+        axios.get('http://localhost:8080/service/getall').then(
             res => {
                 this.setState({
                     dodatneUsluge: res.data
@@ -268,7 +268,7 @@ class Flights extends Component {
         if (idLeta !== "" && brojLeta !== "" && vremePoletanja !== "" && vremeSletanja !== "" && duzinaPutovanja !== "" && brojPresedanja !== "" && tipPuta !== "" &&
             brojMesta !== "" && aviokompanija !== "" && destinacijaPoletanja !== "" && destinacijaSletanja !== "" && destinacijePresedanja !== "" &&
             klaseKojeLetSadrzi !== "" && dodatneUslugeKojeLetSadrzi !== "") {
-            axios.post("http://localhost:8221/flight/add/", {
+            axios.post("http://localhost:8080/flight/add/", {
                 idLeta, brojLeta, vremePoletanja, vremeSletanja, duzinaPutovanja, brojPresedanja, tipPuta, brojMesta, cenaKarte,
                 aviokompanija, destinacijaPoletanja, destinacijaSletanja, destinacijePresedanja, klaseKojeLetSadrzi, tipoviPrtljagaPoLetu,
                 dodatneUslugeKojeLetSadrzi, prosecnaOcena: 0, brojOsoba: 0, ukupanPrihod: 0

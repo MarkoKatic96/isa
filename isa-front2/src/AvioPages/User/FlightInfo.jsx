@@ -29,7 +29,7 @@ class FlightInfo extends Component {
             })
         }
 
-        axios.get('http://localhost:8221/flight/getone/' + this.props.match.params.flightid).then(
+        axios.get('http://localhost:8080/flight/getone/' + this.props.match.params.flightid).then(
             res => {
                 console.log(res);
                 this.setState({
@@ -38,7 +38,7 @@ class FlightInfo extends Component {
             }
         )
 
-        axios.get('http://localhost:8221/flight/getcompanyid/' + this.props.match.params.flightid).then(
+        axios.get('http://localhost:8080/flight/getcompanyid/' + this.props.match.params.flightid).then(
             res => {
                 console.log(res);
                 this.setState({

@@ -15,14 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.isa.hoteli.hoteliservice.dto.CenaNocenjaDTO;
+import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
+import com.isa.hoteli.hoteliservice.avio.model.Rola;
+import com.isa.hoteli.hoteliservice.avio.service.KorisnikService;
 import com.isa.hoteli.hoteliservice.dto.RezervacijeDTO;
-import com.isa.hoteli.hoteliservice.model.CenaNocenja;
-import com.isa.hoteli.hoteliservice.model.Korisnik;
 import com.isa.hoteli.hoteliservice.model.Posecenost;
 import com.isa.hoteli.hoteliservice.model.Rezervacije;
-import com.isa.hoteli.hoteliservice.model.Rola;
-import com.isa.hoteli.hoteliservice.service.KorisnikService;
 import com.isa.hoteli.hoteliservice.service.RezervacijeService;
 
 @RestController

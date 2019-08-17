@@ -17,8 +17,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.isa.hoteli.hoteliservice.model.Korisnik;
-import com.isa.hoteli.hoteliservice.service.KorisnikService;
+import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
+import com.isa.hoteli.hoteliservice.avio.service.KorisnikService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

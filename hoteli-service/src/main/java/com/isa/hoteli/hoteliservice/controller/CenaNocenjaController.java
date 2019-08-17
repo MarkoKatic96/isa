@@ -15,13 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
+import com.isa.hoteli.hoteliservice.avio.model.Rola;
+import com.isa.hoteli.hoteliservice.avio.service.KorisnikService;
 import com.isa.hoteli.hoteliservice.dto.CenaNocenjaDTO;
 import com.isa.hoteli.hoteliservice.model.CenaNocenja;
-import com.isa.hoteli.hoteliservice.model.Korisnik;
-import com.isa.hoteli.hoteliservice.model.Rola;
-import com.isa.hoteli.hoteliservice.security.JwtTokenUtils;
 import com.isa.hoteli.hoteliservice.service.CenaNocenjaService;
-import com.isa.hoteli.hoteliservice.service.KorisnikService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")

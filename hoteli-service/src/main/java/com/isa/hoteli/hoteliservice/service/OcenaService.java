@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.isa.hoteli.hoteliservice.dto.OcenaHotelDTO;
 import com.isa.hoteli.hoteliservice.dto.OcenaHotelskaSobaDTO;
-import com.isa.hoteli.hoteliservice.model.Korisnik;
 import com.isa.hoteli.hoteliservice.model.OcenaHotel;
 import com.isa.hoteli.hoteliservice.model.OcenaHotelskaSoba;
 import com.isa.hoteli.hoteliservice.model.Rezervacije;

@@ -14,7 +14,7 @@ class AllFlights extends Component {
 
     componentDidMount() {
 
-        axios('http://localhost:8221/flight/getall').then(
+        axios('http://localhost:8080/flight/getall').then(
             res => {
                 this.setState({
                     letovi: res.data

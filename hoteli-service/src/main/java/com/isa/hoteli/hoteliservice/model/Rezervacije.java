@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
 import com.isa.hoteli.hoteliservice.dto.RezervacijeDTO;
 
 @Entity

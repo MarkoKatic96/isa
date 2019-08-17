@@ -8,14 +8,14 @@ class UserFriends extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
         .then(res => {
             this.setState({
                 user: res.data
             })
             let userid = res.data.id
         console.log("USERID : " + userid)
-                axios.get('http://localhost:8221/user/getallfriends/' + userid).then(res =>
+                axios.get('http://localhost:8080/korisnik/getallfriends/' + userid).then(res =>
                 {
                     this.setState({
                         userFriends: res.data
@@ -31,7 +31,7 @@ class UserFriends extends Component {
         
         let userSender = this.state.user.id;
         console.log(userSender, userid)
-        axios.post('http://localhost:8221/user/deletefriend/' + userid + '/' + userSender).then(res =>
+        axios.post('http://localhost:8080/korisnik/deletefriend/' + userid + '/' + userSender).then(res =>
                 {
                     console.log(res.data);
                     if(res.data === "SUCCESS")

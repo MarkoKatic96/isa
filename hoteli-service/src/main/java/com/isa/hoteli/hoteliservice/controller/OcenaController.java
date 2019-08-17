@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.isa.hoteli.hoteliservice.dto.KorisnikDTO;
 import com.isa.hoteli.hoteliservice.dto.OcenaHotelDTO;
 import com.isa.hoteli.hoteliservice.dto.OcenaHotelskaSobaDTO;
-import com.isa.hoteli.hoteliservice.model.Korisnik;
 import com.isa.hoteli.hoteliservice.model.OcenaHotel;
 import com.isa.hoteli.hoteliservice.model.OcenaHotelskaSoba;
 import com.isa.hoteli.hoteliservice.service.OcenaService;

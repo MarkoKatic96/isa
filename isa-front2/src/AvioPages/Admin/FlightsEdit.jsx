@@ -54,14 +54,14 @@ class FlightsEdit extends Component {
     componentDidMount() {
         var token = localStorage.getItem('jwtToken');
         var idKompanije = "";
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
             .then(res => {
                 console.log(res)
                 this.setState({
                     user: res.data
                 })
                 idKompanije = res.data.zaduzenZaId;
-                axios.get('http://localhost:8221/flight/getone/' + this.props.match.params.flightid).then(
+                axios.get('http://localhost:8080/flight/getone/' + this.props.match.params.flightid).then(
                     res => {
                         this.setState({
                             let: res.data,
@@ -79,7 +79,7 @@ class FlightsEdit extends Component {
                     }
 
 
-                ).then(axios.get('http://localhost:8221/aviocompany/getone/' + idKompanije, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
+                ).then(axios.get('http://localhost:8080/aviocompany/getone/' + idKompanije, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
                     this.setState({
                         aviokompanijaPovucena: res.data
                     })
@@ -88,7 +88,7 @@ class FlightsEdit extends Component {
                 )
             })
 
-        axios.get('http://localhost:8221/destination/getall').then(
+        axios.get('http://localhost:8080/destination/getall').then(
             res => {
                 this.setState({
                     destinacije: res.data
@@ -96,7 +96,7 @@ class FlightsEdit extends Component {
             }
         )
 
-        axios.get('http://localhost:8221/class/getall').then(
+        axios.get('http://localhost:8080/class/getall').then(
             res => {
                 this.setState({
                     klase: res.data
@@ -104,7 +104,7 @@ class FlightsEdit extends Component {
             }
         )
 
-        axios.get('http://localhost:8221/service/getall').then(
+        axios.get('http://localhost:8080/service/getall').then(
             res => {
                 this.setState({
                     dodatneUsluge: res.data
@@ -112,7 +112,7 @@ class FlightsEdit extends Component {
             }
         )
 
-        axios.get('http://localhost:8221/luggage/getall').then(
+        axios.get('http://localhost:8080/luggage/getall').then(
             res => {
                 this.setState({
                     prtljag: res.data
@@ -282,7 +282,7 @@ class FlightsEdit extends Component {
         }
 
 
-        axios.put("http://localhost:8221/flight/update/" + LET_ID, {
+        axios.put("http://localhost:8080/flight/update/" + LET_ID, {
             idLeta, brojLeta, vremePoletanja, vremeSletanja, duzinaPutovanja, brojPresedanja, tipPuta, brojMesta, cenaKarte,
             aviokompanija, destinacijaPoletanja, destinacijaSletanja, destinacijePresedanja, klaseKojeLetSadrzi,
             dodatneUslugeKojeLetSadrzi, tipoviPrtljagaPoLetu, prosecnaOcena: null, brojOsoba: 0, ukupanPrihod: 0

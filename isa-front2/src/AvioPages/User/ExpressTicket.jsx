@@ -9,14 +9,14 @@ class ExpressTicket extends Component {
 
 
       componentDidMount() {
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
         .then(res => {
 
             this.setState({
                 user: res.data
             })
 
-            axios.get('http://localhost:8221/ticket/getexpress').then(res => {
+            axios.get('http://localhost:8080/ticket/getexpress').then(res => {
                 this.setState({
                     tickets: res.data
                 })
@@ -27,7 +27,7 @@ class ExpressTicket extends Component {
       reserveTicket = (idKarte) =>{
 
         let userid = this.state.user.id;
-        axios.post('http://localhost:8221/ticket/expressreservation/' + userid + '/' + idKarte).then(res => {
+        axios.post('http://localhost:8080/ticket/expressreservation/' + userid + '/' + idKarte).then(res => {
                 if(res.data)
                 {
                     alert("Karta uspesno rezervisana")

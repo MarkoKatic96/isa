@@ -10,14 +10,14 @@ class UserInvitations extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
             .then(res => {
                 this.setState({
                     user: res.data
                 })
                 let userid = res.data.id
                 console.log("USERID : " + userid)
-                axios.get('http://localhost:8221/user/getallinvitations/' + userid).then(res => {
+                axios.get('http://localhost:8080/korisnik/getallinvitations/' + userid).then(res => {
                     this.setState({
                         userInvitations: res.data
                     })
@@ -28,7 +28,7 @@ class UserInvitations extends Component {
     }
 
     acceptRequest = (ticketid) => {
-        axios.post('http://localhost:8221/user/acceptinvrequest/' + ticketid).then(res => {
+        axios.post('http://localhost:8080/korisnik/acceptinvrequest/' + ticketid).then(res => {
             console.log(res.data);
             if (res.data === "SUCCESS") {
                 alert("Pozivnica prihvacena")
@@ -46,7 +46,7 @@ class UserInvitations extends Component {
     }
 
     refuseRequest = (ticketid) => {
-        axios.post('http://localhost:8221/user/refuseinvrequest/' + ticketid).then(res => {
+        axios.post('http://localhost:8080/korisnik/refuseinvrequest/' + ticketid).then(res => {
             console.log(res.data);
             if (res.data === "SUCCESS") {
                 alert("Pozivnica uspesno odbijena")

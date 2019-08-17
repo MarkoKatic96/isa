@@ -30,14 +30,14 @@ class Reservation extends Component {
         this.setState({
             idLeta: letid
         })
-        axios.get('http://localhost:8221/flight/getone/' + letid).then(res => {
+        axios.get('http://localhost:8080/flight/getone/' + letid).then(res => {
             this.setState({
                 podaciOLetu: res.data
             })
         }).catch(error => {
             console.log(error);
         }).then(
-            axios.get('http://localhost:8221/ticket/getfree/' + letid).then(res =>
+            axios.get('http://localhost:8080/ticket/getfree/' + letid).then(res =>
             {
                 this.setState({
                     karte: res.data
@@ -46,7 +46,7 @@ class Reservation extends Component {
         )
 
         //uzmi korisnika
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
             .then(res => {
                 console.log(res)
                 this.setState({
@@ -54,7 +54,7 @@ class Reservation extends Component {
                 })
             })
 
-            axios.get("http://localhost:8221/user/all")
+            axios.get("http://localhost:8080/korisnik/all")
             .then(res => {
                 console.log(res.data)
                 this.setState({
@@ -66,7 +66,7 @@ class Reservation extends Component {
 
     componentDidUpdate(){
         // let letid = this.props.match.params.flightid;
-        // axios.get('http://localhost:8221/ticket/getfree/' + letid).then(res =>
+        // axios.get('http://localhost:8080/ticket/getfree/' + letid).then(res =>
         //     {
         //         this.setState({
         //             karte: res.data
@@ -195,7 +195,7 @@ class Reservation extends Component {
         console.log(listaPrijatelja)
         console.log(brojeviPasosa)
 
-        axios.post('http://localhost:8221/ticket/reservemore/' + userid, {listaKarata, listaPrijatelja, brojeviPasosa}).then(res => { 
+        axios.post('http://localhost:8080/ticket/reservemore/' + userid, {listaKarata, listaPrijatelja, brojeviPasosa}).then(res => { 
             if(res.data === "REZERVISANE")
             {
                 alert("Karte uspesno rezervisane");

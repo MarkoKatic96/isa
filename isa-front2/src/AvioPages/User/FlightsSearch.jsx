@@ -48,7 +48,7 @@ class FlightsSearch extends Component {
             })
         }
 
-        axios.get('http://localhost:8221/destination/getall').then(
+        axios.get('http://localhost:8080/destination/getall').then(
             res => {
                 this.setState({
                     destinacije: res.data
@@ -56,7 +56,7 @@ class FlightsSearch extends Component {
             }
         )
 
-        axios.get('http://localhost:8221/flight/getall').then(
+        axios.get('http://localhost:8080/flight/getall').then(
             res => {
                 this.setState({
                     letovi: res.data
@@ -64,7 +64,7 @@ class FlightsSearch extends Component {
             }
         )
 
-        axios.get('http://localhost:8221/class/getall').then(
+        axios.get('http://localhost:8080/class/getall').then(
             res => {
                 this.setState({
                     klaseKojeLetSadrzi: res.data
@@ -72,7 +72,7 @@ class FlightsSearch extends Component {
             }
         )
 
-        axios.get('http://localhost:8221/luggage/getall').then(
+        axios.get('http://localhost:8080/luggage/getall').then(
             res => {
                 this.setState({
                     tipoviPrtljagaPoLetu: res.data
@@ -196,7 +196,7 @@ class FlightsSearch extends Component {
             object = {}
         }
 
-        axios.post('http://localhost:8221/flight/searchflights', {
+        axios.post('http://localhost:8080/flight/searchflights', {
            time1, time2, takeOffDestination, landingDestination, type, number, klase, prtljag
         }).then(res => {
             console.log(res)
@@ -225,7 +225,7 @@ class FlightsSearch extends Component {
   
 
     showCompanyInfo = (idLeta) => {
-        axios.get('http://localhost:8221/flight/getcompanyid/' + idLeta).then(
+        axios.get('http://localhost:8080/flight/getcompanyid/' + idLeta).then(
             res => {
                 console.log(res);
                 this.setState({

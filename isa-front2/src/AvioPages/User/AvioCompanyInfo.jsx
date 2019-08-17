@@ -13,14 +13,14 @@ class FlightInfo extends Component {
 
     componentDidMount() {
         console.log(this.props.match.params.flightid);
-        axios.get('http://localhost:8221/aviocompany/getone/' + this.props.match.params.flightid).then(
+        axios.get('http://localhost:8080/aviocompany/getone/' + this.props.match.params.flightid).then(
             res => {
                 this.setState({
                     kompanija: res.data
                 })
 
                 let kompanija = this.state.kompanija.idAvioKompanije;
-                axios.get('http://localhost:8221/destination/getalldestsbycompany/' + kompanija).then(
+                axios.get('http://localhost:8080/destination/getalldestsbycompany/' + kompanija).then(
                     res => {
                         console.log("DESTINACIJE: ")
                         console.log(res.data)
@@ -36,7 +36,7 @@ class FlightInfo extends Component {
 
         )
         //za prosecnu ocenu
-        axios.get('http://localhost:8221/aviocompany/getavgrating/' + this.props.match.params.flightid).then(
+        axios.get('http://localhost:8080/aviocompany/getavgrating/' + this.props.match.params.flightid).then(
             res => {
                 console.log(res.data);
                 this.setState({

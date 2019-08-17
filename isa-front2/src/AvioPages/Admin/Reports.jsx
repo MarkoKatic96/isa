@@ -33,39 +33,39 @@ class Reports extends Component {
 
     componentDidMount() {
         var token = localStorage.getItem('jwtToken');
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
             .then(res => {
                 this.setState({
                     user: res.data
                 })
 
-                axios.get('http://localhost:8221/aviocompany/getavgrating/' + res.data.zaduzenZaId).then(res => {
+                axios.get('http://localhost:8080/aviocompany/getavgrating/' + res.data.zaduzenZaId).then(res => {
                     this.setState({
                         prosecnaOcenaKompanije: res.data
                     })
                 })
 
                 //vrati sve letove za odredjenu kompaniju
-                axios.get('http://localhost:8221/flight/getall/' + res.data.zaduzenZaId, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
+                axios.get('http://localhost:8080/flight/getall/' + res.data.zaduzenZaId, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
                     this.setState({
                         letoviKompanije: res.data
                     })
                 })
 
                 //ZA GRAFIKE
-                axios.get('http://localhost:8221/aviocompany/getsoldcardsbyday/' + res.data.zaduzenZaId).then(res => {
+                axios.get('http://localhost:8080/aviocompany/getsoldcardsbyday/' + res.data.zaduzenZaId).then(res => {
                     this.setState({
                         prodateKartePoDanima: res.data
                     })
                 })
 
-                axios.get('http://localhost:8221/aviocompany/getsoldcardsbyweek/' + res.data.zaduzenZaId).then(res => {
+                axios.get('http://localhost:8080/aviocompany/getsoldcardsbyweek/' + res.data.zaduzenZaId).then(res => {
                     this.setState({
                         prodateKartePoNedeljama: res.data
                     })
                 })
 
-                axios.get('http://localhost:8221/aviocompany/getsoldcardsbymonth/' + res.data.zaduzenZaId).then(res => {
+                axios.get('http://localhost:8080/aviocompany/getsoldcardsbymonth/' + res.data.zaduzenZaId).then(res => {
                     this.setState({
                         prodateKartePoMesecima: res.data
                     })
@@ -87,7 +87,7 @@ class Reports extends Component {
         let datumDo = this.state.date2
         let id = this.state.user.zaduzenZaId
 
-        axios.get('http://localhost:8221/aviocompany/getincomebydate/' + id + '/' + datumOd + '/' + datumDo).then(res => {
+        axios.get('http://localhost:8080/aviocompany/getincomebydate/' + id + '/' + datumOd + '/' + datumDo).then(res => {
             this.setState({
                 prihodZaDatum: res.data
             })

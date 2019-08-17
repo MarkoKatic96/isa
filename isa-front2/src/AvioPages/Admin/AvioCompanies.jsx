@@ -19,7 +19,7 @@ class AvioCompanies extends Component {
     componentDidMount(){
         var token = localStorage.getItem('jwtToken');
         let idKompanije = "";
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
         .then(res=>{
             console.log(res)
             this.setState({
@@ -27,9 +27,9 @@ class AvioCompanies extends Component {
             })
             idKompanije = res.data.zaduzenZaId;
 
-            // axios.put("http://localhost:8221/aviocompany/adddefaultdest/" + idKompanije).then(ress =>
+            // axios.put("http://localhost:8080/aviocompany/adddefaultdest/" + idKompanije).then(ress =>
             // {
-                axios.get("http://localhost:8221/aviocompany/getone/" + idKompanije, { headers: { Authorization: `Bearer ${token}` } })
+                axios.get("http://localhost:8080/aviocompany/getone/" + idKompanije, { headers: { Authorization: `Bearer ${token}` } })
                 .then(res=>{
                     this.setState({
                         company: res.data,
@@ -39,7 +39,7 @@ class AvioCompanies extends Component {
                         destinacijeNaKojimaPosluje: res.data.destinacijeNaKojimaPosluje
                     })
                     console.log(res.data);
-                    axios.get("http://localhost:8221/destination/getall").then(res=>{
+                    axios.get("http://localhost:8080/destination/getall").then(res=>{
                     console.log(res)
                     this.setState({
                         destinacije: res.data
@@ -92,7 +92,7 @@ class AvioCompanies extends Component {
 
         if(this.state.naziv !== "" && this.state.adresa !== "" && this.state.opis !== "")
         {
-            axios.put("http://localhost:8221/aviocompany/update/" + this.state.company.idAvioKompanije, 
+            axios.put("http://localhost:8080/aviocompany/update/" + this.state.company.idAvioKompanije, 
             {
                 naziv: naziv, adresa: adresa, opis: opis, destinacijeNaKojimaPosluje: destinacijeNaKojimaPosluje
             },  { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }).then(res =>

@@ -9,14 +9,14 @@ class UserRequests extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
             .then(res => {
                 this.setState({
                     user: res.data
                 })
                 let userid = res.data.id
                 console.log("USERID : " + userid)
-                axios.get('http://localhost:8221/user/getallrequests/' + userid).then(res => {
+                axios.get('http://localhost:8080/korisnik/getallrequests/' + userid).then(res => {
                     this.setState({
                         userRequests: res.data
                     })
@@ -28,7 +28,7 @@ class UserRequests extends Component {
 
     acceptRequest = (userid) => {
         let userSender = this.state.user.id;
-        axios.post('http://localhost:8221/user/acceptrequest/' + userid + '/' + userSender).then(res => {
+        axios.post('http://localhost:8080/korisnik/acceptrequest/' + userid + '/' + userSender).then(res => {
             console.log(res.data);
             if (res.data === "SUCCESS") {
                 alert("Zahtev uspesno prihvacen")
@@ -47,7 +47,7 @@ class UserRequests extends Component {
 
     refuseRequest = (userid) => {
         let userSender = this.state.user.id;
-        axios.post('http://localhost:8221/user/refuserequest/' + userid + '/' + userSender).then(res => {
+        axios.post('http://localhost:8080/korisnik/refuserequest/' + userid + '/' + userSender).then(res => {
             console.log(res.data);
             if (res.data === "SUCCESS") {
                 alert("Zahtev uspesno odbijen")

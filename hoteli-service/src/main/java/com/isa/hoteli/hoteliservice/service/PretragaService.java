@@ -6,10 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.isa.hoteli.hoteliservice.dto.HotelDTO;
 import com.isa.hoteli.hoteliservice.model.Hotel;
 import com.isa.hoteli.hoteliservice.model.HotelskaSoba;
-import com.isa.hoteli.hoteliservice.model.Korisnik;
 import com.isa.hoteli.hoteliservice.model.Pretraga;
 import com.isa.hoteli.hoteliservice.repository.HotelRepository;
 

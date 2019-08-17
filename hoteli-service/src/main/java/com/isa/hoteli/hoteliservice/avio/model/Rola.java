@@ -1,6 +1,7 @@
-package com.isa.hoteli.hoteliservice.model;
+package com.isa.hoteli.hoteliservice.avio.model;
 
-public enum Rola {
+public enum Rola 
+{
 	KORISNIK,
 	ADMIN_AVIO_KOMPANIJE,
 	ADMIN_HOTELA,

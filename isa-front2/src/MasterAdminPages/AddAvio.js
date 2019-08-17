@@ -15,7 +15,8 @@ class AddAvio extends Component{
     }
 
     componentDidMount(){
-        axios.get("http://localhost:8080/korisnik/allAvioAdmins")
+        var token = localStorage.getItem('jwtToken')
+        axios.get("http://localhost:8080/korisnik/allAvioAdmins", { headers: { Authorization: `Bearer ${token}` } })
         .then(res=>{
             console.log(res.data);
              this.setState({
@@ -37,6 +38,7 @@ class AddAvio extends Component{
 
     handleSubmit=(e) => {
         e.preventDefault();
+        var token = localStorage.getItem('jwtToken')
         var adminZaSlanje = "";
         var {admini} = this.state;
         var i;
@@ -46,7 +48,7 @@ class AddAvio extends Component{
             }
         }
         if(this.state.naziv!=="" && this.state.opis!=="" && this.state.adresa!=="" && this.state.selectedAdmin!=""){
-            axios.post("http://localhost:8080/rent/" + this.state.selectedAdmin.value, {naziv: this.state.naziv, adresa:this.state.adresa, opis:this.state.opis})
+            axios.post("http://localhost:8080/aviocompany/" + this.state.selectedAdmin.value, {naziv: this.state.naziv, adresa:this.state.adresa, opis:this.state.opis}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res =>{
                 console.log(res.data)
                 this.props.history.push("/");

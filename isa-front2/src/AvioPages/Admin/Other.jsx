@@ -19,19 +19,19 @@ class Other extends Component {
 
     componentDidMount() {
         var token = localStorage.getItem('jwtToken');
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
             .then(res => {
                 this.setState({
                     user: res.data
                 })
 
-                axios.get('http://localhost:8221/flight/getall/' + res.data.zaduzenZaId, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
+                axios.get('http://localhost:8080/flight/getall/' + res.data.zaduzenZaId, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
                     this.setState({
                         letovi: res.data
                     })
                 })
 
-                axios.get('http://localhost:8221/luggage/getall').then(res => {
+                axios.get('http://localhost:8080/luggage/getall').then(res => {
                     this.setState({
                         prtljag: res.data
                     })
@@ -53,7 +53,7 @@ class Other extends Component {
             this.setState({
                 toggleTickets: true
             })
-            axios.get('http://localhost:8221/ticket/getfree/' + idLeta).then(res =>
+            axios.get('http://localhost:8080/ticket/getfree/' + idLeta).then(res =>
         {
             this.setState({
                 karte: res.data
@@ -84,7 +84,7 @@ class Other extends Component {
         let popust = this.state.popust;
         let karta = this.state.karta;
 
-        axios.put('http://localhost:8221/ticket/settoexpress/' + karta.idKarte + '/' + popust).then(res => {
+        axios.put('http://localhost:8080/ticket/settoexpress/' + karta.idKarte + '/' + popust).then(res => {
                     if(res.data)
                         alert("Karta uspesno postavljena na brzu rezervaciju");
                 })
@@ -92,7 +92,7 @@ class Other extends Component {
 
     deleteLuggage = (idPrtljaga) =>
     {
-        axios.delete('http://localhost:8221/luggage/delete/' + idPrtljaga).then(res => {
+        axios.delete('http://localhost:8080/luggage/delete/' + idPrtljaga).then(res => {
                     alert("Prtljag obrisan")
                     this.componentDidMount();
                 })
@@ -104,7 +104,7 @@ class Other extends Component {
         let opis = this.state.opis;
         let tezina = this.state.tezina;
 
-        axios.post('http://localhost:8221/luggage/add/', {opis, tezina}).then(res => {
+        axios.post('http://localhost:8080/luggage/add/', {opis, tezina}).then(res => {
                     alert("Novi prtljag uspesno definisan")
                     this.componentDidMount();
                 })

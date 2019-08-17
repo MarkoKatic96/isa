@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.isa.hoteli.hoteliservice.model.Korisnik;
-import com.isa.hoteli.hoteliservice.service.KorisnikService;
+import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
+import com.isa.hoteli.hoteliservice.avio.service.KorisnikService;
 
 @Service
 public class UserDetails implements UserDetailsService{

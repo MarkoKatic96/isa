@@ -2,9 +2,9 @@ package com.isa.hoteli.hoteliservice.dto;
 
 import java.sql.Date;
 
+import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
 import com.isa.hoteli.hoteliservice.model.Hotel;
 import com.isa.hoteli.hoteliservice.model.HotelskaSoba;
-import com.isa.hoteli.hoteliservice.model.Korisnik;
 import com.isa.hoteli.hoteliservice.model.Rezervacije;
 
 public class RezervacijeDTO {

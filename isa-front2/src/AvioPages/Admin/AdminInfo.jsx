@@ -13,7 +13,7 @@ class AdminInfo extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8221/user/all/" + localStorage.getItem('email'))
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
             .then(res => {
                 this.setState({
                     user: res.data,
@@ -45,7 +45,7 @@ class AdminInfo extends Component {
         let grad = this.state.grad;
         let telefon = this.state.telefon;
 
-        axios.put("http://localhost:8221/user/" + this.state.user.id, {ime, prezime, email, lozinka, grad, telefon, aktiviran: true, rola: this.state.user.rola, 
+        axios.put("http://localhost:8080/korisnik/" + this.state.user.id, {ime, prezime, email, lozinka, grad, telefon, aktiviran: true, rola: this.state.user.rola, 
             zaduzenZaId: this.state.user.zaduzenZaId, prviPutLogovan: false, brojPasosa: this.state.user.brojPasosa,       
             prijateljiKorisnika: this.state.user.prijateljiKorisnika, zahteviKorisnika: this.state.user.zahteviKorisnika  
     }, {headers: {
