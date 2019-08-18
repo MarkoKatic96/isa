@@ -6,17 +6,42 @@ import ReservationsChooseBar from './ReservationsChooseBar';
 class MyReservations extends Component{
 
     state={
-        rezervacije:[]
+        rezervacije:[],
+        korisnik:""
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8080/rezervacija/user/6")
-        .then(res=>{
-            this.setState({
-                rezervacije: res.data
+        var token = localStorage.getItem('jwtToken');
+        var id = ""
+        var sobaId = ""
+        axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
+            .then(res=>{
+                this.setState({
+                    korisnik: res.data
+                })
+                id=res.data.id;
+            axios.get("http://localhost:8080/rezervacija/user/" + id)
+            .then(res=>{
+                this.setState({
+                    rezervacije: res.data
+                })
+                console.log(res.data);
             })
-            console.log(res.data);
         })
+    }
+
+    oceniClick=(rezId)=>{//dovrsi
+        axios.delete("http://localhost:8080/rezervacija/" + rezId)
+        .then(res=>{
+            this.componentDidMount();
+        })
+    }
+    
+    otkaziClick=(rezId)=>{
+            axios.delete("http://localhost:8080/rezervacija/" + rezId)
+            .then(res=>{
+                this.componentDidMount();
+            })
     }
 
     render(){
@@ -28,15 +53,15 @@ class MyReservations extends Component{
                         <div className="col s12 m12">
                             <div className="card grey darken-2 card-panel hoverable">
                                 <div className="card-content white-text left-align">
-                                <span className="card-title"><b>{rezervacija.datumOd} - {rezervacija.datumDo}</b></span>
+                                <span className="card-title"><b>Od: {rezervacija.datumOd} Do: {rezervacija.datumDo}</b></span>
                                 <div className="divider white"></div>
                                 <br/>
                                 <p>Cena: {rezervacija.ukupnaCena}</p>
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                    <button className="btn waves-effect waves-light green" id="sobeBtn"/* onClick={()=>{this.sobeClick(hotel.id)}}*/>Sobe</button>
-                                    <button className="btn waves-effect waves-light green" id="uslugeBtn" /*onClick={()=>{this.uslugeClick(hotel.id)}}*/>Dodatne usluge</button>
+                                    <button className="btn waves-effect waves-light green" id="sobeBtn" onClick={()=>{this.oceniClick(rezervacija.id)}}>Oceni</button>
+                                    <button className="btn waves-effect waves-light red" id="uslugeBtn" onClick={()=>{this.otkaziClick(rezervacija.id)}}>Otkazi</button>
                                 </div>
                             </div>
                         </div>
