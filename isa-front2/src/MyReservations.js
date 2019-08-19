@@ -30,17 +30,16 @@ class MyReservations extends Component{
         })
     }
 
-    oceniClick=(rezId)=>{//dovrsi
-        axios.delete("http://localhost:8080/rezervacija/" + rezId)
-        .then(res=>{
-            this.componentDidMount();
-        })
+    oceniClick=(rezId, hotelId, sobaId)=>{//dovrsi
+        console.log(rezId+" "+hotelId+" "+sobaId);
+        this.props.history.push("/rating/"+ rezId + "/" + hotelId + "/" + sobaId);
     }
     
     otkaziClick=(rezId)=>{
             axios.delete("http://localhost:8080/rezervacija/" + rezId)
             .then(res=>{
                 this.componentDidMount();
+                alert("Uspesno otkazana rezervacija.");
             })
     }
 
@@ -60,7 +59,7 @@ class MyReservations extends Component{
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                    <button className="btn waves-effect waves-light green" id="sobeBtn" onClick={()=>{this.oceniClick(rezervacija.id)}}>Oceni</button>
+                                    <button className="btn waves-effect waves-light green" id="sobeBtn" onClick={()=>{this.oceniClick(rezervacija.id, rezervacija.hotel.id, rezervacija.hotelskaSoba.id)}}>Oceni</button>
                                     <button className="btn waves-effect waves-light red" id="uslugeBtn" onClick={()=>{this.otkaziClick(rezervacija.id)}}>Otkazi</button>
                                 </div>
                             </div>

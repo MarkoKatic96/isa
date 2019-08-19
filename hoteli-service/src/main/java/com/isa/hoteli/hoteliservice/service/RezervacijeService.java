@@ -2,6 +2,7 @@ package com.isa.hoteli.hoteliservice.service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,8 +53,21 @@ public class RezervacijeService {
 	}
 	
 	public String deleteReservation(Long id) {
-		rezervacijeRepository.deleteById(id);
-		return "Uspesno obrisana rezervacija sa id: " + id;
+		Rezervacije rezervacije = rezervacijeRepository.getOne(id);
+		if(rezervacije!=null) {
+			java.util.Date sadasnjost = new java.util.Date();//koji je danas datum
+			Date datumOd = rezervacije.getDatumOd();//datum kada pocinje rezervacija
+			Calendar c = Calendar.getInstance(); 
+			c.setTime(sadasnjost); 
+			c.add(Calendar.DATE, 2);//dodamo max dana za otkazivanje na danas
+			sadasnjost = c.getTime();
+			if(sadasnjost.before(datumOd)) {
+				rezervacijeRepository.deleteById(id);
+				return "Uspesno obrisana rezervacija sa id: " + id;
+			}
+			return null;
+		}
+		return null;
 	}
 	
 	public RezervacijeDTO updateReservation(Rezervacije obj, Long id) {

@@ -42,6 +42,7 @@ import ReservationForm from './HotelPages/ReservationForm';
 import UserInvitations from './AvioPages/User/UserInvitations';
 import MyReservations from './MyReservations';
 import ExpressTicket from './AvioPages/User/ExpressTicket';
+import Ocena from './HotelPages/Ocena';
 
 class App extends Component {
 
@@ -111,6 +112,7 @@ class App extends Component {
           <Route path='/master/add_rent' render={AddRent}/>
           <Route path='/reserve/:hotelId/:sobaId' render={ReservationForm}/>
           <Route path='/my_reservations' render={MyReservations}/>
+          <Route path='/rating/:rezervacijaId/:hotelId/:sobaId' render={Ocena}/>
 
 
           <Route path='/flsearch' render={() => <FlightsSearch />} />
