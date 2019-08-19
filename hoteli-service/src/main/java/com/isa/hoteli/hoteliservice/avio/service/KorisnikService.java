@@ -557,6 +557,7 @@ public class KorisnikService
 	public String prihvatiPozivnicu(Long idKarte)
 	{
 		Optional<Karta> karta = kartaRepo.findById(idKarte);
+		Korisnik kor = karta.get().getKorisnik();
 		
 		LocalDateTime date = LocalDateTime.now();
 		
@@ -570,6 +571,7 @@ public class KorisnikService
 			e.printStackTrace();
 		}
 		karta.get().setVremeRezervisanja(date);
+		karta.get().setBrojPasosa(kor.getBrojPasosa());
 		kartaRepo.save(karta.get());
 		
 		return "SUCCESS";

@@ -53,6 +53,7 @@ public class KartaController
 	@GetMapping("/getfree/{flightid}")
 	public ResponseEntity<List<KartaDTO>> getAllNerezervisaneKarte(@PathVariable("flightid") Long idLeta)
 	{
+		System.out.println("ID LETA: " + idLeta);
 		System.out.println("getAllNerezervisaneKarte()");
 		
 		List<KartaDTO> listDto = kartaService.getAllNerezervisaneKarte(idLeta);

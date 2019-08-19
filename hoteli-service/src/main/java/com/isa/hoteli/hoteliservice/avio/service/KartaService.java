@@ -295,19 +295,24 @@ public class KartaService
 					card.setKorisnik(korisnik.get()); 
 					card.setVremeRezervisanja(date);
 					kartaRepo.save(card);
-				}				
-				card.setKorisnik(korisnik.get()); 
-				card.setVremeRezervisanja(date);
-				
-				for(String pasos : brojeviPasosa)
+					flag = true;
+				}	
+				else
 				{
-					card.setBrojPasosa(pasos);
-					brojeviPasosa.remove(pasos);
-					break;
+					card.setKorisnik(korisnik.get()); 
+					card.setVremeRezervisanja(date);
+					
+					for(String pasos : brojeviPasosa)
+					{
+						card.setBrojPasosa(pasos);
+						brojeviPasosa.remove(pasos);
+						break;
+					}
+					
+					kartaRepo.save(card);
 				}
 				
-				kartaRepo.save(card);
-				flag = true;
+				
 			}
 			
 			try {

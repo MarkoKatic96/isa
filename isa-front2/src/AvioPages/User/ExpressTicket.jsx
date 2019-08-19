@@ -4,11 +4,28 @@ import axios from 'axios';
 class ExpressTicket extends Component {
     state = {
         user: "",
-        tickets: ""
+        tickets: "",
+
+        showResBtn: false
       }
 
 
       componentDidMount() {
+
+        let local = localStorage.getItem("rola");
+        if(local === 'KORISNIK')
+        {
+            this.setState({
+                showResBtn: true
+            })
+        }
+        else
+        {
+            this.setState({
+                showResBtn: false
+            })
+        }
+
         axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
         .then(res => {
 
@@ -39,7 +56,7 @@ class ExpressTicket extends Component {
 
 
     render() {
-
+        let show = this.state.showResBtn;
         const reservationList = this.state.tickets.length ? (this.state.tickets.map(ticket => {
             return (
                 <div key={ticket.idKarte}>
@@ -61,7 +78,7 @@ class ExpressTicket extends Component {
                                     </div>
                                     <div className="divider white"></div>
                                     <div className="card-action">
-                                    <button className="btn waves-effect waves-light blue" id="reservationbtn" onClick={() => { this.reserveTicket(ticket.idKarte) }}>REZERVISI</button><br />
+                                    {(show) ? (<button className="btn waves-effect waves-light blue" id="reservationbtn" onClick={() => { this.reserveTicket(ticket.idKarte) }}>REZERVISI</button>) : (<div></div>)}
                                         {
                                             (this.state.showRateFormFlag) ? (
                                                 <div>
@@ -87,7 +104,7 @@ class ExpressTicket extends Component {
                 </div>
             );
         })) : (
-                <h4>Nema rezervacija</h4>
+                <h4>Nema karata za brzu rezervaciju</h4>
             )
 
         return (

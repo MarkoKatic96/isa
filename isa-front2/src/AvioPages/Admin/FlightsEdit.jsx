@@ -14,10 +14,6 @@ class FlightsEdit extends Component {
 
         datumSletanja2fetch: "",
         vremeSletanja2fetch: "",
-        destinacijaPoletanjaFetch: "",
-        destinacijaSletanjaFetch: "",
-
-
 
         destinacije: [],
         klase: [],
