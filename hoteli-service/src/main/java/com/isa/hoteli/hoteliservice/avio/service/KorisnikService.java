@@ -428,6 +428,17 @@ public class KorisnikService
 		return null;
 	}
 	
+	public KorisnikDTO updateFirstLogin(Long id, String s) {
+		Optional<Korisnik> obj1 = korisnikRepo.findById(id);
+		if(obj1.isPresent()) {
+			obj1.get().setLozinka(s);
+			obj1.get().setPrviPutLogovan(true);
+			korisnikRepo.save(obj1.get());
+			return new KorisnikDTO(obj1.get());
+		}
+		return null;
+	}
+	
 	public String login(String email, String lozinka)
 	{
 		Korisnik k = korisnikRepo.getUserByEmail(email);

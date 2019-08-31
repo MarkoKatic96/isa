@@ -76,13 +76,17 @@ public class RezervacijeController {
 	
 	@RequestMapping(value="/", method = RequestMethod.POST)
 	public ResponseEntity<RezervacijeDTO> createReservation(@RequestBody RezervacijeDTO dto, HttpServletRequest req){
-		Rezervacije obj = new Rezervacije(dto);
-		RezervacijeDTO returnType = rezervacijeService.createReservation(obj);
-		if(returnType!=null) {
-			return new ResponseEntity<>(returnType, HttpStatus.OK);
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.KORISNIK)){
+			Rezervacije obj = new Rezervacije(dto);
+			RezervacijeDTO returnType = rezervacijeService.createReservation(obj);
+			if(returnType!=null) {
+				return new ResponseEntity<>(returnType, HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)

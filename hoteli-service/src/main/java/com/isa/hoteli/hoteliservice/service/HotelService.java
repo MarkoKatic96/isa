@@ -34,14 +34,14 @@ public class HotelService {
 	}
 	
 	public HotelDTO updateHotel(Hotel hotel, Long id) {
-		Optional<Hotel> hotel1 = hotelRepository.findById(id);
-		if(hotel1.isPresent()) {
-			hotel1.get().setNaziv(hotel.getNaziv());
-			hotel1.get().setAdresa(hotel.getAdresa());
-			hotel1.get().setOpis(hotel.getOpis());
-			hotel1.get().setKonfiguracija(hotel.getKonfiguracija());
-			hotelRepository.save(hotel1.get());
-			return new HotelDTO(hotel1.get());
+		Hotel hotel1 = hotelRepository.getOne(id);
+		if(hotel1!=null) {
+			hotel1.setNaziv(hotel.getNaziv());
+			hotel1.setAdresa(hotel.getAdresa());
+			hotel1.setOpis(hotel.getOpis());
+			hotel1.setKonfiguracija(hotel.getKonfiguracija());
+			hotelRepository.save(hotel1);
+			return new HotelDTO(hotel1);
 		}
 		return null;
 	}

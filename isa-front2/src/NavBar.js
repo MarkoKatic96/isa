@@ -7,6 +7,7 @@ class NavBar extends Component{
         localStorage.setItem('jwtToken', undefined);
         localStorage.setItem('email', undefined);
         localStorage.setItem('rola', undefined);
+        localStorage.setItem('prviPutLogovan', undefined);
         localStorage.setItem("isLogged", false);
         this.props.logOut();  
         this.props.history.push("/");    

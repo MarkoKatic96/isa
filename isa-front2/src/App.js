@@ -43,6 +43,7 @@ import UserInvitations from './AvioPages/User/UserInvitations';
 import MyReservations from './MyReservations';
 import ExpressTicket from './AvioPages/User/ExpressTicket';
 import Ocena from './HotelPages/Ocena';
+import PromeniSifru from './PromeniSifru';
 
 class App extends Component {
 
@@ -113,6 +114,7 @@ class App extends Component {
           <Route path='/reserve/:hotelId/:sobaId' render={ReservationForm}/>
           <Route path='/my_reservations' render={MyReservations}/>
           <Route path='/rating/:rezervacijaId/:hotelId/:sobaId' render={Ocena}/>
+          <Route path='/promeni_sifru' render={PromeniSifru}/>
 
 
           <Route path='/flsearch' render={() => <FlightsSearch />} />

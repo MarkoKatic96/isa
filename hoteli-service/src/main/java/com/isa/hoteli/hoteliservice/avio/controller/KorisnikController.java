@@ -128,6 +128,18 @@ public class KorisnikController
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
+	@RequestMapping(value="/firstLogin/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<KorisnikDTO> updateLoginById(@PathVariable("id") Long id, @RequestBody KorisnikDTO dto)
+	{
+		String s = dto.getLozinka();
+		KorisnikDTO returnTip = korService.updateFirstLogin(id, s);
+		if(returnTip!=null) {
+			return new ResponseEntity<>(returnTip, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
 	public ResponseEntity<String> login(@RequestBody Login login)
 	{

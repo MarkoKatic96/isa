@@ -39,7 +39,6 @@ class MyReservations extends Component{
             axios.delete("http://localhost:8080/rezervacija/" + rezId)
             .then(res=>{
                 this.componentDidMount();
-                alert("Uspesno otkazana rezervacija.");
             })
     }
 

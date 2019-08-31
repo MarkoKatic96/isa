@@ -42,6 +42,9 @@ class Ocena extends Component{
                 korisnikId: this.state.korisnik.id, hotelskaSobaId: this.props.match.params.sobaId})
                     .then(res => {
                         alert("Ocene uspesno prosledjene.");
+                        this.props.history.push('/my_reservations');
+                }).catch(error=>{
+                    alert("Vec ste ocenili ovu rezervaciju.");
                 })
             })
         }

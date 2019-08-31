@@ -32,7 +32,16 @@ class Login extends Component{
                 axios.get("http://localhost:8080/korisnik/all/" + localStorage.getItem('email'))
                 .then(res=>{
                   localStorage.setItem('rola', res.data.rola);
-                  this.props.history.push("/");
+                  localStorage.setItem('prviPutLogovan', res.data.prviPutLogovan);
+                  var rola = localStorage.getItem('rola');
+                  var prviPutLogovan = localStorage.getItem('prviPutLogovan')
+                  console.log(rola + "  " + prviPutLogovan)
+                  if(prviPutLogovan=="false" && (rola==="ADMIN_HOTELA" || rola==="ADMIN_RENT_A_CAR" || rola==="ADMIN_AVIO_KOMPANIJE")){
+                      console.log("AM I HERE")
+                    this.props.history.push("/promeni_sifru");
+                  }else{
+                    this.props.history.push("/");
+                  }
                 })
                 
             }).catch(error=>{

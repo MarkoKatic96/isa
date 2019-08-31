@@ -16,7 +16,6 @@ class Account extends Component {
         telefon: "",
         prijateljiKorisnika: [],
         zahteviKorisnika: [],
-
         emailnovi: ""
     }
 

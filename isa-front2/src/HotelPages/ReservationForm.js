@@ -75,10 +75,11 @@ class ReservationForm extends Component{
 
     handleSubmit = (e) => {
         e.preventDefault();
+        var token = localStorage.getItem('jwtToken');
         if(this.state.datumOd!=="" && this.state.datumDo!==""){
             var iznos = this.state.ukupnaCena - (this.state.ukupnaCena/100) * this.state.popust;
             console.log(iznos);
-            axios.post("http://localhost:8080/rezervacija/", {datumDo: this.state.datumDo, datumOd: this.state.datumOd, hotelskaSoba:this.state.soba, korisnik: this.state.korisnik, ukupnaCena: iznos, hotel: this.state.hotel, brojOsoba:1})
+            axios.post("http://localhost:8080/rezervacija/", {datumDo: this.state.datumDo, datumOd: this.state.datumOd, hotelskaSoba:this.state.soba, korisnik: this.state.korisnik, ukupnaCena: iznos, hotel: this.state.hotel, brojOsoba:1}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res =>{
                 console.log(res.data)
                 this.props.history.push("/hotels");
