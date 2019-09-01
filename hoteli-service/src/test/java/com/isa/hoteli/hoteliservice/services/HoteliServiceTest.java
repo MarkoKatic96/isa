@@ -1,8 +1,10 @@
 package com.isa.hoteli.hoteliservice.services;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -19,6 +21,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.isa.hoteli.hoteliservice.dto.HotelDTO;
+import com.isa.hoteli.hoteliservice.dto.TipSobeDTO;
 import com.isa.hoteli.hoteliservice.model.Hotel;
 import com.isa.hoteli.hoteliservice.repository.HotelRepository;
 import com.isa.hoteli.hoteliservice.service.HotelService;
@@ -65,7 +68,7 @@ public class HoteliServiceTest {
 	public void createHotelSuccess() {
 		when(hotelRepository.save(hotel1)).thenReturn(hotel1);
 		HotelDTO hotel = hotelService.createHotel(hotel1);
-		assertNotNull(hotel);
+		assertThat(hotel.equals(new HotelDTO(hotel1)));
 		verify(hotelRepository, times(1)).save(hotel1);
 		verifyNoMoreInteractions(hotelRepository);
 	}
@@ -75,7 +78,7 @@ public class HoteliServiceTest {
 		when(hotelRepository.getOne(1l)).thenReturn(hotel1);
 		when(hotelRepository.save(hotel1)).thenReturn(hotel1);
 		HotelDTO hotel = hotelService.updateHotel(hotel1, 1l);
-		assertNotNull(hotel);
+		assertThat(hotel.equals(new HotelDTO(hotel1)));
 		verify(hotelRepository, times(1)).getOne(1l);
 		verify(hotelRepository, times(1)).save(hotel1);
 		verifyNoMoreInteractions(hotelRepository);
@@ -86,6 +89,15 @@ public class HoteliServiceTest {
 		when(hotelRepository.getOne(1l)).thenReturn(null);
 		hotelService.updateHotel(hotel1, 1l);
 		verify(hotelRepository, times(1)).getOne(1l);
+		verifyNoMoreInteractions(hotelRepository);
+	}
+	
+	@Test
+	public void deleteHotelSuccess() {
+		doNothing().when(hotelRepository).deleteById(1l);
+		String s = hotelService.deleteHotel(1l);
+		assertEquals("Uspesno obrisan hotel sa id: 1", s);
+		verify(hotelRepository, times(1)).deleteById(1l);
 		verifyNoMoreInteractions(hotelRepository);
 	}
 }

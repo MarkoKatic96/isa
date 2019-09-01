@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
 import com.isa.hoteli.hoteliservice.avio.model.Rola;
@@ -26,6 +27,7 @@ import com.isa.hoteli.hoteliservice.model.Pretraga;
 import com.isa.hoteli.hoteliservice.service.HotelService;
 import com.isa.hoteli.hoteliservice.service.HotelskaSobaService;
 import com.isa.hoteli.hoteliservice.service.OcenaService;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")

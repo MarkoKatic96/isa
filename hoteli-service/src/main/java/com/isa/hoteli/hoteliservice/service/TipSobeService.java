@@ -41,12 +41,12 @@ public class TipSobeService {
 	}
 	
 	public TipSobeDTO updateType(TipSobe tipSobe, Long id) {
-		Optional<TipSobe> tipSobe1 = tipSobeRepository.findById(id);
-		if(tipSobe1.isPresent()) {
-			tipSobe1.get().setNaziv(tipSobe.getNaziv());
-			tipSobe1.get().setHotel(tipSobe.getHotel());
-			tipSobeRepository.save(tipSobe1.get());
-			return new TipSobeDTO(tipSobe1.get());
+		TipSobe tipSobe1 = tipSobeRepository.getOne(id);
+		if(tipSobe1!=null) {
+			tipSobe1.setNaziv(tipSobe.getNaziv());
+			tipSobe1.setHotel(tipSobe.getHotel());
+			tipSobeRepository.save(tipSobe1);
+			return new TipSobeDTO(tipSobe1);
 		}
 		return null;
 	}
