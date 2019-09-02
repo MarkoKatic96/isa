@@ -38,14 +38,14 @@ public class DodatnaUslugaService {
 	}
 	
 	public DodatnaUslugaDTO updateService(DodatnaUsluga obj, Long id) {
-		Optional<DodatnaUsluga> obj1 = dodatnaUslugaRepository.findById(id);
-		if(obj1.isPresent()) {
-			obj1.get().setCena(obj.getCena());
-			obj1.get().setNaziv(obj.getNaziv());
-			obj1.get().setPopust(obj.getPopust());
-			obj1.get().setHotel(obj.getHotel());
-			dodatnaUslugaRepository.save(obj1.get());
-			return new DodatnaUslugaDTO(obj1.get());
+		DodatnaUsluga obj1 = dodatnaUslugaRepository.getOne(id);
+		if(obj1!=null) {
+			obj1.setCena(obj.getCena());
+			obj1.setNaziv(obj.getNaziv());
+			obj1.setPopust(obj.getPopust());
+			obj1.setHotel(obj.getHotel());
+			dodatnaUslugaRepository.save(obj1);
+			return new DodatnaUslugaDTO(obj1);
 		}
 		return null;
 	}

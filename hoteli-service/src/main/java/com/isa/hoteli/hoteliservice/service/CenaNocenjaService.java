@@ -60,15 +60,15 @@ public class CenaNocenjaService {
 	}
 	
 	public CenaNocenjaDTO updatePrice(CenaNocenja obj, Long id) {
-		Optional<CenaNocenja> obj1 = cenaNocenjaRepository.findById(id);
-		if(obj1.isPresent()) {
-			obj1.get().setCenaNocenja(obj.getCenaNocenja());
+		CenaNocenja obj1 = cenaNocenjaRepository.getOne(id);
+		if(obj1!=null) {
+			obj1.setCenaNocenja(obj.getCenaNocenja());
 			//staviti datumska ogranicenja ako budem koristio
-			obj1.get().setDatumDo(obj.getDatumDo());
-			obj1.get().setDatumOd(obj.getDatumOd());
-			obj1.get().setHotelskaSoba(obj.getHotelskaSoba());
-			cenaNocenjaRepository.save(obj1.get());
-			return new CenaNocenjaDTO(obj1.get());
+			obj1.setDatumDo(obj.getDatumDo());
+			obj1.setDatumOd(obj.getDatumOd());
+			obj1.setHotelskaSoba(obj.getHotelskaSoba());
+			cenaNocenjaRepository.save(obj1);
+			return new CenaNocenjaDTO(obj1);
 		}
 		return null;
 	}
