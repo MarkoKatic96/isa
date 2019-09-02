@@ -81,6 +81,9 @@ class ReservationForm extends Component{
             console.log(iznos);
             axios.post("http://localhost:8080/rezervacija/", {datumDo: this.state.datumDo, datumOd: this.state.datumOd, hotelskaSoba:this.state.soba, korisnik: this.state.korisnik, ukupnaCena: iznos, hotel: this.state.hotel, brojOsoba:1}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res =>{
+                sessionStorage.setItem("vremePoletanja", undefined);
+                sessionStorage.setItem("vremeSletanja", undefined);
+                sessionStorage.setItem("flag", 0);
                 console.log(res.data)
                 this.props.history.push("/hotels");
             }).catch(error=>{

@@ -67,6 +67,10 @@ class Hotels extends Component{
                                 <div className="card-action">
                                     <button className="btn waves-effect waves-light green" id="sobeBtn" onClick={()=>{this.sobeClick(hotel.id)}}>Sobe</button>
                                     <button className="btn waves-effect waves-light green" id="uslugeBtn" onClick={()=>{this.uslugeClick(hotel.id)}}>Dodatne usluge</button>
+                                    { 
+                                       sessionStorage.getItem('flag')=="1" ? (<button className="btn waves-effect waves-light green" id="sobeBtn" onClick={()=>{this.sobeClick(hotel.id)}}>Sobe</button>):(<p></p>)
+                                        
+                                        }
                                 </div>
                             </div>
                         </div>

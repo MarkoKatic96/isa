@@ -83,6 +83,14 @@ class UserReservations extends Component {
         }
     }
 
+    redirectToHotel = (karta) =>
+    {
+        sessionStorage.setItem("vremePoletanja", karta.let.vremePoletanja);
+        sessionStorage.setItem("vremeSletanja", karta.let.vremeSletanja);
+        sessionStorage.setItem("flag", "1");
+        this.props.history.push('/hotels');
+    } 
+
     render() {
         const reservationList = this.state.userTickets.length ? (this.state.userTickets.map(ticket => {
             return (
@@ -105,6 +113,7 @@ class UserReservations extends Component {
                                     <div className="card-action">
                                         <button className="btn waves-effect waves-light red" id="deletebtn" onClick={() => { this.deleteReservation(ticket.idKarte) }}>Ponisti</button>
                                         <button className="btn waves-effect waves-light blue" id="ratebtn" onClick={() => { this.showRateForm() }}>Oceni</button>
+                                        <button className="btn waves-effect waves-light green" id="redirectbtn" onClick={() => { this.redirectToHotel(ticket) }}>Rezervisi smestaj</button>
                                         {
                                             (this.state.showRateFormFlag) ? (
                                                 <div>
