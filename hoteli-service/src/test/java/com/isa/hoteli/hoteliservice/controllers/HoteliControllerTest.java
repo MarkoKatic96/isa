@@ -66,7 +66,8 @@ public class HoteliControllerTest {
 	private HotelDTO hotel1DTO = new HotelDTO(1l, "a", "a", "a", "a");
 	private HotelDTO hotel2DTO = new HotelDTO(2l, "b", "b", "b", "b");
 	private List<HotelInfoDTO> hotelsInfoDTO = new ArrayList<>();
-	private MockHttpServletRequest request = new MockHttpServletRequest();	private List<HotelskaSoba> sobe = new ArrayList<>();
+	private MockHttpServletRequest request = new MockHttpServletRequest();
+	private List<HotelskaSoba> sobe = new ArrayList<>();
 	private HotelskaSoba hotelskaSoba1= new HotelskaSoba(1l, 1, 1, 1, 1, hotel1, null);
 
 	
