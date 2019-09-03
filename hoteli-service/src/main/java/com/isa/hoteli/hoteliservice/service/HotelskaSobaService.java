@@ -72,16 +72,16 @@ public class HotelskaSobaService {
 	public HotelskaSobaDTO updateRoom(HotelskaSoba soba, Long id) {
 		Date datum = new Date(System.currentTimeMillis());
 		if(rezervacijeRepository.neMozeMenjatiBrisati(id, datum).isEmpty() && hotelskaSobaRepository.getRoomWithNumber(soba.getHotel().getId(), soba.getBrojSobe())==null){
-			Optional<HotelskaSoba> soba1 = hotelskaSobaRepository.findById(id);
-			if(soba1.isPresent()) {
-				soba1.get().setBrojKreveta(soba.getBrojKreveta());
-				soba1.get().setBrojSobe(soba.getBrojSobe());
-				soba1.get().setSprat(soba.getSprat());
-				soba1.get().setOriginalnaCena(soba.getOriginalnaCena());
-				soba1.get().setTipSobe(soba.getTipSobe());
-				soba1.get().setHotel(soba.getHotel());
-				hotelskaSobaRepository.save(soba1.get());
-				return new HotelskaSobaDTO(soba1.get());
+			HotelskaSoba soba1 = hotelskaSobaRepository.getOne(id);
+			if(soba1!=null) {
+				soba1.setBrojKreveta(soba.getBrojKreveta());
+				soba1.setBrojSobe(soba.getBrojSobe());
+				soba1.setSprat(soba.getSprat());
+				soba1.setOriginalnaCena(soba.getOriginalnaCena());
+				soba1.setTipSobe(soba.getTipSobe());
+				soba1.setHotel(soba.getHotel());
+				hotelskaSobaRepository.save(soba1);
+				return new HotelskaSobaDTO(soba1);
 			}
 		}
 		
@@ -89,11 +89,11 @@ public class HotelskaSobaService {
 	}
 	
 	public HotelskaSobaDTO updateRoomPrice(HotelskaSoba soba, Long id) {
-			Optional<HotelskaSoba> soba1 = hotelskaSobaRepository.findById(id);
-			if(soba1.isPresent()) {
-				soba1.get().setOriginalnaCena(soba.getOriginalnaCena());
-				hotelskaSobaRepository.save(soba1.get());
-				return new HotelskaSobaDTO(soba1.get());
+			HotelskaSoba soba1 = hotelskaSobaRepository.getOne(id);
+			if(soba1!=null) {
+				soba1.setOriginalnaCena(soba.getOriginalnaCena());
+				hotelskaSobaRepository.save(soba1);
+				return new HotelskaSobaDTO(soba1);
 			}
 		
 		return null;

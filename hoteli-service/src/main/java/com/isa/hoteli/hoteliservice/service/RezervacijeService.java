@@ -43,10 +43,10 @@ public class RezervacijeService {
 	}
 	
 	public RezervacijeDTO createReservation(Rezervacije obj) {
-		Optional<HotelskaSoba> hs = hotelskaSobaRepository.findById(obj.getHotelskaSoba().getId());
+		HotelskaSoba hs = hotelskaSobaRepository.getOne(obj.getHotelskaSoba().getId());
 		List<Rezervacije> lista = rezervacijeRepository.findKonfliktRezervacije(obj.getHotelskaSoba().getId(), obj.getDatumOd(), obj.getDatumDo());
-		if(hs.isPresent() && lista.isEmpty()) {
-			obj.setHotel(hs.get().getHotel());
+		if(hs!=null && lista.isEmpty()) {
+			obj.setHotel(hs.getHotel());
 			return new RezervacijeDTO(rezervacijeRepository.save(obj));
 		}
 		return null;
@@ -71,16 +71,16 @@ public class RezervacijeService {
 	}
 	
 	public RezervacijeDTO updateReservation(Rezervacije obj, Long id) {
-		Optional<Rezervacije> obj1 = rezervacijeRepository.findById(id);
-		if(obj1.isPresent()) {
-			obj1.get().setKorisnik(obj.getKorisnik());
-			obj1.get().setDatumDo(obj.getDatumDo());
-			obj1.get().setDatumOd(obj.getDatumOd());
-			obj1.get().setUkupnaCena(obj.getUkupnaCena());
-			obj1.get().setBrojOsoba(obj.getBrojOsoba());
-			obj1.get().setHotelskaSoba(obj.getHotelskaSoba());
-			rezervacijeRepository.save(obj1.get());
-			return new RezervacijeDTO(obj1.get());
+		Rezervacije obj1 = rezervacijeRepository.getOne(id);
+		if(obj1!=null) {
+			obj1.setKorisnik(obj.getKorisnik());
+			obj1.setDatumDo(obj.getDatumDo());
+			obj1.setDatumOd(obj.getDatumOd());
+			obj1.setUkupnaCena(obj.getUkupnaCena());
+			obj1.setBrojOsoba(obj.getBrojOsoba());
+			obj1.setHotelskaSoba(obj.getHotelskaSoba());
+			rezervacijeRepository.save(obj1);
+			return new RezervacijeDTO(obj1);
 		}
 		return null;
 	}

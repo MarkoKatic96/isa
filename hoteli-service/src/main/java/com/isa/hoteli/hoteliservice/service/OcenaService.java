@@ -37,8 +37,8 @@ public class OcenaService {
 	}
 	
 	public OcenaHotelDTO createHotelRating(OcenaHotel ocena) {
-		Optional<Rezervacije> r = rezervacijeRepository.findById(ocena.getRezervacijaId());
-		if(r.isPresent()) {
+		Rezervacije r = rezervacijeRepository.getOne(ocena.getRezervacijaId());
+		if(r!=null) {
 			OcenaHotel o = ocenaHotelRepository.vecOcenjeno(ocena.getRezervacijaId());
 			if(o==null) {
 				return new OcenaHotelDTO(ocenaHotelRepository.save(ocena));
@@ -49,8 +49,8 @@ public class OcenaService {
 	}
 	
 	public OcenaHotelskaSobaDTO createHotelRoomRating(OcenaHotelskaSoba ocena) {
-		Optional<Rezervacije> r = rezervacijeRepository.findById(ocena.getRezervacijaId());
-		if(r.isPresent()) {
+		Rezervacije r = rezervacijeRepository.getOne(ocena.getRezervacijaId());
+		if(r!=null) {
 			OcenaHotelskaSoba o = ocenaHotelskaSobaRepository.vecOcenjeno(ocena.getRezervacijaId());
 			if(o==null) {
 				return new OcenaHotelskaSobaDTO(ocenaHotelskaSobaRepository.save(ocena));
