@@ -71,7 +71,8 @@ public class HotelskaSobaService {
 	
 	public HotelskaSobaDTO updateRoom(HotelskaSoba soba, Long id) {
 		Date datum = new Date(System.currentTimeMillis());
-		if(rezervacijeRepository.neMozeMenjatiBrisati(id, datum).isEmpty() && hotelskaSobaRepository.getRoomWithNumber(soba.getHotel().getId(), soba.getBrojSobe())==null){
+		List<Rezervacije> lista = rezervacijeRepository.neMozeMenjatiBrisati(id, datum);
+		if(lista.isEmpty()){
 			HotelskaSoba soba1 = hotelskaSobaRepository.getOne(id);
 			if(soba1!=null) {
 				soba1.setBrojKreveta(soba.getBrojKreveta());
