@@ -44,6 +44,8 @@ import MyReservations from './MyReservations';
 import ExpressTicket from './AvioPages/User/ExpressTicket';
 import Ocena from './HotelPages/Ocena';
 import PromeniSifru from './PromeniSifru';
+import AddRoomType from './HotelPages/Admin/AddRoomType';
+import RoomTypes from './HotelPages/Admin/RoomTypes';
 
 class App extends Component {
 
@@ -96,7 +98,9 @@ class App extends Component {
           <Route path='/services/:serviceId' render={Services}/>
           <Route path='/edit/hotel' render={EditHotel}/>
           <Route path='/admin/rooms' render={HotelRooms}/>
+          <Route path='/admin/types' render={RoomTypes}/>
           <Route path='/admin/add_room/:hotelId' render={AddRoom}/>
+          <Route path='/admin/add_room_type/:hotelId' render={AddRoomType}/>
           <Route path='/admin/edit_room/:sobaId' render={EditRoom}/>
           <Route path='/admin/services' render={HotelServices}/>
           <Route path='/admin/add_services/:hotelId' render={AddService}/>

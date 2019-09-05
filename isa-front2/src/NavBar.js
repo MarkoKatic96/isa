@@ -41,6 +41,7 @@ class NavBar extends Component{
             ispis = <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li><Link to="/edit/hotel">Izmeni hotel</Link></li>
                         <li><Link to="/admin/rooms">Sobe</Link></li>
+                        <li><Link to="/admin/types">Tipovi sobe</Link></li>
                         <li><Link to="/cenovnik">Cenovnik</Link></li>
                         <li><Link to="/izvestaji">Izvestaji</Link></li>
                         <li><Link to="/admin/services">Usluge</Link></li>
