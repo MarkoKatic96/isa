@@ -85,8 +85,8 @@ class UserReservations extends Component {
 
     redirectToHotel = (karta) =>
     {
-        sessionStorage.setItem("vremePoletanja", karta.let.vremePoletanja);
-        sessionStorage.setItem("vremeSletanja", karta.let.vremeSletanja);
+        sessionStorage.setItem("vremePoletanja", karta.let.vremePoletanja.substring(0, 10));
+        sessionStorage.setItem("vremeSletanja", karta.let.vremeSletanja.substring(0, 10));
         sessionStorage.setItem("flag", "1");
         this.props.history.push('/hotels');
     } 

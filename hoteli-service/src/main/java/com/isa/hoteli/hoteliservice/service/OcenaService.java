@@ -1,5 +1,6 @@
 package com.isa.hoteli.hoteliservice.service;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +39,7 @@ public class OcenaService {
 	
 	public OcenaHotelDTO createHotelRating(OcenaHotel ocena) {
 		Rezervacije r = rezervacijeRepository.getOne(ocena.getRezervacijaId());
-		if(r!=null) {
+		if(r!=null && r.getDatumOd().before(new Date(System.currentTimeMillis()))) {
 			OcenaHotel o = ocenaHotelRepository.vecOcenjeno(ocena.getRezervacijaId());
 			if(o==null) {
 				return new OcenaHotelDTO(ocenaHotelRepository.save(ocena));
@@ -50,7 +51,7 @@ public class OcenaService {
 	
 	public OcenaHotelskaSobaDTO createHotelRoomRating(OcenaHotelskaSoba ocena) {
 		Rezervacije r = rezervacijeRepository.getOne(ocena.getRezervacijaId());
-		if(r!=null) {
+		if(r!=null && r.getDatumOd().before(new Date(System.currentTimeMillis()))) {
 			OcenaHotelskaSoba o = ocenaHotelskaSobaRepository.vecOcenjeno(ocena.getRezervacijaId());
 			if(o==null) {
 				return new OcenaHotelskaSobaDTO(ocenaHotelskaSobaRepository.save(ocena));

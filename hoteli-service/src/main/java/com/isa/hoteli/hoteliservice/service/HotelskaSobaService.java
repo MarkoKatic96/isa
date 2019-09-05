@@ -141,4 +141,24 @@ public class HotelskaSobaService {
 		return returnList2;
 	}
 	
+	/*
+	 * 
+	 * vraca cenu nocenja koja je manja od originalne za neku sobu
+	 * 
+	 * */
+	public float getPriceIfDiscount(Long id, Date datumOd, Date datumDo){
+		HotelskaSoba soba = hotelskaSobaRepository.getOne(id);
+		List<HotelskaSoba> sobe = getAllFreeRoomsFromHotelWithDiscount(soba.getHotel().getId(), datumOd, datumDo);
+		for (HotelskaSoba hotelskaSoba : sobe) {
+			if(soba.getId()==hotelskaSoba.getId()){
+				if(cenaNocenjaRepository.getValidFromHotelRoom(soba.getId(), datumOd)!=null) {
+					if(cenaNocenjaRepository.getValidFromHotelRoom(soba.getId(), datumOd).getCenaNocenja()<hotelskaSoba.getOriginalnaCena()) {
+						return cenaNocenjaRepository.getValidFromHotelRoom(soba.getId(), datumOd).getCenaNocenja();
+					}
+				}
+			}
+		}
+		return -1.0f;
+	}
+	
 }

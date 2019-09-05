@@ -46,6 +46,7 @@ import Ocena from './HotelPages/Ocena';
 import PromeniSifru from './PromeniSifru';
 import AddRoomType from './HotelPages/Admin/AddRoomType';
 import RoomTypes from './HotelPages/Admin/RoomTypes';
+import FastRooms from './HotelPages/FastRooms';
 
 class App extends Component {
 
@@ -95,6 +96,7 @@ class App extends Component {
           <Route path='/login' render={props => <Login setToken={this.setToken} setEmail={this.setEmail}  logIn={this.logIn}/>}/>
           <Route path='/register' render={Register}/>
           <Route path='/rooms/:hotelId' render={props => <Rooms loggedIn={this.state.loggedIn}/>}/>
+          <Route path='/fast/rooms/:hotelId' render={props => <FastRooms loggedIn={this.state.loggedIn}/>}/>
           <Route path='/services/:serviceId' render={Services}/>
           <Route path='/edit/hotel' render={EditHotel}/>
           <Route path='/admin/rooms' render={HotelRooms}/>

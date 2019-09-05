@@ -187,4 +187,10 @@ public class HotelskaSobaController {
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
+	@RequestMapping(value="/discount/{id}", method = RequestMethod.POST)
+	public ResponseEntity<Float> hotelRoomDiscountPrice(@PathVariable("id") Long id, Pretraga pretraga){
+		float f = hotelskaSobaService.getPriceIfDiscount(id, pretraga.getDatumOd(), pretraga.getDatumDo());
+		Float returnFloat = new Float(f);
+		return new ResponseEntity<Float>(returnFloat, HttpStatus.OK);
+	}
 }
