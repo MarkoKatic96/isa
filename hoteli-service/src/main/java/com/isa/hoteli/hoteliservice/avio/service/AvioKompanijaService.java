@@ -39,12 +39,12 @@ public class AvioKompanijaService
 	private KartaRepository kartaRepo;
 	
 	
-	public AvioKompanijaDTO findById(Long id)
+	public AvioKompanija findById(Long id)
 	{
 		Optional<AvioKompanija> avio = avioRepo.findById(id);
 		
 		if(avio.isPresent())
-			return avioConv.convertToDTO(avio.get());
+			return avio.get();
 		else
 			return null;
 	}
@@ -79,19 +79,19 @@ public class AvioKompanijaService
 		}
 	}
 	
-	public boolean addDefaultDestination(Long id)
-	{
-		Optional<AvioKompanija> avio = avioRepo.findById(id);
-		Optional<Destinacija> dest = destRepo.findById((long) 1);
-		
-		List<Destinacija> lista = new ArrayList<Destinacija>();
-		lista.add(dest.get());
-		
-		avio.get().setDestinacijeNaKojimaPosluje(lista);
-		avioRepo.save(avio.get());
-		
-		return true;
-	}
+//	public boolean addDefaultDestination(Long id)
+//	{
+//		Optional<AvioKompanija> avio = avioRepo.findById(id);
+//		Optional<Destinacija> dest = destRepo.findById((long) 1);
+//		
+//		List<Destinacija> lista = new ArrayList<Destinacija>();
+//		lista.add(dest.get());
+//		
+//		avio.get().setDestinacijeNaKojimaPosluje(lista);
+//		avioRepo.save(avio.get());
+//		
+//		return true;
+//	}
 	
 	public AvioKompanijaDTO updateOne(Long id, AvioKompanijaDTO dto)
 	{
@@ -284,6 +284,11 @@ public class AvioKompanijaService
 		}
 		
 		return prihod;
+	}
+
+	public List<AvioKompanija> getAvioCompanies() {
+		
+		return this.avioRepo.findAll();
 	}
 	
 }
