@@ -60,11 +60,11 @@ import com.isa.hoteli.hoteliservice.service.OcenaService;
 public class HoteliControllerTest {
 
 	private List<Hotel> hotels = new ArrayList<>();;
-	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a");
-	private Hotel hotel2 = new Hotel(2l, "b", "b", "b", "b");
+	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a", 1f, 1f);
+	private Hotel hotel2 = new Hotel(2l, "b", "b", "b", "b", 2f, 2f);
 	private List<HotelDTO> hotelsDTO = new ArrayList<>();
-	private HotelDTO hotel1DTO = new HotelDTO(1l, "a", "a", "a", "a");
-	private HotelDTO hotel2DTO = new HotelDTO(2l, "b", "b", "b", "b");
+	private HotelDTO hotel1DTO = new HotelDTO(1l, "a", "a", "a", "a", 1f, 1f);
+	private HotelDTO hotel2DTO = new HotelDTO(2l, "b", "b", "b", "b", 2f, 2f);
 	private List<HotelInfoDTO> hotelsInfoDTO = new ArrayList<>();
 	private MockHttpServletRequest request = new MockHttpServletRequest();
 	private List<HotelskaSoba> sobe = new ArrayList<>();
@@ -126,7 +126,7 @@ public class HoteliControllerTest {
 		when(ocenaService.getMeanHotelRating(1l)).thenReturn((float) 1);
 		when(ocenaService.getMeanHotelRating(2l)).thenReturn((float) 1);
 		for (Hotel hotel : hotels) {
-			hotelsInfoDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), 1));
+			hotelsInfoDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), 1, 1, 1));
 		}
 		MvcResult result = this.mockMvc.perform(get("/hotel/all")).andExpect(status().isOk()).andReturn();
 		List<HotelInfoDTO> rets = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<HotelInfoDTO>>() {});

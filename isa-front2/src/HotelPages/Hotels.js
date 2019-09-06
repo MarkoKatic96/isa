@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { withRouter} from 'react-router-dom';
 import ChooseBar from '../ChooseBar';
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 
 class Hotels extends Component{
 
@@ -54,6 +55,11 @@ class Hotels extends Component{
 
 
     render(){
+        const style = {
+            width: '85%',
+            height: '40%',
+            border: 'solid 3px whitesmoke'
+        }
         var {hoteli}=this.state;
         const hoteliList = hoteli.length ? (hoteli.map(hotel => {
             return(
@@ -68,6 +74,18 @@ class Hotels extends Component{
                                 <p>Adresa: {hotel.adresa}</p>
                                 <p>Opis: {hotel.opis}</p>
                                 <p>Ocena: {hotel.ocena}</p>
+                                <div id="mapa">
+                                    <Map google={this.props.google}  style={style} zoom={1}>
+                                        <Marker onClick={this.onMarkerClick}
+                                                name={hotel.naziv}
+                                                position={{lat: hotel.lat, lng: hotel.lng}}
+                                                />
+                                        <InfoWindow onClose={this.onInfoWindowClose}>
+                                            <div>
+                                            </div>
+                                        </InfoWindow>
+                                    </Map>
+                                </div>
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
@@ -77,10 +95,10 @@ class Hotels extends Component{
                                        sessionStorage.getItem('flag')=="1" ? (<button className="btn waves-effect waves-light green" id="brzaBtn" onClick={()=>{this.brzaClick(hotel.id)}}>Brza rezervacija</button>):(<p></p>)
                                         
                                         }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                </div>    
+                            </div>                   
+                        </div>              
+                    </div>               
                 </div>
             )
         })):(
@@ -117,4 +135,8 @@ class Hotels extends Component{
     }
 
 }
-export default withRouter(Hotels)
+//export default withRouter(Hotels)
+
+export default GoogleApiWrapper({
+    apiKey: ("API KEY")
+  })(withRouter(Hotels))

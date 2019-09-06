@@ -59,7 +59,7 @@ public class CenaNocenjaControllerTest {
 	private Date datumOd = new Date(System.currentTimeMillis());
 	private Date datumDo = new Date(System.currentTimeMillis()); 
 	private Date datum = new Date(System.currentTimeMillis());
-	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a");
+	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a", 1f, 1f);
 	private HotelskaSoba soba1 = new HotelskaSoba(1l, 1, 1, 1, 200, hotel1, null);
 	private List<CenaNocenja> cene = new ArrayList<>();
 	private CenaNocenja cena1 = new CenaNocenja(1l, 20, datumOd, datumDo, soba1);

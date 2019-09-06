@@ -56,7 +56,7 @@ public class RezervacijaControllerTest {
 
 	private Date datumOd = new Date(System.currentTimeMillis());
 	private Date datumDo = new Date(System.currentTimeMillis());
-	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a");
+	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a", 1f, 1f);
 	private HotelskaSoba soba1 = new HotelskaSoba(1l, 1, 1, 1, 200, hotel1, null);
 	private Rezervacije r1 = new Rezervacije(1l, datumOd, datumDo, 200, 2, soba1, k, hotel1);
 	private Rezervacije r2 = new Rezervacije(1l, datumOd, datumDo, 200, 2, soba1, k, hotel1);

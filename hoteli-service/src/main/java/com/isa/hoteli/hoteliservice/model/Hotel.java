@@ -51,6 +51,9 @@ public class Hotel {
 	
 	private String konfiguracija;
 	
+	private float lat;
+	private float lng;
+	
 	@Version
 	private Long version = 0l;
 	
@@ -69,11 +72,13 @@ public class Hotel {
 		this.dodatnaUslugaList = hotel.getDodatnaUslugaList();
 		this.tipSobeList = hotel.getTipSobeList();*/
 		this.konfiguracija = hotel.getKonfiguracija();
+		this.lat = hotel.getLat();
+		this.lng = hotel.getLng();
 	}
 
 	public Hotel(Long id, String naziv, String adresa, String opis/*, List<Cenovnik> cenovnikList,
 			List<HotelskaSoba> hotelskaSobaList, List<DodatnaUsluga> dodatnaUslugaList, List<TipSobe> tipSobeList*/,
-			String konfiguracija) {
+			String konfiguracija, float lat, float lng) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -84,6 +89,8 @@ public class Hotel {
 		this.dodatnaUslugaList = dodatnaUslugaList;
 		//this.tipSobeList = tipSobeList;*/
 		this.konfiguracija = konfiguracija;
+		this.lat = lat;
+		this.lng = lng;
 	}
 
 	public Long getId() {
@@ -174,5 +181,22 @@ public class Hotel {
 	public void setVersion(Long version) {
 		this.version = version;
 	}
+
+	public float getLat() {
+		return lat;
+	}
+
+	public void setLat(float lat) {
+		this.lat = lat;
+	}
+
+	public float getLng() {
+		return lng;
+	}
+
+	public void setLng(float lng) {
+		this.lng = lng;
+	}
+	
 	
 }

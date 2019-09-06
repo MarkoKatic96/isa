@@ -28,7 +28,7 @@ import com.isa.hoteli.hoteliservice.service.DodatnaUslugaService;
 @RunWith(SpringRunner.class)
 public class DodatnaUslugaServiceTest {
 	
-	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a");
+	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a", 1f, 1f);
 	private List<DodatnaUsluga> usluge = new ArrayList<>();
 	private DodatnaUsluga usluga1 = new DodatnaUsluga(1l, "a", 50, 2, hotel1);
 	private DodatnaUsluga usluga2 = new DodatnaUsluga(1l, "b", 100, 5, hotel1);

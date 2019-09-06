@@ -36,7 +36,7 @@ public class PretragaController {
 		List<HotelInfoDTO> hoteliDTO = new ArrayList<>();
 		List<Hotel> hoteli = pretragaService.getSearch(pretraga);
 		for (Hotel hotel : hoteli) {
-			hoteliDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), ocenaService.getMeanHotelRating(hotel.getId())));
+			hoteliDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), ocenaService.getMeanHotelRating(hotel.getId()), hotel.getLat(), hotel.getLng()));
 		}
 		return new ResponseEntity<List<HotelInfoDTO>>(hoteliDTO, HttpStatus.OK);
 	}

@@ -46,8 +46,8 @@ public class PretragaConrollerTest {
 	private Date datumOd = new Date(System.currentTimeMillis());
 	private Date datumDo = new Date(System.currentTimeMillis());
 	private List<Hotel> hotels = new ArrayList<>();;
-	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a");
-	private Hotel hotel2 = new Hotel(2l, "b", "b", "b", "b");
+	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a", 1f, 1f);
+	private Hotel hotel2 = new Hotel(2l, "b", "b", "b", "b", 2f, 2f);
 	private List<HotelskaSoba> sobe = new ArrayList<>();
 	private List<Hotel> hotelsRet = new ArrayList<>();
 	private List<HotelInfoDTO> hotelsInfoDTO = new ArrayList<>();
@@ -82,7 +82,7 @@ public class PretragaConrollerTest {
 		when(os.getMeanHotelRating(1l)).thenReturn(3f);
 		when(os.getMeanHotelRating(2l)).thenReturn(3f);
 		for (Hotel hotel : hotels) {
-			hotelsInfoDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), 3f));
+			hotelsInfoDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), 3f, 1f, 1f));
 		}
 		String s = objectMapper.writeValueAsString(pretraga);
 		MvcResult result = this.mockMvc.perform(post("/pretraga/").contentType(MediaType.APPLICATION_JSON).content(s)).andExpect(status().isOk()).andReturn();

@@ -20,6 +20,8 @@ public class HotelDTO {
 	private List<DodatnaUsluga> dodatnaUslugaList;
 	private List<TipSobe> tipSobeList;
 	private String konfiguracija;
+	private float lat;
+	private float lng;
 	
 	public HotelDTO() {
 
@@ -36,11 +38,13 @@ public class HotelDTO {
 		this.dodatnaUslugaList = hotel.getDodatnaUslugaList();
 		//this.tipSobeList = hotel.getTipSobeList();*/
 		this.konfiguracija = hotel.getKonfiguracija();
+		this.lat = hotel.getLat();
+		this.lng = hotel.getLng();
 	}
 	
 	public HotelDTO(Long id, String naziv, String adresa, String opis/*, List<Cenovnik> cenovnikList,
 			List<HotelskaSoba> hotelskaSobaList, List<DodatnaUsluga> dodatnaUslugaList, List<TipSobe> tipSobeList*/,
-			String konfiguracija) {
+			String konfiguracija, float lat, float lng) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -51,6 +55,8 @@ public class HotelDTO {
 		this.dodatnaUslugaList = dodatnaUslugaList;
 		//this.tipSobeList = tipSobeList;*/
 		this.konfiguracija = konfiguracija;
+		this.lat = lat;
+		this.lng = lng;
 	}
 	
 	public Long getId() {
@@ -114,6 +120,22 @@ public class HotelDTO {
 	}
 	public void setKonfiguracija(String konfiguracija) {
 		this.konfiguracija = konfiguracija;
+	}
+
+	public float getLat() {
+		return lat;
+	}
+
+	public void setLat(float lat) {
+		this.lat = lat;
+	}
+
+	public float getLng() {
+		return lng;
+	}
+
+	public void setLng(float lng) {
+		this.lng = lng;
 	}
 	
 	

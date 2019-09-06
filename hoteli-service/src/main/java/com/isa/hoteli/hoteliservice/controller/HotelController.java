@@ -64,7 +64,7 @@ public class HotelController {
 		List<HotelInfoDTO> hoteliDTO = new ArrayList<>();
 		List<Hotel> hoteli = hotelService.getHotels();
 		for (Hotel hotel : hoteli) {
-			hoteliDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), ocenaService.getMeanHotelRating(hotel.getId())));
+			hoteliDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), ocenaService.getMeanHotelRating(hotel.getId()), hotel.getLat(), hotel.getLng()));
 		}
 		return new ResponseEntity<List<HotelInfoDTO>>(hoteliDTO, HttpStatus.OK);
 	}
@@ -135,7 +135,7 @@ public class HotelController {
 		List<Hotel> lista = hotelService.getHotels();
 		for (Hotel hotel : lista) {
 			if(!hotelskaSobaService.getAllFreeRoomsFromHotelWithDiscount(hotel.getId(), pretraga.getDatumOd(), pretraga.getDatumDo()).isEmpty()) {
-				hoteliDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), ocenaService.getMeanHotelRating(hotel.getId())));
+				hoteliDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), ocenaService.getMeanHotelRating(hotel.getId()), hotel.getLat(), hotel.getLng()));
 			}
 		}
 		return new ResponseEntity<List<HotelInfoDTO>>(hoteliDTO, HttpStatus.OK);

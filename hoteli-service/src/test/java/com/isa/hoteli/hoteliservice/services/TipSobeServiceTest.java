@@ -30,8 +30,8 @@ import com.isa.hoteli.hoteliservice.service.TipSobeService;
 public class TipSobeServiceTest {
 	
 	private List<TipSobe> tipovi = new ArrayList<>();
-	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a");
-	private Hotel hotel2 = new Hotel(2l, "b", "b", "b", "b");
+	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a", 1f, 1f);
+	private Hotel hotel2 = new Hotel(2l, "b", "b", "b", "b", 2f, 2f);
 	private TipSobe tipSobe1 = new TipSobe(1l, "a", hotel1);
 	private TipSobe tipSobe2 = new TipSobe(2l, "b", hotel1);
 	private TipSobeDTO dto;

@@ -30,8 +30,8 @@ import com.isa.hoteli.hoteliservice.service.HotelService;
 public class HoteliServiceTest {
 	
 	private List<Hotel> hotels = new ArrayList<>();;
-	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a");
-	private Hotel hotel2 = new Hotel(2l, "b", "b", "b", "b");
+	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a", 1f, 1f);
+	private Hotel hotel2 = new Hotel(2l, "b", "b", "b", "b", 2f, 2f);
 	private HotelDTO dto;
 	
 	@Mock

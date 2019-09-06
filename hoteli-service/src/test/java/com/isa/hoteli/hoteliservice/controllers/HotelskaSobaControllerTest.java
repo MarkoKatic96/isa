@@ -58,7 +58,7 @@ public class HotelskaSobaControllerTest {
 	
 	private Date datumOd = new Date(System.currentTimeMillis());
 	private Date datumDo = new Date(System.currentTimeMillis());
-	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a");
+	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a", 1f, 1f);
 	private List<HotelskaSoba> sobe = new ArrayList<>();
 	private List<HotelskaSobaDTO> sobeDTO = new ArrayList<>();
 	private List<Rezervacije> rezervacije = new ArrayList<>();

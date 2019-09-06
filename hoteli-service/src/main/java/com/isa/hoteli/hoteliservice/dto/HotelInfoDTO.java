@@ -7,18 +7,22 @@ public class HotelInfoDTO {
 	private String adresa;	
 	private String opis;
 	private float ocena;
+	private float lat;
+	private float lng;
 	
 	public HotelInfoDTO() {
 
 	}
 	
-	public HotelInfoDTO(Long id, String naziv, String adresa, String opis, float ocena) {
+	public HotelInfoDTO(Long id, String naziv, String adresa, String opis, float ocena, float lat, float lng) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.opis = opis;
 		this.ocena = ocena;
+		this.lat = lat;
+		this.lng = lng;
 	}
 	
 	public Long getId() {
@@ -50,6 +54,22 @@ public class HotelInfoDTO {
 	}
 	public void setOcena(float ocena) {
 		this.ocena = ocena;
+	}
+
+	public float getLat() {
+		return lat;
+	}
+
+	public void setLat(float lat) {
+		this.lat = lat;
+	}
+
+	public float getLng() {
+		return lng;
+	}
+
+	public void setLng(float lng) {
+		this.lng = lng;
 	}
 	
 	
