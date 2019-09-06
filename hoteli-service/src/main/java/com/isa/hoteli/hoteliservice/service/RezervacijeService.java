@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.dto.RezervacijeDTO;
 import com.isa.hoteli.hoteliservice.model.Hotel;
@@ -26,22 +28,27 @@ public class RezervacijeService {
 	@Autowired
 	private HotelskaSobaRepository hotelskaSobaRepository;
 	
+	@Transactional(readOnly = true)
 	public List<Rezervacije> getRezervations(){
 		return rezervacijeRepository.findAll();
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Rezervacije> getReservationsFromHotelRoom(Long id){
 		return rezervacijeRepository.getAllFromHotelRoom(id);
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Rezervacije> getReservationsFromUser(Long id){
 		return rezervacijeRepository.findByKorisnik(id);
 	}
 	
+	@Transactional(readOnly = true)
 	public Rezervacije getReservationById(Long id){
 		return rezervacijeRepository.getOne(id);
 	}
 	
+	@Transactional(readOnly = false)
 	public RezervacijeDTO createReservation(Rezervacije obj) {
 		HotelskaSoba hs = hotelskaSobaRepository.getOne(obj.getHotelskaSoba().getId());
 		List<Rezervacije> lista = rezervacijeRepository.findKonfliktRezervacije(obj.getHotelskaSoba().getId(), obj.getDatumOd(), obj.getDatumDo());
@@ -52,6 +59,7 @@ public class RezervacijeService {
 		return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String deleteReservation(Long id) {
 		Rezervacije rezervacije = rezervacijeRepository.getOne(id);
 		if(rezervacije!=null) {
@@ -70,6 +78,7 @@ public class RezervacijeService {
 		return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public RezervacijeDTO updateReservation(Rezervacije obj, Long id) {
 		Rezervacije obj1 = rezervacijeRepository.getOne(id);
 		if(obj1!=null) {
@@ -85,6 +94,7 @@ public class RezervacijeService {
 		return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public int dnevnaPosecenost(Long id, Date date) {
 		if( rezervacijeRepository.dnevnaPosecenost(id, date)!=null) {
 			return rezervacijeRepository.dnevnaPosecenost(id, date);
@@ -92,6 +102,7 @@ public class RezervacijeService {
 		return 0;
 	}
 	
+	@Transactional(readOnly = true)
 	public int nedeljnaPosecenost(Long id, Date date) {
 		LocalDate ld = date.toLocalDate();
 		LocalDate nedeljaKasnije = ld.plusWeeks(1);
@@ -102,6 +113,7 @@ public class RezervacijeService {
 		return 0;
 	}
 	
+	@Transactional(readOnly = true)
 	public int mesecnaPosecenost(Long id, Date date) {
 		LocalDate ld = date.toLocalDate();
 		LocalDate mesecKasnije = ld.plusMonths(1);
@@ -112,6 +124,7 @@ public class RezervacijeService {
 		return 0;
 	}
 	
+	@Transactional(readOnly = true)
 	public float nedeljniPrihod(Long id, Date date) {
 		LocalDate ld = date.toLocalDate();
 		LocalDate nedeljaKasnije = ld.plusWeeks(1);
@@ -122,6 +135,7 @@ public class RezervacijeService {
 		return 0;
 	}
 	
+	@Transactional(readOnly = true)
 	public float mesecniPrihod(Long id, Date date) {
 		LocalDate ld = date.toLocalDate();
 		LocalDate mesecKasnije = ld.plusMonths(1);
@@ -132,6 +146,7 @@ public class RezervacijeService {
 		return 0;
 	}
 	
+	@Transactional(readOnly = true)
 	public float godisnjiPrihod(Long id, Date date) {
 		LocalDate ld = date.toLocalDate();
 		LocalDate godinaKasnije = ld.plusYears(1);

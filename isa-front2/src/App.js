@@ -103,7 +103,7 @@ class App extends Component {
           <Route path='/admin/types' render={RoomTypes}/>
           <Route path='/admin/add_room/:hotelId' render={AddRoom}/>
           <Route path='/admin/add_room_type/:hotelId' render={AddRoomType}/>
-          <Route path='/admin/edit_room/:sobaId' render={EditRoom}/>
+          <Route path='/admin/edit_room/:hotelId/:sobaId' render={EditRoom}/>
           <Route path='/admin/services' render={HotelServices}/>
           <Route path='/admin/add_services/:hotelId' render={AddService}/>
           <Route path='/admin/edit_services/:serviceId' render={EditService}/>

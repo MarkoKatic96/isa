@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.dto.CenaNocenjaDTO;
 import com.isa.hoteli.hoteliservice.dto.HotelskaSobaDTO;
@@ -19,14 +21,17 @@ public class CenaNocenjaService {
 	@Autowired
 	private CenaNocenjaRepository cenaNocenjaRepository;
 	
+	@Transactional(readOnly = true)
 	public List<CenaNocenja> getPrices(){
 		return cenaNocenjaRepository.findAll();
 	}
 	
+	@Transactional(readOnly = true)
 	public List<CenaNocenja> getPricesFromHotelRoom(Long id){
 		return cenaNocenjaRepository.getAllFromHotelRoom(id);
 	}
 	
+	@Transactional(readOnly = true)
 	public float getValidPriceFromHotelRoom(Long id){
 		if(!cenaNocenjaRepository.getAllFromHotelRoom(id).isEmpty()) {
 			Date date = new Date(System.currentTimeMillis());
@@ -41,10 +46,12 @@ public class CenaNocenjaService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	public CenaNocenja getPriceById(Long id){
 		return cenaNocenjaRepository.getOne(id);
 	}
 	
+	@Transactional(readOnly = false)
 	public CenaNocenjaDTO createPrice(CenaNocenja obj) {
 		//proveravam da li vec postoji cena u istom datumskom intervalu
 		if(!cenaNocenjaRepository.findKonfliktCeneNocenja(obj.getHotelskaSoba().getId(), obj.getDatumOd(), obj.getDatumDo()).isEmpty()) {
@@ -54,11 +61,13 @@ public class CenaNocenjaService {
 		
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String deletePrice(Long id) {
 		cenaNocenjaRepository.deleteById(id);
 		return "Uspesno obrisana cena sa id: " + id;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public CenaNocenjaDTO updatePrice(CenaNocenja obj, Long id) {
 		CenaNocenja obj1 = cenaNocenjaRepository.getOne(id);
 		if(obj1!=null) {

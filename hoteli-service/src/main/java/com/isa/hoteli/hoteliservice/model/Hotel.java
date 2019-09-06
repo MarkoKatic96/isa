@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.hoteli.hoteliservice.dto.HotelDTO;
@@ -49,6 +50,9 @@ public class Hotel {
 	private List<Rezervacije> rezervacijeList;
 	
 	private String konfiguracija;
+	
+	@Version
+	private Long version = 0l;
 	
 	public Hotel() {
 
@@ -162,7 +166,13 @@ public class Hotel {
 	public void setTipSobeList(List<TipSobe> tipSobeList) {
 		this.tipSobeList = tipSobeList;
 	}
-	
-	
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
 	
 }

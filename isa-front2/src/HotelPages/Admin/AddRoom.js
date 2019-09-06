@@ -16,7 +16,7 @@ class AddRoom extends Component{
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8080/tip_sobe/all")
+        axios.get("http://localhost:8080/tip_sobe/all/" + this.props.match.params.hotelId)
         .then(res=>{
             console.log(res.data);
              this.setState({

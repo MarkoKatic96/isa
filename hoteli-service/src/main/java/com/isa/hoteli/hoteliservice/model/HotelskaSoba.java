@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.hoteli.hoteliservice.dto.HotelskaSobaDTO;
@@ -58,6 +59,9 @@ public class HotelskaSoba {
 	
 	@OneToMany(mappedBy="hotelskaSoba", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<Rezervacije> rezervacijeList;
+	
+	@Version
+	private Long version = 0l;
 
 	public HotelskaSoba() {
 
@@ -173,6 +177,14 @@ public class HotelskaSoba {
 
 	public void setOriginalnaCena(float originalnaCena) {
 		this.originalnaCena = originalnaCena;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 	
 	

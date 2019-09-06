@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 
 import com.isa.hoteli.hoteliservice.dto.DodatnaUslugaDTO;
 
@@ -33,6 +34,9 @@ public class DodatnaUsluga {
 	@ManyToOne
     @JoinColumn(name="hotel_id", nullable=false)
     private Hotel hotel;
+	
+	@Version
+	private Long version = 0l;
 
 	public DodatnaUsluga() {
 	}
@@ -94,7 +98,14 @@ public class DodatnaUsluga {
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
 	}
-	
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
 	
 
 }

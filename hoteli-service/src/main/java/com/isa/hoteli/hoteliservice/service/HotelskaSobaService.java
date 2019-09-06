@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.dto.HotelskaSobaDTO;
 import com.isa.hoteli.hoteliservice.model.CenaNocenja;
@@ -28,14 +30,17 @@ public class HotelskaSobaService {
 	@Autowired
 	private CenaNocenjaRepository cenaNocenjaRepository;
 	
+	@Transactional(readOnly = true)
 	public List<HotelskaSoba> getRooms(){
 		return hotelskaSobaRepository.findAll();
 	}
 	
+	@Transactional(readOnly = true)
 	public List<HotelskaSoba> getRoomsFromHotel(Long id){
 		return hotelskaSobaRepository.getAllFromHotel(id);
 	}
 	
+	@Transactional(readOnly = true)
 	public List<HotelskaSoba> getFreeRoomsFromHotel(Long id, Date datumOd, Date datumDo){
 		List<HotelskaSoba> sobe = hotelskaSobaRepository.getAllFromHotel(id);
 		List<HotelskaSoba> returnList = new ArrayList<>();
@@ -48,10 +53,12 @@ public class HotelskaSobaService {
 
 	}
 	
+	@Transactional(readOnly = true)
 	public HotelskaSoba getRoomById(Long id){
 		return hotelskaSobaRepository.getOne(id);
 	}
 	
+	@Transactional(readOnly = false)
 	public HotelskaSobaDTO createRoom(HotelskaSoba soba) {
 		if(hotelskaSobaRepository.getRoomWithNumber(soba.getHotel().getId(), soba.getBrojSobe())==null) {
 			return new HotelskaSobaDTO(hotelskaSobaRepository.save(soba));
@@ -59,6 +66,7 @@ public class HotelskaSobaService {
 		return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String deleteRoom(Long id) {
 		Date datum = new Date(System.currentTimeMillis());
 		if(rezervacijeRepository.neMozeMenjatiBrisati(id, datum).isEmpty()) {
@@ -69,6 +77,7 @@ public class HotelskaSobaService {
 		}
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public HotelskaSobaDTO updateRoom(HotelskaSoba soba, Long id) {
 		Date datum = new Date(System.currentTimeMillis());
 		List<Rezervacije> lista = rezervacijeRepository.neMozeMenjatiBrisati(id, datum);
@@ -81,6 +90,7 @@ public class HotelskaSobaService {
 				soba1.setOriginalnaCena(soba.getOriginalnaCena());
 				soba1.setTipSobe(soba.getTipSobe());
 				soba1.setHotel(soba.getHotel());
+				soba1.setVersion(soba1.getVersion()+1l);
 				hotelskaSobaRepository.save(soba1);
 				return new HotelskaSobaDTO(soba1);
 			}
@@ -89,10 +99,12 @@ public class HotelskaSobaService {
 		return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public HotelskaSobaDTO updateRoomPrice(HotelskaSoba soba, Long id) {
 			HotelskaSoba soba1 = hotelskaSobaRepository.getOne(id);
 			if(soba1!=null) {
 				soba1.setOriginalnaCena(soba.getOriginalnaCena());
+				soba1.setVersion(soba1.getVersion()+1l);
 				hotelskaSobaRepository.save(soba1);
 				return new HotelskaSobaDTO(soba1);
 			}
@@ -100,6 +112,7 @@ public class HotelskaSobaService {
 		return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<HotelskaSoba> getAllFreeRoomsFromHotel(Long id, Date datumOd, Date datumDo){
 		List<HotelskaSoba> sobe = hotelskaSobaRepository.getAllFromHotel(id);
 		List<HotelskaSoba> returnList = new ArrayList<>();
@@ -111,6 +124,7 @@ public class HotelskaSobaService {
 		return returnList;
 	}
 
+	@Transactional(readOnly = true)
 	public List<HotelskaSoba> getAllReservedRoomsFromHotel(Long id, Date datumOd, Date datumDo){
 		List<HotelskaSoba> sobe = hotelskaSobaRepository.getAllFromHotel(id);
 		List<HotelskaSoba> returnList = new ArrayList<>();
@@ -122,6 +136,7 @@ public class HotelskaSobaService {
 		return returnList;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<HotelskaSoba> getAllFreeRoomsFromHotelWithDiscount(Long id, Date datumOd, Date datumDo){
 		List<HotelskaSoba> sobe = hotelskaSobaRepository.getAllFromHotel(id);
 		List<HotelskaSoba> returnList = new ArrayList<>();
@@ -146,6 +161,7 @@ public class HotelskaSobaService {
 	 * vraca cenu nocenja koja je manja od originalne za neku sobu
 	 * 
 	 * */
+	@Transactional(readOnly = true)
 	public float getPriceIfDiscount(Long id, Date datumOd, Date datumDo){
 		HotelskaSoba soba = hotelskaSobaRepository.getOne(id);
 		List<HotelskaSoba> sobe = getAllFreeRoomsFromHotelWithDiscount(soba.getHotel().getId(), datumOd, datumDo);

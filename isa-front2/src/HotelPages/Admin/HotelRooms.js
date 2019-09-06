@@ -33,8 +33,8 @@ class HotelRooms extends Component{
         this.props.history.push('/admin/add_room/' + this.state.korisnik.zaduzenZaId);
     }
 
-    izmeniClick=(sobaId)=>{
-        this.props.history.push('/admin/edit_room/' + sobaId);
+    izmeniClick=(sobaId, hotelId)=>{
+        this.props.history.push('/admin/edit_room/' + hotelId + "/" + sobaId);
     }
 
     obrisiClick=(sobaId)=>{
@@ -65,7 +65,7 @@ class HotelRooms extends Component{
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                    <button className="btn waves-effect waves-light green" id="izmeniSobuBtn" onClick={()=>{this.izmeniClick(soba.id)}}>Izmeni</button>
+                                    <button className="btn waves-effect waves-light green" id="izmeniSobuBtn" onClick={()=>{this.izmeniClick(soba.id, soba.hotel.id)}}>Izmeni</button>
                                     <button className="btn waves-effect waves-light red" id="obrisiSobuBtn" onClick={()=>{this.obrisiClick(soba.id)}}>Obrisi</button>
                                 </div>
                             </div>

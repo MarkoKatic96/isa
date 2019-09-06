@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.dto.OcenaHotelDTO;
 import com.isa.hoteli.hoteliservice.dto.OcenaHotelskaSobaDTO;
@@ -29,14 +30,17 @@ public class OcenaService {
 	@Autowired
 	private RezervacijeRepository rezervacijeRepository;
 	
+	@Transactional(readOnly = true)
 	public List<OcenaHotel> getHotelRatings(){
 		return ocenaHotelRepository.findAll();
 	}
 	
+	@Transactional(readOnly = true)
 	public List<OcenaHotelskaSoba> getRoomRatings(){
 		return ocenaHotelskaSobaRepository.findAll();
 	}
 	
+	@Transactional(readOnly = false)
 	public OcenaHotelDTO createHotelRating(OcenaHotel ocena) {
 		Rezervacije r = rezervacijeRepository.getOne(ocena.getRezervacijaId());
 		if(r!=null && r.getDatumOd().before(new Date(System.currentTimeMillis()))) {
@@ -49,6 +53,7 @@ public class OcenaService {
 		return null;//rezervacija ne postoji
 	}
 	
+	@Transactional(readOnly = false)
 	public OcenaHotelskaSobaDTO createHotelRoomRating(OcenaHotelskaSoba ocena) {
 		Rezervacije r = rezervacijeRepository.getOne(ocena.getRezervacijaId());
 		if(r!=null && r.getDatumOd().before(new Date(System.currentTimeMillis()))) {
@@ -61,6 +66,7 @@ public class OcenaService {
 		return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public float getMeanHotelRating(Long id) {
 		if(!ocenaHotelRepository.ocene(id).isEmpty()) {
 			float mean = ocenaHotelRepository.prosek(id);
@@ -70,6 +76,7 @@ public class OcenaService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	public float getMeanRoomRating(Long id) {
 		if(!ocenaHotelskaSobaRepository.ocene(id).isEmpty()) {
 			float mean = ocenaHotelskaSobaRepository.prosek(id);

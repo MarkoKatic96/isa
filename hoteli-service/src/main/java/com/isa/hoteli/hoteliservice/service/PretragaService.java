@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.model.Hotel;
 import com.isa.hoteli.hoteliservice.model.HotelskaSoba;
@@ -20,6 +21,7 @@ public class PretragaService {
 	@Autowired
 	private HotelskaSobaService hotelskaSobaService;
 	
+	@Transactional(readOnly = true)
 	public List<Hotel> getSearch(Pretraga pretraga){
 		List<Hotel> returnList = new ArrayList<Hotel>();
 		List<HotelskaSoba> sobe = new ArrayList<HotelskaSoba>();

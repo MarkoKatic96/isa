@@ -118,6 +118,7 @@ public class HotelController {
 		Korisnik k = korisnikService.zaTokene(req);
 		if(k!=null && k.getRola().equals(Rola.ADMIN_HOTELA) && k.getZaduzenZaId()==id) {
 			Hotel hotel = new Hotel(hotelDTO);
+			hotel.setVersion(hotel.getVersion()+1l);
 			HotelDTO returnHotel = hotelService.updateHotel(hotel, id);
 			if(returnHotel!=null) {
 				return new ResponseEntity<>(returnHotel, HttpStatus.OK);
