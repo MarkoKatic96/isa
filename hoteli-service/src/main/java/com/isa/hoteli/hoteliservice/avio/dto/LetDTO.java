@@ -3,6 +3,8 @@ package com.isa.hoteli.hoteliservice.avio.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.isa.hoteli.hoteliservice.avio.model.Let;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,4 +34,19 @@ public class LetDTO
     private List<PrtljagDTO> tipoviPrtljagaPoLetu;
 	private List<KlasaDTO> klaseKojeLetSadrzi;
 	private List<DodatnaUslugaLetaDTO> dodatneUslugeKojeLetSadrzi;
+	
+	public LetDTO(Let let)
+	{
+		this.idLeta = let.getIdLeta();
+		this.brojLeta = let.getBrojLeta();
+		this.vremePoletanja = let.getVremePoletanja();
+		this.vremeSletanja = let.getVremeSletanja();
+		this.duzinaPutovanja = let.getDuzinaPutovanja();
+		this.brojPresedanja = let.getBrojPresedanja();
+		this.prosecnaOcena = let.getProsecnaOcena();
+		this.tipPuta = let.getTipPuta();
+		this.brojMesta = let.getBrojMesta();
+		this.ukupanPrihod = let.getUkupanPrihod();
+		this.cenaKarte = let.getCenaKarte();
+	}
 }

@@ -2,6 +2,8 @@ package com.isa.hoteli.hoteliservice.avio.dto;
 
 import java.time.LocalDateTime;
 
+import com.isa.hoteli.hoteliservice.avio.model.Karta;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,4 +26,17 @@ public class KartaDTO
 	private LocalDateTime vremeRezervisanja;
 	private KorisnikDTO korisnik;
 	private KorisnikDTO korisnikKojiSaljePozivnicu;
+	
+	public KartaDTO(Karta karta)
+	{
+		this.idKarte = karta.getIdKarte();
+		this.cena = karta.getCena();
+		this.ocena = karta.getOcena();
+		this.brzaRezervacija = karta.isBrzaRezervacija();
+		this.popust = karta.getPopust();
+		this.brojPasosa = karta.getBrojPasosa();
+		this.vremeRezervisanja = karta.getVremeRezervisanja();
+	}
+	
+	
 }

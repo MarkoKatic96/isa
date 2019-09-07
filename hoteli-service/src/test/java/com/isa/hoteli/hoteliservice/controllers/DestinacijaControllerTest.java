@@ -64,8 +64,7 @@ public class DestinacijaControllerTest
 	
 	private List<Destinacija> destinacije = new ArrayList<>();
 	private Destinacija destinacija1 = new Destinacija(1l, "a", "a", null, null, null, null, null);
-	private Destinacija destinacija2 = new Destinacija(2l, "b", "b");
-	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
+	private Destinacija destinacija2 = new Destinacija(2l, "b", "b", null, null, null, null, null);
 
 	private MockHttpServletRequest request = new MockHttpServletRequest();
 	
@@ -97,7 +96,6 @@ public class DestinacijaControllerTest
 	{
 		MockitoAnnotations.initMocks(this);
 		letovi.add(let1);
-		destinacija1.setLetovi(letovi);
 		destinacije.add(destinacija1);
 		destinacije.add(destinacija2);
 		
@@ -160,24 +158,51 @@ public class DestinacijaControllerTest
 	@Test
 	public void addDestinacijaSuccess() throws Exception
 	{
-		when(destinacijaService.saveOne(Mockito.any(Destinacija.class))).thenReturn(destinacija1);
-		String s = objectMapper.writeValueAsString(destinacija1);
+		when(destinacijaService.saveOne(Mockito.any(DestinacijaDTO.class))).thenReturn(destinacija1Dto);
+		String s = objectMapper.writeValueAsString(destinacija1Dto);
 		MvcResult result = this.mockMvc.
 				perform(post(this.route + "/add/").contentType(MediaType.APPLICATION_JSON).content(s)).
-//				andExpect(status().isCreated()).
+				andExpect(status().isCreated()).
 				andReturn();
-		Destinacija dto = objectMapper.readValue(result
+		DestinacijaDTO dto = objectMapper.readValue(result
 				.getResponse()
-				.getContentAsString(), Destinacija.class);
-		assertEquals(dto, destinacija1);
-		verify(destinacijaService, times(1)).saveOne(Mockito.any(Destinacija.class));
+				.getContentAsString(), DestinacijaDTO.class);
+		assertEquals(dto, destinacija1Dto);
+		verify(destinacijaService, times(1)).saveOne(Mockito.any(DestinacijaDTO.class));
+		verifyNoMoreInteractions(destinacijaService);
+	}
+	
+	@Test
+	public void getAllDestinacijeByAvioKompanijaSuccess() throws Exception
+	{
+		when(destinacijaService.getAllDestinacijeByAvioKompanija(1l)).thenReturn(destinacijeDto);
+		MvcResult result = this.mockMvc.
+				perform(get(this.route + "/getalldestsbycompany/1")).
+				andExpect(status().isOk()).
+				andReturn();
+		List<DestinacijaDTO> dtos = objectMapper.readValue(result
+				.getResponse()
+				.getContentAsString(), new TypeReference<List<DestinacijaDTO>>() {});
+		assertEquals(dtos.size(), 2);
+		for(Destinacija dest : destinacije)
+		{
+			destinacijeDto.add(new DestinacijaDTO(dest));
+		}
+		assertThat(destinacijeDto.equals(dtos));
+		verify(destinacijaService, times(1)).getAllDestinacijeByAvioKompanija(1l);
 		verifyNoMoreInteractions(destinacijaService);
 	}
 	
 	@Test
 	public void addDestinacijaFailed() throws Exception
 	{
-		
+		String s = objectMapper.writeValueAsString(destinacija1Dto);
+		this.mockMvc.
+				perform(post(this.route + "/add/").contentType(MediaType.APPLICATION_JSON).content(s)).
+				andExpect(status().is4xxClientError()).
+				andReturn();
+		verify(destinacijaService, times(1)).saveOne(Mockito.any(DestinacijaDTO.class));
+		verifyNoMoreInteractions(destinacijaService);
 	}
 	
 	@Test
@@ -196,7 +221,7 @@ public class DestinacijaControllerTest
 	}
 	
 	@Test
-	public void updateAvioKompanijaFailed() throws Exception
+	public void updateDestinacijaFailed() throws Exception
 	{
 		when(destinacijaService.updateOne(Mockito.any(Long.class), Mockito.any(DestinacijaDTO.class))).thenReturn(null);
 		String s = objectMapper.writeValueAsString(destinacija1Dto);
@@ -211,7 +236,7 @@ public class DestinacijaControllerTest
 	}
 	
 	@Test
-	public void deleteAvioKompanijaSuccess() throws Exception
+	public void deleteDestinacijaSuccess() throws Exception
 	{
 		when(destinacijaService.deleteOne(1l)).thenReturn(true);
 		MvcResult result = this.mockMvc.perform(delete(this.route + "/delete/1")).andExpect(status().isOk()).andReturn();
