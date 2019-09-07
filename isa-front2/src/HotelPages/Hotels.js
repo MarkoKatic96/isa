@@ -74,6 +74,7 @@ class Hotels extends Component{
                                 <p>Adresa: {hotel.adresa}</p>
                                 <p>Opis: {hotel.opis}</p>
                                 <p>Ocena: {hotel.ocena}</p>
+                                <p/>
                                 <div id="mapa">
                                     <Map google={this.props.google}  style={style} zoom={1}>
                                         <Marker onClick={this.onMarkerClick}
@@ -138,5 +139,5 @@ class Hotels extends Component{
 //export default withRouter(Hotels)
 
 export default GoogleApiWrapper({
-    apiKey: ("API KEY")
+    apiKey: ("AIzaSyCS2anlfKaFnhgAL8TpHBoHDMr8ZwIeQHw")
   })(withRouter(Hotels))
