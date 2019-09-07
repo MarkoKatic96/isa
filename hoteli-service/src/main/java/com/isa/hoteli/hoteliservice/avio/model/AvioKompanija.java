@@ -45,6 +45,15 @@ public class AvioKompanija
 	
 	@OneToMany(mappedBy="aviokompanija") //kad ubacim kaskadno brisanje baca jako cudnu gresku
     private List<Let> letovi;
+
+	public AvioKompanija(long idAvioKompanije, @NotNull String naziv, @NotNull String adresa, String opis) {
+		super();
+		this.idAvioKompanije = idAvioKompanije;
+		this.naziv = naziv;
+		this.adresa = adresa;
+		this.opis = opis;
+	}
+	
 	
 
 }

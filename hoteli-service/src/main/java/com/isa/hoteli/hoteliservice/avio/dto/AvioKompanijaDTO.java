@@ -29,6 +29,16 @@ public class AvioKompanijaDTO
 		this.opis = avio.getOpis();
 		this.destinacijeNaKojimaPosluje = null;
 	}
+
+	public AvioKompanijaDTO(long idAvioKompanije, String naziv, String adresa, String opis) {
+		super();
+		this.idAvioKompanije = idAvioKompanije;
+		this.naziv = naziv;
+		this.adresa = adresa;
+		this.opis = opis;
+	}
+	
+	
     
     
 }

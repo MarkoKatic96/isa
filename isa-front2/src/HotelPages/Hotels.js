@@ -139,5 +139,5 @@ class Hotels extends Component{
 //export default withRouter(Hotels)
 
 export default GoogleApiWrapper({
-    apiKey: ("AIzaSyCS2anlfKaFnhgAL8TpHBoHDMr8ZwIeQHw")
+    apiKey: ("AEja3krwQ20d9OPe3dzb2phK1Rsp4Whv0")
   })(withRouter(Hotels))
