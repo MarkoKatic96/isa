@@ -32,6 +32,9 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
+import com.isa.hoteli.hoteliservice.avio.model.Rola;
+import com.isa.hoteli.hoteliservice.avio.service.KorisnikService;
 import com.isa.hoteli.hoteliservice.controller.TipSobeController;
 import com.isa.hoteli.hoteliservice.dto.CenaNocenjaDTO;
 import com.isa.hoteli.hoteliservice.dto.TipSobeDTO;
@@ -53,12 +56,17 @@ public class TipSobeControllerTest {
 	private TipSobe tipSobe2 = new TipSobe(2l, "b", hotel1);
 	private TipSobeDTO tipSobe1DTO = new TipSobeDTO(1l, "a", hotel1);
 	private TipSobeDTO tipSobe2DTO = new TipSobeDTO(2l, "b", hotel1);
+	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_HOTELA, 1l, true, "a", null, null, null, null, null, null);
+
 	
 	@MockBean
 	private TipSobeService tss;
 	
 	@MockBean
 	private JwtTokenUtils jwt;
+	
+	@MockBean
+	private KorisnikService ks;
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -123,21 +131,28 @@ public class TipSobeControllerTest {
 	@Test
 	public void createTypeSuccess() throws Exception {
 		when(tss.createType(Mockito.any(TipSobe.class))).thenReturn(tipSobe1DTO);
+		when(ks.zaTokene(Mockito.any(HttpServletRequest.class))).thenReturn(k);
 		String s = objectMapper.writeValueAsString(tipSobe1DTO);
 		MvcResult result = this.mockMvc.perform(post("/tip_sobe/").contentType(MediaType.APPLICATION_JSON).content(s)).andExpect(status().isOk()).andReturn();
 		TipSobeDTO dto = objectMapper.readValue(result.getResponse().getContentAsString(), TipSobeDTO.class);
 		assertThat(dto.equals(tipSobe1DTO));
 		verify(tss, times(1)).createType(Mockito.any(TipSobe.class));
+		verify(ks, times(1)).zaTokene(Mockito.any(HttpServletRequest.class));
 		verifyNoMoreInteractions(tss);
+		verifyNoMoreInteractions(ks);
 	}
 	
 	@Test
 	public void deleteTypeSuccess() throws Exception {
 		when(tss.deleteType(1l)).thenReturn("Obrisano");
+		when(ks.zaTokene(Mockito.any(HttpServletRequest.class))).thenReturn(k);
 		MvcResult result = this.mockMvc.perform(delete("/tip_sobe/1")).andExpect(status().isOk()).andReturn();
 		assertThat(result.equals("Obrisano"));
 		verify(tss, times(1)).deleteType(1l);
+		verify(ks, times(1)).zaTokene(Mockito.any(HttpServletRequest.class));
+		verifyNoMoreInteractions(ks);
 		verifyNoMoreInteractions(tss);
+		
 	}
 	
 	@Test

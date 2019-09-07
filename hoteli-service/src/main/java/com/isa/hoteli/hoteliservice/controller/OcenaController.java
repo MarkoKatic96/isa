@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
+import com.isa.hoteli.hoteliservice.avio.model.Rola;
+import com.isa.hoteli.hoteliservice.avio.service.KorisnikService;
 import com.isa.hoteli.hoteliservice.dto.OcenaHotelDTO;
 import com.isa.hoteli.hoteliservice.dto.OcenaHotelskaSobaDTO;
 import com.isa.hoteli.hoteliservice.model.OcenaHotel;
@@ -27,6 +32,9 @@ public class OcenaController {
 	
 	@Autowired
 	private OcenaService ocenaService;
+	
+	@Autowired
+	private KorisnikService korisnikService;
 	
 	@RequestMapping(value="/hotel/all", method = RequestMethod.GET)
 	public ResponseEntity<List<OcenaHotelDTO>> getHotelRatings(){
@@ -49,27 +57,35 @@ public class OcenaController {
 	}
 	
 	@RequestMapping(value="/hotel/", method = RequestMethod.POST)
-	public ResponseEntity<OcenaHotelDTO> createHotelRating(@RequestBody OcenaHotelDTO dto){
-		OcenaHotel obj = new OcenaHotel(dto);
-		obj.setDatumOcene(new Date(System.currentTimeMillis()));
-		OcenaHotelDTO returnType = ocenaService.createHotelRating(obj);
-		if(returnType!=null) {
-			return new ResponseEntity<>(returnType, HttpStatus.OK);
-		}
+	public ResponseEntity<OcenaHotelDTO> createHotelRating(@RequestBody OcenaHotelDTO dto, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.KORISNIK) && k.getId()==dto.getKorisnikId()) {
+			OcenaHotel obj = new OcenaHotel(dto);
+			obj.setDatumOcene(new Date(System.currentTimeMillis()));
+			OcenaHotelDTO returnType = ocenaService.createHotelRating(obj);
+			if(returnType!=null) {
+				return new ResponseEntity<>(returnType, HttpStatus.OK);
+			}
 		
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/soba/", method = RequestMethod.POST)
-	public ResponseEntity<OcenaHotelskaSobaDTO> createRoomRating(@RequestBody OcenaHotelskaSobaDTO dto){
-		OcenaHotelskaSoba obj = new OcenaHotelskaSoba(dto);
-		obj.setDatumOcene(new Date(System.currentTimeMillis()));
-		OcenaHotelskaSobaDTO returnType = ocenaService.createHotelRoomRating(obj);
-		if(returnType!=null) {
-			return new ResponseEntity<>(returnType, HttpStatus.OK);
+	public ResponseEntity<OcenaHotelskaSobaDTO> createRoomRating(@RequestBody OcenaHotelskaSobaDTO dto, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.KORISNIK) && k.getId()==dto.getKorisnikId()) {
+			OcenaHotelskaSoba obj = new OcenaHotelskaSoba(dto);
+			obj.setDatumOcene(new Date(System.currentTimeMillis()));
+			OcenaHotelskaSobaDTO returnType = ocenaService.createHotelRoomRating(obj);
+			if(returnType!=null) {
+				return new ResponseEntity<>(returnType, HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/prosek/hotel/{id}", method = RequestMethod.GET)

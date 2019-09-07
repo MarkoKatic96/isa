@@ -175,10 +175,13 @@ public class RezervacijaControllerTest {
 	@Test
 	public void deleteReservationSuccess() throws Exception {
 		when(rs.deleteReservation(1l)).thenReturn("Obrisano");
+		when(ks.zaTokene(Mockito.any(HttpServletRequest.class))).thenReturn(k);
 		MvcResult result = this.mockMvc.perform(delete("/rezervacija/1")).andExpect(status().isOk()).andReturn();
 		assertThat(result.equals("Obrisano"));
 		verify(rs, times(1)).deleteReservation(1l);
+		verify(ks, times(1)).zaTokene(Mockito.any(HttpServletRequest.class));
 		verifyNoMoreInteractions(rs);
+		verifyNoMoreInteractions(ks);
 	}
 	
 	@Test

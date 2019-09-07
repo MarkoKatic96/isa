@@ -90,8 +90,12 @@ public class RezervacijeController {
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteReservationById(@PathVariable("id") Long id){
-		return new ResponseEntity<String>(rezervacijeService.deleteReservation(id), HttpStatus.OK);
+	public ResponseEntity<String> deleteReservationById(@PathVariable("id") Long id, HttpServletRequest req){
+		Korisnik k = korisnikService.zaTokene(req);
+		if(k!=null && k.getRola().equals(Rola.KORISNIK)){
+			return new ResponseEntity<String>(rezervacijeService.deleteReservation(id), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.PUT)

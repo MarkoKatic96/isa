@@ -36,8 +36,7 @@ class Login extends Component{
                   var rola = localStorage.getItem('rola');
                   var prviPutLogovan = localStorage.getItem('prviPutLogovan')
                   console.log(rola + "  " + prviPutLogovan)
-                  if(prviPutLogovan=="false" && (rola==="ADMIN_HOTELA" || rola==="ADMIN_RENT_A_CAR" || rola==="ADMIN_AVIO_KOMPANIJE")){
-                      console.log("AM I HERE")
+                  if(prviPutLogovan=="false" && (rola==="ADMIN_HOTELA" || rola==="ADMIN_RENT_A_CAR" || rola==="ADMIN_AVIO_KOMPANIJE" || rola==="MASTER_ADMIN")){
                     this.props.history.push("/promeni_sifru");
                   }else{
                     this.props.history.push("/");

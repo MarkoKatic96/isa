@@ -34,12 +34,13 @@ class Ocena extends Component{
 
     handleSubmit = (e) => {
         e.preventDefault();
+        var token = localStorage.getItem('jwtToken');
         if(this.state.ocenaSoba!="" && this.state.ocenaSoba>0 && this.state.ocenaSoba<6 && this.state.ocenaHotel!="" && this.state.ocenaHotel>0 && this.state.ocenaHotel<6){
             axios.post("http://localhost:8080/ocena/hotel/", {ocena: this.state.ocenaHotel, rezervacijaId: this.props.match.params.rezervacijaId, 
-                korisnikId: this.state.korisnik.id, hotelId: this.props.match.params.hotelId})
+                korisnikId: this.state.korisnik.id, hotelId: this.props.match.params.hotelId}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 axios.post("http://localhost:8080/ocena/soba/", {ocena: this.state.ocenaSoba, rezervacijaId: this.props.match.params.rezervacijaId, 
-                korisnikId: this.state.korisnik.id, hotelskaSobaId: this.props.match.params.sobaId})
+                korisnikId: this.state.korisnik.id, hotelskaSobaId: this.props.match.params.sobaId}, { headers: { Authorization: `Bearer ${token}` } })
                     .then(res => {
                         alert("Ocene uspesno prosledjene.");
                         this.props.history.push('/my_reservations');

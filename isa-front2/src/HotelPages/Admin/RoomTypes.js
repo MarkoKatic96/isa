@@ -35,7 +35,7 @@ class RoomTypes extends Component{
 
     obrisiClick=(tipId)=>{
         var token = localStorage.getItem('jwtToken');
-        axios.delete("http://localhost:8080/tip_sobe/" + tipId)
+        axios.delete("http://localhost:8080/tip_sobe/" + tipId, { headers: { Authorization: `Bearer ${token}` } })
             .then(res=>{
                 console.log(res.data);
                 this.componentDidMount();

@@ -69,6 +69,7 @@ public class HoteliControllerTest {
 	private MockHttpServletRequest request = new MockHttpServletRequest();
 	private List<HotelskaSoba> sobe = new ArrayList<>();
 	private HotelskaSoba hotelskaSoba1= new HotelskaSoba(1l, 1, 1, 1, 1, hotel1, null);
+	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.MASTER_ADMIN, 1l, true, "a", null, null, null, null, null, null);
 
 	
 	@MockBean
@@ -159,22 +160,28 @@ public class HoteliControllerTest {
 	
 	@Test
 	public void createHotelSuccess() throws Exception{
+		when(ks.zaTokene(Mockito.any(HttpServletRequest.class))).thenReturn(k);
 		when(hotelService.createHotel(Mockito.any(Hotel.class))).thenReturn(hotel1DTO);
 		String s = objectMapper.writeValueAsString(hotel1DTO);
 		MvcResult result = this.mockMvc.perform(post("/hotel/").contentType(MediaType.APPLICATION_JSON).content(s)).andExpect(status().isOk()).andReturn();
 		HotelDTO dto = objectMapper.readValue(result.getResponse().getContentAsString(), HotelDTO.class);
 		assertThat(dto.equals(hotel1DTO));
+		verify(ks, times(1)).zaTokene(Mockito.any(HttpServletRequest.class));
 		verify(hotelService, times(1)).createHotel(Mockito.any(Hotel.class));
 		verifyNoMoreInteractions(hotelService);
+		verifyNoMoreInteractions(ks);
 	}
 	
 	@Test
 	public void createHotelFailed() throws Exception{
+		when(ks.zaTokene(Mockito.any(HttpServletRequest.class))).thenReturn(k);
 		when(hotelService.createHotel(Mockito.any(Hotel.class))).thenReturn(null);
 		String s = objectMapper.writeValueAsString(hotel1DTO);
 		this.mockMvc.perform(post("/hotel/").contentType(MediaType.APPLICATION_JSON).content(s)).andExpect(status().is4xxClientError()).andReturn();
 		verify(hotelService, times(1)).createHotel(Mockito.any(Hotel.class));
+		verify(ks, times(1)).zaTokene(Mockito.any(HttpServletRequest.class));
 		verifyNoMoreInteractions(hotelService);
+		verifyNoMoreInteractions(ks);
 	}
 	
 	

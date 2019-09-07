@@ -28,7 +28,7 @@ class AddRoomType extends Component{
         var token = localStorage.getItem('jwtToken');
         e.preventDefault();
         if(this.state.naziv!==""){
-            axios.post("http://localhost:8080/tip_sobe/", {naziv: this.state.naziv, hotel: this.state.hotel})
+            axios.post("http://localhost:8080/tip_sobe/", {naziv: this.state.naziv, hotel: this.state.hotel}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 alert("Uspesno dodat novi tip.")
                 this.props.history.push("/admin/types");

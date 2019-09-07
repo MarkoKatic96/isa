@@ -33,6 +33,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
 import com.isa.hoteli.hoteliservice.avio.model.Rola;
+import com.isa.hoteli.hoteliservice.avio.service.KorisnikService;
 import com.isa.hoteli.hoteliservice.controller.OcenaController;
 import com.isa.hoteli.hoteliservice.dto.CenaNocenjaDTO;
 import com.isa.hoteli.hoteliservice.dto.OcenaHotelDTO;
@@ -51,6 +52,7 @@ import com.isa.hoteli.hoteliservice.service.OcenaService;
 public class OceneControllerTest {
 	
 	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.MASTER_ADMIN, null, true, "a", null, null, null, null, null, null);
+	private Korisnik k1 = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.KORISNIK, null, true, "a", null, null, null, null, null, null);
 	private Date datumOd = new Date(System.currentTimeMillis());
 	private Date datumDo = new Date(System.currentTimeMillis());
 	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a", 1f, 1f);
@@ -73,6 +75,9 @@ public class OceneControllerTest {
 	
 	@MockBean
 	private JwtTokenUtils jwt;
+	
+	@MockBean
+	private KorisnikService ks;
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -119,22 +124,28 @@ public class OceneControllerTest {
 	@Test
 	public void createHotelRatingSuccess() throws Exception {
 		when(os.createHotelRating(Mockito.any(OcenaHotel.class))).thenReturn(ocenaHotela1DTO);
+		when(ks.zaTokene(Mockito.any(HttpServletRequest.class))).thenReturn(k1);
 		String s = objectMapper.writeValueAsString(ocenaHotela1DTO);
 		MvcResult result = this.mockMvc.perform(post("/ocena/hotel/").contentType(MediaType.APPLICATION_JSON).content(s)).andExpect(status().isOk()).andReturn();
 		OcenaHotelDTO dto = objectMapper.readValue(result.getResponse().getContentAsString(), OcenaHotelDTO.class);
 		assertThat(dto.equals(ocenaHotela1DTO));
 		verify(os, times(1)).createHotelRating(Mockito.any(OcenaHotel.class));
+		verify(ks, times(1)).zaTokene(Mockito.any(HttpServletRequest.class));
+		verifyNoMoreInteractions(ks);
 		verifyNoMoreInteractions(os);
 	}
 	
 	@Test
 	public void createRoomRatingSuccess() throws Exception {
 		when(os.createHotelRoomRating(Mockito.any(OcenaHotelskaSoba.class))).thenReturn(ocenaSoba1DTO);
+		when(ks.zaTokene(Mockito.any(HttpServletRequest.class))).thenReturn(k1);
 		String s = objectMapper.writeValueAsString(ocenaSoba1DTO);
 		MvcResult result = this.mockMvc.perform(post("/ocena/soba/").contentType(MediaType.APPLICATION_JSON).content(s)).andExpect(status().isOk()).andReturn();
 		OcenaHotelskaSobaDTO dto = objectMapper.readValue(result.getResponse().getContentAsString(), OcenaHotelskaSobaDTO.class);
 		assertThat(dto.equals(ocenaSoba1DTO));
 		verify(os, times(1)).createHotelRoomRating(Mockito.any(OcenaHotelskaSoba.class));
+		verify(ks, times(1)).zaTokene(Mockito.any(HttpServletRequest.class));
+		verifyNoMoreInteractions(ks);
 		verifyNoMoreInteractions(os);
 	}
 	

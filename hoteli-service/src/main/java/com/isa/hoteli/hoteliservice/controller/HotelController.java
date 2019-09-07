@@ -80,14 +80,18 @@ public class HotelController {
 	}
 	
 	@RequestMapping(value="/", method = RequestMethod.POST)
-	public ResponseEntity<HotelDTO> createHotel(@RequestBody HotelDTO hotelDTO){
-		Hotel hotel = new Hotel(hotelDTO);
-		HotelDTO returnHotel = hotelService.createHotel(hotel);
-		if(returnHotel!=null) {
-			return new ResponseEntity<>(returnHotel, HttpStatus.OK);
+	public ResponseEntity<HotelDTO> createHotel(@RequestBody HotelDTO hotelDTO, HttpServletRequest req){
+		Korisnik korisnik = korisnikService.zaTokene(req);
+		if(korisnik!=null && korisnik.getRola().equals(Rola.MASTER_ADMIN)) {
+			Hotel hotel = new Hotel(hotelDTO);
+			HotelDTO returnHotel = hotelService.createHotel(hotel);
+			if(returnHotel!=null) {
+				return new ResponseEntity<>(returnHotel, HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.POST)

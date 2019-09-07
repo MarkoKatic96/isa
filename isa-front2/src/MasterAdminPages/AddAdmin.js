@@ -40,8 +40,10 @@ class Registration extends Component{
                     tip="ADMIN_AVIO_KOMPANIJE"
                 }else if(this.state.selectedTip.value==2){
                     tip="ADMIN_HOTELA"
-                }else{
+                }else if(this.state.selectedTip.value==3){
                     tip="ADMIN_RENT_A_CAR"
+                }else{
+                    tip="MASTER_ADMIN"
                 }
             axios.post("http://localhost:8080/korisnik/admin", {email: this.state.username, lozinka: this.state.password, ime: this.state.firstname, prezime: this.state.lastname, grad: this.state.city, telefon: this.state.telefone, rola: tip}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res =>{
@@ -59,7 +61,8 @@ class Registration extends Component{
         const tipoviAdmina = [
             { label: "Admin aviokompanije", value: 1 },
             { label: "Admin hotela", value: 2 },
-            { label: "Admin rent-a-cara", value: 3 }
+            { label: "Admin rent-a-cara", value: 3 },
+            { label: "Admin sistema", value: 4 }
           ];
         var { selectedTip } = this.state;
         return(

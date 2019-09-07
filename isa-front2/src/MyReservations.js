@@ -36,7 +36,8 @@ class MyReservations extends Component{
     }
     
     otkaziClick=(rezId)=>{
-            axios.delete("http://localhost:8080/rezervacija/" + rezId)
+        var token = localStorage.getItem('jwtToken')
+            axios.delete("http://localhost:8080/rezervacija/" + rezId, { headers: { Authorization: `Bearer ${token}` } })
             .then(res=>{
                 this.componentDidMount();
             })
