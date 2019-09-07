@@ -55,6 +55,16 @@ public class KartaService
 			return null;
 	}
 	
+	public Karta traziById(Long id)
+	{
+		Karta karta = kartaRepo.getOne(id);
+		
+		if(karta != null)
+			return karta;
+		else
+			return null;
+	}
+	
 	public List<KartaDTO> findAll()
 	{
 		Optional<List<Karta>> list = Optional.of(kartaRepo.findAll());
@@ -72,6 +82,11 @@ public class KartaService
 			return null;
 	}
 	
+	public List<Karta> traziSve()
+	{
+		return kartaRepo.findAll();
+	}
+	
 	public KartaDTO saveOne(KartaDTO dto)
 	{
 		Optional<Karta> karta = kartaRepo.findById(dto.getIdKarte());
@@ -82,6 +97,20 @@ public class KartaService
 		{			
 			dto.setOcena(0);
 			kartaRepo.save(kartaConv.convertFromDTO(dto));
+			return dto;
+		}
+	}
+	
+	public Karta saveOne(Karta dto)
+	{
+		Karta karta = kartaRepo.getOne(dto.getIdKarte());
+						
+		if(karta != null)
+			return null;
+		else
+		{			
+			dto.setOcena(0);
+			kartaRepo.save(dto);
 			return dto;
 		}
 	}
@@ -109,11 +138,34 @@ public class KartaService
 			return null;
 	}
 	
+	public Karta updateOne(Long id, Karta dto)
+	{
+		Karta karta = kartaRepo.getOne(id);
+		
+		if(karta != null)
+		{
+			karta.setIdKarte(dto.getIdKarte());
+			karta.setCena(dto.getCena());
+			karta.setOcena(dto.getOcena());
+			karta.setBrzaRezervacija(dto.isBrzaRezervacija());
+			karta.setPopust(dto.getPopust());
+			karta.setLet(dto.getLet());
+			karta.setVremeRezervisanja(dto.getVremeRezervisanja());
+			karta.setKorisnik(dto.getKorisnik());
+			
+			kartaRepo.save(karta);
+			
+			return karta;
+		}
+		else
+			return null;
+	}
+	
 	public boolean deleteOne(Long id)
 	{
-		Optional<Karta> karta = kartaRepo.findById(id);
+		Karta karta = kartaRepo.getOne(id);
 		
-		if(karta.isPresent())
+		if(karta != null)
 		{
 			kartaRepo.deleteById(id);
 			return true;

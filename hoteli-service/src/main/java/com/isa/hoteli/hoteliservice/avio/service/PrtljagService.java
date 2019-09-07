@@ -32,6 +32,16 @@ public class PrtljagService
 			return null;
 	}
 	
+	public Prtljag traziById(Long id)
+	{
+		Prtljag prtljag = prtljagRepo.getOne(id);
+		
+		if(prtljag != null)
+			return prtljag;
+		else
+			return null;
+	}
+	
 	public List<PrtljagDTO> findAll()
 	{
 		Optional<List<Prtljag>> list = Optional.of(prtljagRepo.findAll());
@@ -49,6 +59,11 @@ public class PrtljagService
 			return null;
 	}
 	
+	public List<Prtljag> traziSve()
+	{
+		return prtljagRepo.findAll();
+	}
+	
 	public PrtljagDTO saveOne(PrtljagDTO dto)
 	{
 		Optional<Prtljag> prtljag = prtljagRepo.findById(dto.getIdPrtljaga());
@@ -58,6 +73,19 @@ public class PrtljagService
 		else
 		{			
 			prtljagRepo.save(prtljagConv.convertFromDTO(dto));
+			return dto;
+		}
+	}
+	
+	public Prtljag saveOne(Prtljag dto)
+	{
+		Prtljag prtljag = prtljagRepo.getOne(dto.getIdPrtljaga());
+						
+		if(prtljag != null)
+			return null;
+		else
+		{			
+			prtljagRepo.save(dto);
 			return dto;
 		}
 	}
@@ -80,11 +108,29 @@ public class PrtljagService
 			return null;
 	}
 	
+	public Prtljag updateOne(Long id, Prtljag dto)
+	{
+		Prtljag prtljag = prtljagRepo.getOne(id);
+		
+		if(prtljag != null)
+		{
+			prtljag.setIdPrtljaga(dto.getIdPrtljaga());
+			prtljag.setTezina(dto.getTezina());
+			prtljag.setOpis(dto.getOpis());
+			
+			prtljagRepo.save(prtljag);
+			
+			return prtljag;
+		}
+		else
+			return null;
+	}
+	
 	public boolean deleteOne(Long id)
 	{
-		Optional<Prtljag> prtljag = prtljagRepo.findById(id);
+		Prtljag prtljag = prtljagRepo.getOne(id);
 		
-		if(prtljag.isPresent())
+		if(prtljag != null)
 		{
 			prtljagRepo.deleteById(id);
 			return true;

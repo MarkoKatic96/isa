@@ -1,18 +1,13 @@
 package com.isa.hoteli.hoteliservice.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.junit.Assert;
@@ -21,19 +16,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.isa.hoteli.hoteliservice.avio.converter.DestinacijaConverter;
-import com.isa.hoteli.hoteliservice.avio.dto.AvioKompanijaDTO;
-import com.isa.hoteli.hoteliservice.avio.dto.DestinacijaDTO;
-import com.isa.hoteli.hoteliservice.avio.dto.DodatnaUslugaLetaDTO;
-import com.isa.hoteli.hoteliservice.avio.model.AvioKompanija;
 import com.isa.hoteli.hoteliservice.avio.model.DodatnaUslugaLeta;
-import com.isa.hoteli.hoteliservice.avio.model.DodatnaUslugaLeta;
-import com.isa.hoteli.hoteliservice.avio.repository.DestinacijaRepository;
 import com.isa.hoteli.hoteliservice.avio.repository.DodatnaUslugaLetaRepository;
-import com.isa.hoteli.hoteliservice.avio.service.DestinacijaService;
 import com.isa.hoteli.hoteliservice.avio.service.DodatnaUslugaLetaService;
 
 

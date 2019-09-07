@@ -32,6 +32,16 @@ public class KlasaService
 			return null;
 	}
 	
+	public Klasa traziById(Long id)
+	{
+		Klasa klasa = klasaRepo.getOne(id);
+		
+		if(klasa != null)
+			return klasa;
+		else
+			return null;
+	}
+	
 	public List<KlasaDTO> findAll()
 	{
 		Optional<List<Klasa>> list = Optional.of(klasaRepo.findAll());
@@ -49,6 +59,11 @@ public class KlasaService
 			return null;
 	}
 	
+	public List<Klasa> traziSve()
+	{
+		return klasaRepo.findAll();
+	}
+	
 	public KlasaDTO saveOne(KlasaDTO dto)
 	{
 		Optional<Klasa> klasa = klasaRepo.findById(dto.getIdKlase());
@@ -58,6 +73,19 @@ public class KlasaService
 		else
 		{			
 			klasaRepo.save(klasaConv.convertFromDTO(dto));
+			return dto;
+		}
+	}
+	
+	public Klasa saveOne(Klasa dto)
+	{
+		Klasa klasa = klasaRepo.getOne(dto.getIdKlase());
+						
+		if(klasa != null)
+			return null;
+		else
+		{			
+			klasaRepo.save(dto);
 			return dto;
 		}
 	}
@@ -79,11 +107,28 @@ public class KlasaService
 			return null;
 	}
 	
+	public Klasa updateOne(Long id, Klasa dto)
+	{
+		Klasa klasa = klasaRepo.getOne(id);
+		
+		if(klasa != null)
+		{
+			klasa.setIdKlase(dto.getIdKlase());
+			klasa.setNaziv(dto.getNaziv());
+			
+			klasaRepo.save(klasa);
+			
+			return klasa;
+		}
+		else
+			return null;
+	}
+	
 	public boolean deleteOne(Long id)
 	{
-		Optional<Klasa> klasa = klasaRepo.findById(id);
+		Klasa klasa = klasaRepo.getOne(id);
 		
-		if(klasa.isPresent())
+		if(klasa != null)
 		{
 			klasaRepo.deleteById(id);
 			return true;

@@ -58,6 +58,16 @@ public class LetService
 			return null;
 	}
 	
+	public Let traziById(Long id)
+	{
+		Let let = letRepo.getOne(id);
+		
+		if(let != null)
+			return let;
+		else
+			return null;
+	}
+	
 	public List<LetDTO> findAll()
 	{
 		Optional<List<Let>> list = Optional.of(letRepo.findAll());
@@ -73,6 +83,11 @@ public class LetService
 		}
 		else
 			return null;
+	}
+	
+	public List<Let> traziSve()
+	{
+		return letRepo.findAll();
 	}
 	
 	/*
@@ -127,6 +142,34 @@ public class LetService
 		
 	}
 	
+	public Let saveOne(Let dto)
+	{
+		
+		Korisnik korisnik = korisnikRepo.getOne((long) 1);
+		if(letRepo.existsByBrojLeta(dto.getBrojLeta()))
+			return null;
+		
+			letRepo.save(dto);
+			Let lett = letRepo.findByBrojLeta(dto.getBrojLeta());
+			for(int i=0; i<lett.getBrojMesta(); i++)
+			{
+				Karta karta = new Karta();
+				karta.setBrzaRezervacija(false);
+				karta.setCena(dto.getCenaKarte());
+				karta.setKorisnik(korisnik);
+				karta.setKorisnikKojiSaljePozivnicu(korisnik);
+				karta.setOcena(0);
+				karta.setPopust(0);
+				karta.setBrojPasosa("0");
+				karta.setVremeRezervisanja(LocalDateTime.of(2000, 10, 10, 10, 10));
+				karta.setLet(lett);
+				kartaRepo.save(karta);
+			}
+			
+			return dto;
+		
+	}
+	
 	public LetDTO updateOne(Long id, LetDTO dto)
 	{
 		Optional<Let> let = letRepo.findById(id);
@@ -161,17 +204,51 @@ public class LetService
 			return null;
 	}
 	
+	public Let updateOne(Long id, Let dto)
+	{
+		Let let = letRepo.getOne(id);
+		
+		if(let != null)
+		{
+			let.setIdLeta(dto.getIdLeta());
+			let.setBrojLeta(dto.getBrojLeta());
+			let.setVremePoletanja(dto.getVremePoletanja());
+			let.setVremeSletanja(dto.getVremeSletanja());
+			let.setDuzinaPutovanja(dto.getDuzinaPutovanja());
+			let.setBrojPresedanja(dto.getBrojPresedanja());
+			let.setProsecnaOcena(dto.getProsecnaOcena());
+			let.setTipPuta(dto.getTipPuta());
+			let.setBrojOsoba(dto.getBrojOsoba());
+			let.setUkupanPrihod(dto.getUkupanPrihod());
+			
+			let.setAviokompanija(dto.getAviokompanija());
+			let.setDestinacijaPoletanja(dto.getDestinacijaPoletanja());
+			let.setDestinacijaSletanja(dto.getDestinacijaSletanja());
+			let.setDestinacijePresedanja(dto.getDestinacijePresedanja());
+			let.setTipoviPrtljagaPoLetu(dto.getTipoviPrtljagaPoLetu());
+			let.setKlaseKojeLetSadrzi(dto.getKlaseKojeLetSadrzi());
+			let.setDodatneUslugeKojeLetSadrzi(dto.getDodatneUslugeKojeLetSadrzi());
+			
+			
+			letRepo.save(let);
+			
+			return let;
+		}
+		else
+			return null;
+	}
+	
 	public boolean deleteOne(Long id)
 	{
-		Optional<Let> let = letRepo.findById(id);
+		Let let = letRepo.getOne(id);
 		
-		if(let.isPresent())
+		if(let != null)
 		{
 			List<Karta> karte = kartaRepo.findAll();
 			
 			for(Karta karta : karte)
 			{
-				if(karta.getLet().equals(let.get()))
+				if(karta.getLet().equals(let))
 				{
 					kartaRepo.delete(karta);
 				}
