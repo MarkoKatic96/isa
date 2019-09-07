@@ -30,12 +30,22 @@ public class DestinacijaService
 	
 	public DestinacijaDTO findById(Long id)
 	{
-		Optional<Destinacija> dest = destRepo.findById(id);
+		Destinacija dest = destRepo.getOne(id);
 		
-		if(dest.isPresent())
-			return destConv.convertToDTO(dest.get());
+		if(dest != null)
+			return destConv.convertToDTO(dest);
 		else
 			return null;
+	}
+	
+	public Destinacija traziById(Long id)
+	{
+		Destinacija dest = destRepo.getOne(id);
+		
+		if(dest != null)
+			return dest;
+			else
+				return null;
 	}
 	
 	public List<DestinacijaDTO> findAll()
@@ -53,6 +63,13 @@ public class DestinacijaService
 		}
 		else
 			return null;
+	}
+	
+	public List<Destinacija> traziSve()
+	{
+		List<Destinacija> list = destRepo.findAll();
+		
+		return list;
 	}
 	
 	public List<DestinacijaDTO> getAllDestinacijeByAvioKompanija(Long idAvioKompanije)
@@ -84,6 +101,19 @@ public class DestinacijaService
 		}
 	}
 	
+	public Destinacija saveOne(Destinacija dto)
+	{
+		Destinacija dest = destRepo.getOne(dto.getIdDestinacije());
+						
+		if(dest!=null)
+			return null;
+		else
+		{			
+			destRepo.save(dto);
+			return dto;
+		}
+	}
+	
 	public DestinacijaDTO updateOne(Long id, DestinacijaDTO dto)
 	{
 		Optional<Destinacija> dest = destRepo.findById(id);
@@ -102,11 +132,29 @@ public class DestinacijaService
 			return null;
 	}
 	
+	public Destinacija updateOne(Long id, Destinacija dto)
+	{
+		Destinacija dest = destRepo.getOne(id);
+		
+		if(dest!= null)
+		{
+			dest.setIdDestinacije(dto.getIdDestinacije());
+			dest.setNaziv(dto.getNaziv());
+			dest.setInformacije(dto.getInformacije());
+			
+			destRepo.save(dest);
+			
+			return dest;
+		}
+		else
+			return null;
+	}
+	
 	public boolean deleteOne(Long id)
 	{
-		Optional<Destinacija> dest = destRepo.findById(id);
+		Destinacija dest = destRepo.getOne(id);
 		
-		if(dest.isPresent())
+		if(dest!=null)
 		{
 			destRepo.deleteById(id);
 			return true;

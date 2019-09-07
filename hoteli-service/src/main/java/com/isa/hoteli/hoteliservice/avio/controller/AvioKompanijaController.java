@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isa.hoteli.hoteliservice.avio.converter.AvioKompanijaConverter;
 import com.isa.hoteli.hoteliservice.avio.dto.AvioKompanijaDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.BrojKarataDnevnoDTO;
 import com.isa.hoteli.hoteliservice.avio.model.AvioKompanija;
@@ -91,7 +92,7 @@ public class AvioKompanijaController
 //		
 //		return (!avioService.addDefaultDestination(id)) ? new ResponseEntity<>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
 //	}
-	
+	private AvioKompanijaConverter avioConv;
 	/*
 	 * ADMIN
 	 */
@@ -103,8 +104,8 @@ public class AvioKompanijaController
 		Korisnik k = korServ.zaTokene(req);
 		if(k != null && k.getRola().equals(Rola.ADMIN_AVIO_KOMPANIJE) && k.getZaduzenZaId() == Long.parseLong(id, 10))
 		{
-			AvioKompanijaDTO avio = avioService.updateOne(Long.parseLong(id, 10), dto);
-			return (avio == null) ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST) : new ResponseEntity<AvioKompanijaDTO>(avio, HttpStatus.CREATED);
+			AvioKompanija avio = avioService.updateOne(Long.parseLong(id, 10), dto);
+			return (avio == null) ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST) : new ResponseEntity<AvioKompanijaDTO>(avioConv.convertToDTO(avio), HttpStatus.CREATED);
 		}
 		
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

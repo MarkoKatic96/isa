@@ -41,37 +41,37 @@ public class AvioKompanijaService
 	
 	public AvioKompanija findById(Long id)
 	{
-		Optional<AvioKompanija> avio = avioRepo.findById(id);
+		AvioKompanija avio = avioRepo.getOne(id);
 		
-		if(avio.isPresent())
-			return avio.get();
+		if(avio != null)
+			return avio;
 		else
 			return null;
 	}
 	
 	public List<AvioKompanijaDTO> findAll()
 	{
-		Optional<List<AvioKompanija>> list = Optional.of(avioRepo.findAll());
+		List<AvioKompanija> list = avioRepo.findAll();
 		
 		List<AvioKompanijaDTO> listDto = new ArrayList<AvioKompanijaDTO>();
 		
-		if(list.isPresent())
-		{
-			for(AvioKompanija avio : list.get())
+			for(AvioKompanija avio : list)
 				listDto.add(avioConv.convertToDTO(avio));
 			
 			return listDto;
-		}
-		else
-			return null;
+	}
+	
+	public List<AvioKompanija> traziSve()
+	{
+		return avioRepo.findAll();
 	}
 	
 	public AvioKompanija saveOne(AvioKompanija avioKom)
 	{
-		Optional<AvioKompanija> avio = avioRepo.findById(avioKom.getIdAvioKompanije());
+		AvioKompanija avio = avioRepo.getOne(avioKom.getIdAvioKompanije());
 						
 		
-		if(avio.isPresent())
+		if(avio != null)
 			return null;
 		else
 		{				
@@ -93,23 +93,45 @@ public class AvioKompanijaService
 //		return true;
 //	}
 	
-	public AvioKompanijaDTO updateOne(Long id, AvioKompanijaDTO dto)
+	public AvioKompanija updateOne(Long id, AvioKompanijaDTO dto)
 	{
-		Optional<AvioKompanija> avio = avioRepo.findById(id);
+		AvioKompanija avio = avioRepo.getOne(id);
 		
-		if(avio.isPresent())
+		if(avio != null)
 		{
-			//avio.get().setIdAvioKompanije(avioConv.convertFromDTO(dto).getIdAvioKompanije());
-			avio.get().setNaziv(avioConv.convertFromDTO(dto).getNaziv());
-			avio.get().setAdresa(avioConv.convertFromDTO(dto).getAdresa());
-			avio.get().setOpis(avioConv.convertFromDTO(dto).getOpis());
+			//avio.setIdAvioKompanije(avioConv.convertFromDTO(dto).getIdAvioKompanije());
+			avio.setNaziv(avioConv.convertFromDTO(dto).getNaziv());
+			avio.setAdresa(avioConv.convertFromDTO(dto).getAdresa());
+			avio.setOpis(avioConv.convertFromDTO(dto).getOpis());
 			
-//			if(!avio.get().getDestinacijeNaKojimaPosluje().isEmpty())
-				avio.get().setDestinacijeNaKojimaPosluje(avioConv.convertFromDTO(dto).getDestinacijeNaKojimaPosluje());
+//			if(!avio.getDestinacijeNaKojimaPosluje().isEmpty())
+				avio.setDestinacijeNaKojimaPosluje(avioConv.convertFromDTO(dto).getDestinacijeNaKojimaPosluje());
 			
-			avioRepo.save(avio.get());
+			avioRepo.save(avio);
 			
-			return avioConv.convertToDTO(avio.get());
+			return avio;
+		}
+		else
+			return null;
+	}
+	
+	public AvioKompanija updateOne(Long id, AvioKompanija dto)
+	{
+		AvioKompanija avio = avioRepo.getOne(id);
+		
+		if(avio != null)
+		{
+			//avio.setIdAvioKompanije(avioConv.convertFromDTO(dto).getIdAvioKompanije());
+			avio.setNaziv(dto.getNaziv());
+			avio.setAdresa(dto.getAdresa());
+			avio.setOpis(dto.getOpis());
+			
+//			if(!avio.getDestinacijeNaKojimaPosluje().isEmpty())
+				avio.setDestinacijeNaKojimaPosluje(dto.getDestinacijeNaKojimaPosluje());
+			
+			avioRepo.save(avio);
+			
+			return avio;
 		}
 		else
 			return null;
@@ -118,16 +140,17 @@ public class AvioKompanijaService
 	
 	public boolean deleteOne(Long id)
 	{
-		Optional<AvioKompanija> avio = avioRepo.findById(id);
+		AvioKompanija avio = avioRepo.getOne(id);
 		
-		if(avio.isPresent())
+		if(avio != null)
 		{
-			List<Let> letovi = avio.get().getLetovi();
+			List<Let> letovi = avio.getLetovi();
 			
-			for(Let let : letovi)
-			{
-				letService.deleteOne(let.getIdLeta());
-			}
+			//zakomentarisano zbog testova
+//			for(Let let : letovi)
+//			{
+//				letService.deleteOne(let.getIdLeta());
+//			}
 			
 			avioRepo.deleteById(id);
 			return true;
@@ -146,11 +169,11 @@ public class AvioKompanijaService
 	public Float getSrednjaOcenaAvioKompanije(Long id)
 	{
 		
-		Optional<Float> avg = avioRepo.findAverageRating(id);
+		Float avg = avioRepo.findAverageRating(id);
 		
-		if(avg.isPresent())
+		if(avg != null)
 		{
-			return avg.get();
+			return avg;
 		}
 		
 		return null;

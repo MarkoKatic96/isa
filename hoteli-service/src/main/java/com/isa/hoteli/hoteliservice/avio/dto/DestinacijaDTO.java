@@ -1,5 +1,7 @@
 package com.isa.hoteli.hoteliservice.avio.dto;
 
+import com.isa.hoteli.hoteliservice.avio.model.Destinacija;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,13 @@ public class DestinacijaDTO
 	private long idDestinacije;
 	private String naziv;
 	private String informacije;
+	
+	public DestinacijaDTO(Destinacija dest)
+	{
+		this.idDestinacije = dest.getIdDestinacije();
+		this.naziv = dest.getNaziv();
+		this.informacije = dest.getInformacije();
+	}
 	
 //    private AvioKompanijaDTO aviokompanija;
 	

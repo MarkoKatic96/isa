@@ -32,6 +32,16 @@ public class DodatnaUslugaLetaService
 			return null;
 	}
 	
+	public DodatnaUslugaLeta traziById(Long id)
+	{
+		DodatnaUslugaLeta dest = uslugaRepo.getOne(id);
+		
+		if(dest != null)
+			return dest;
+		else
+			return null;
+	}
+	
 	public List<DodatnaUslugaLetaDTO> findAll()
 	{
 		Optional<List<DodatnaUslugaLeta>> list = Optional.of(uslugaRepo.findAll());
@@ -49,6 +59,11 @@ public class DodatnaUslugaLetaService
 			return null;
 	}
 	
+	public List<DodatnaUslugaLeta> traziSve()
+	{
+		return uslugaRepo.findAll();
+	}
+	
 	public DodatnaUslugaLetaDTO saveOne(DodatnaUslugaLetaDTO dto)
 	{
 		Optional<DodatnaUslugaLeta> dest = uslugaRepo.findById(dto.getIdDodatneUsluge());
@@ -59,6 +74,19 @@ public class DodatnaUslugaLetaService
 		else
 		{			
 			uslugaRepo.save(uslugaConv.convertFromDTO(dto));
+			return dto;
+		}
+	}
+	
+	public DodatnaUslugaLeta saveOne(DodatnaUslugaLeta dto)
+	{
+		DodatnaUslugaLeta dest = uslugaRepo.getOne(dto.getIdDodatneUsluge());
+						
+		if(dest != null)
+			return null;
+		else
+		{			
+			uslugaRepo.save(dto);
 			return dto;
 		}
 	}
@@ -80,11 +108,28 @@ public class DodatnaUslugaLetaService
 			return null;
 	}
 	
+	public DodatnaUslugaLeta updateOne(Long id, DodatnaUslugaLeta dto)
+	{
+		DodatnaUslugaLeta dest = uslugaRepo.getOne(id);
+		
+		if(dest != null)
+		{
+			dest.setIdDodatneUsluge(dto.getIdDodatneUsluge());
+			dest.setNaziv(dto.getNaziv());
+			
+			uslugaRepo.save(dest);
+			
+			return dest;
+		}
+		else
+			return null;
+	}
+	
 	public boolean deleteOne(Long id)
 	{
-		Optional<DodatnaUslugaLeta> dest = uslugaRepo.findById(id);
+		DodatnaUslugaLeta dest = uslugaRepo.getOne(id);
 		
-		if(dest.isPresent())
+		if(dest != null)
 		{
 			uslugaRepo.deleteById(id);
 			return true;
