@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -66,19 +68,23 @@ public class KartaControllerTest
 	private LocalDateTime vremeRez = LocalDateTime.now();
 	
 	private List<Karta> karte = new ArrayList<>();
-	private Karta karta1 = new Karta(1l, 10, 5, false, 0, "a", null, vremeRez, null, null);
-	private Karta karta2 = new Karta(2l, 20, 1, false, 0, "b", null, vremeRez, null, null);
 	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
+
+	private Karta karta1 = new Karta(1l, 10, 5, false, 0, "a", null, vremeRez, null, null);
+	private Karta karta2 = new Karta(2l, 20, 1, false, 0, "b", null, vremeRez, korisnik, null);
 
 	private MockHttpServletRequest request = new MockHttpServletRequest();
 	
 	private Let let1 = new Let(1l, 1l, LocalDateTime.now(), LocalDateTime.now(), 10, 10, 5, "a", 10, 10, 10, 10, null, null, null, null, null, null, null, null);
 	private List<Let> letovi = new ArrayList<>();
 	
+	private String brzaRez;
+	
 	//DTO
+	private Korisnik korisnikDto = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
 	private List<KartaDTO> karteDto = new ArrayList<>();
 	private KartaDTO karta1Dto = new KartaDTO(1l, 10, 5, false, 0, "a", null, vremeRez, null, null);
-	private KartaDTO karta2Dto = new KartaDTO(2l, 20, 1, false, 0, "b", null, vremeRez, null, null);
+	private KartaDTO karta2Dto = new KartaDTO(karta2);
 
 	@MockBean
 	private KartaService kartaService;
@@ -158,6 +164,27 @@ public class KartaControllerTest
 	}
 	
 	@Test
+	public void getAllNerezervisaneKarteSuccess() throws Exception
+	{
+		when(kartaService.getAllNerezervisaneKarte(1l)).thenReturn(karteDto);
+		MvcResult result = this.mockMvc.
+				perform(get(this.route + "/getfree/1")).
+				andExpect(status().isOk()).
+				andReturn();
+		List<KartaDTO> dtos = objectMapper.readValue(result
+				.getResponse()
+				.getContentAsString(), new TypeReference<List<KartaDTO>>() {});
+		assertEquals(dtos.size(), 2);
+		for(Karta kartaa : karte)
+		{
+			karteDto.add(new KartaDTO(kartaa));
+		}
+		assertThat(karteDto.equals(dtos));
+		verify(kartaService, times(1)).getAllNerezervisaneKarte(1l);
+		verifyNoMoreInteractions(kartaService);
+	}
+	
+	@Test
 	public void addKartaSuccess() throws Exception
 	{
 		when(kartaService.saveOne(Mockito.any(KartaDTO.class))).thenReturn(karta1Dto);
@@ -223,6 +250,25 @@ public class KartaControllerTest
 		MvcResult result = this.mockMvc.perform(delete(this.route + "/delete/1")).andExpect(status().isOk()).andReturn();
 		assertThat(result.equals(true));
 		verify(kartaService, times(1)).deleteOne(1l);
+		verifyNoMoreInteractions(kartaService);
+	}
+	
+	
+	@Test
+	public void brzaRezervacijaJedneKarteSuccess() throws Exception
+	{
+		when(kartaService.brzaRezervacijaJedneKarte(2l, 2l)).thenReturn(brzaRez);
+		System.out.println("REZERVACIJA: " + brzaRez);
+		String s = objectMapper.writeValueAsString(brzaRez);
+		MvcResult result = this.mockMvc.
+				perform(post(this.route + "/expressreservation/2/2")).
+				andExpect(status().isCreated()).
+				andReturn();
+		String dto = objectMapper.readValue(result
+				.getResponse()
+				.getContentAsString(), String.class);
+		assertEquals("success", brzaRez);
+		verify(kartaService, times(1)).brzaRezervacijaJedneKarte(2l, 2l);
 		verifyNoMoreInteractions(kartaService);
 	}
 	

@@ -99,7 +99,7 @@ public class KartaController
 	 * BRZA REZERVACIJA
 	 */
 	@PostMapping("/expressreservation/{userid}/{ticketid}")
-	public ResponseEntity<Boolean> brzaRezervacijaJedneKarte(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte)
+	public ResponseEntity<String> brzaRezervacijaJedneKarte(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte)
 	{
 		System.out.println("brzaRezervacijaJedneKarte()");
 		
@@ -112,7 +112,9 @@ public class KartaController
 		
 		System.out.println("ID_KORISNIK: " + idKorisnika + "\nID_KARTE: " + idKarte);
 		
-		return (!kartaService.brzaRezervacijaJedneKarte(idKorisnika, idKarte)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+		String res = kartaService.brzaRezervacijaJedneKarte(idKorisnika, idKarte);
+		
+		return (res.equals("error")) ? new ResponseEntity<String>(res, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(res, HttpStatus.CREATED);
 	}
 	
 	/*

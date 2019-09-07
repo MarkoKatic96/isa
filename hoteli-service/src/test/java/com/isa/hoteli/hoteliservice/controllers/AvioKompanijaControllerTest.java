@@ -218,21 +218,21 @@ public class AvioKompanijaControllerTest
 	}
 	
 	//nije mi jasno sto ne radi ako sam ubacio let koji ima srednju ocenu
-//	@Test
-//	public void getSrednjaOcenaAviokompanijeSuccess() throws Exception
-//	{
-//		when(avioService.getSrednjaOcenaAvioKompanije(1l)).thenReturn(srednjaOcena);
-//		MvcResult result = this.mockMvc.
-//				perform(get(this.route + "/getavgrating/1")).
-//				andExpect(status().isOk()).
-//				andReturn();
-//		Float vrednost = objectMapper.readValue(result
-//				.getResponse()
-//				.getContentAsString(), Float.class);
-//		assertNotNull(vrednost);
-//		verify(avioService, times(1)).getSrednjaOcenaAvioKompanije(1l);
-//		verifyNoMoreInteractions(avioService);
-//	}
+	@Test
+	public void getSrednjaOcenaAviokompanijeSuccess() throws Exception
+	{
+		when(avioService.getSrednjaOcenaAvioKompanije(1l)).thenReturn(srednjaOcena);
+		MvcResult result = this.mockMvc.
+				perform(get(this.route + "/getavgrating/1")).
+				andExpect(status().isOk()).
+				andReturn();
+		Float vrednost = objectMapper.readValue(result
+				.getResponse()
+				.getContentAsString(), Float.class);
+		assertNotNull(vrednost);
+		verify(avioService, times(1)).getSrednjaOcenaAvioKompanije(1l);
+		verifyNoMoreInteractions(avioService);
+	}
 	
 	
 	@Test
@@ -286,9 +286,11 @@ public class AvioKompanijaControllerTest
 	@Test
 	public void getPrihodZaOdredjeniPeriodSuccess() throws Exception
 	{
+		
 		when(avioService.getPrihodZaOdredjeniPeriod(1l, datumOd, datumDo)).thenReturn(prihod);
+		System.out.println(prihod);
 		MvcResult result = this.mockMvc.
-				perform(get(this.route + "/getincomebydate/1" + "/" + datumOd + "/" + datumDo)).
+				perform(get(this.route + "/getincomebydate/1/" + datumOd + "/" + datumDo)).
 				andExpect(status().isOk()).
 				andReturn();
 		Float vrednost = objectMapper.readValue(result
@@ -306,18 +308,22 @@ public class AvioKompanijaControllerTest
 		when(avioService.saveOne(kompanija1)).thenReturn(kompanija1);
 		when(korisnikService.getUserById(1l)).thenReturn(korisnik);
 		when(korisnikRepo.save(korisnik)).thenReturn(korisnik);
+		String s = objectMapper.writeValueAsString(kompanija1);
 		MvcResult result = this.mockMvc.
-				perform(post(this.route + "/1")).
-				andExpect(status().isCreated()).
+				perform(post(this.route + "/1").contentType(MediaType.APPLICATION_JSON).content(s)).
+				andExpect(status().isOk()).
 				andReturn();
-		AvioKompanijaDTO dto = objectMapper.readValue(result
+		AvioKompanija dto = objectMapper.readValue(result
 				.getResponse()
-				.getContentAsString(), AvioKompanijaDTO.class);
+				.getContentAsString(), AvioKompanija.class);
 		assertEquals(dto, kompanija1);
-		verify(avioService, times(1)).updateOne(1l, kompanija1Dto);
 		verify(korisnikService, times(1)).zaTokene(Mockito.any(HttpServletRequest.class));
+		verify(avioService, times(1)).saveOne(kompanija1);
+		verify(korisnikService, times(1)).getUserById(1l);
+		verify(korisnikRepo, times(1)).save(korisnik);
 		verifyNoMoreInteractions(avioService);
 		verifyNoMoreInteractions(korisnikService);
+		verifyNoMoreInteractions(korisnikRepo);
 	}
 
 	

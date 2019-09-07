@@ -75,9 +75,7 @@ public class DestinacijaControllerTest
 	private List<DestinacijaDTO> destinacijeDto = new ArrayList<>();
 	private DestinacijaDTO destinacija1Dto = new DestinacijaDTO(1l, "a", "a");
 	private DestinacijaDTO destinacija2Dto = new DestinacijaDTO(2l, "b", "b");
-	
-	//treba mokovati svakakva cudesa iz kontrolera da ne baca failed to load app context
-	
+
 	@MockBean
 	private DestinacijaService destinacijaService;
 	
@@ -156,23 +154,6 @@ public class DestinacijaControllerTest
 	}
 	
 	@Test
-	public void addDestinacijaSuccess() throws Exception
-	{
-		when(destinacijaService.saveOne(Mockito.any(DestinacijaDTO.class))).thenReturn(destinacija1Dto);
-		String s = objectMapper.writeValueAsString(destinacija1Dto);
-		MvcResult result = this.mockMvc.
-				perform(post(this.route + "/add/").contentType(MediaType.APPLICATION_JSON).content(s)).
-				andExpect(status().isCreated()).
-				andReturn();
-		DestinacijaDTO dto = objectMapper.readValue(result
-				.getResponse()
-				.getContentAsString(), DestinacijaDTO.class);
-		assertEquals(dto, destinacija1Dto);
-		verify(destinacijaService, times(1)).saveOne(Mockito.any(DestinacijaDTO.class));
-		verifyNoMoreInteractions(destinacijaService);
-	}
-	
-	@Test
 	public void getAllDestinacijeByAvioKompanijaSuccess() throws Exception
 	{
 		when(destinacijaService.getAllDestinacijeByAvioKompanija(1l)).thenReturn(destinacijeDto);
@@ -190,6 +171,23 @@ public class DestinacijaControllerTest
 		}
 		assertThat(destinacijeDto.equals(dtos));
 		verify(destinacijaService, times(1)).getAllDestinacijeByAvioKompanija(1l);
+		verifyNoMoreInteractions(destinacijaService);
+	}
+	
+	@Test
+	public void addDestinacijaSuccess() throws Exception
+	{
+		when(destinacijaService.saveOne(Mockito.any(DestinacijaDTO.class))).thenReturn(destinacija1Dto);
+		String s = objectMapper.writeValueAsString(destinacija1Dto);
+		MvcResult result = this.mockMvc.
+				perform(post(this.route + "/add/").contentType(MediaType.APPLICATION_JSON).content(s)).
+				andExpect(status().isCreated()).
+				andReturn();
+		DestinacijaDTO dto = objectMapper.readValue(result
+				.getResponse()
+				.getContentAsString(), DestinacijaDTO.class);
+		assertEquals(dto, destinacija1Dto);
+		verify(destinacijaService, times(1)).saveOne(Mockito.any(DestinacijaDTO.class));
 		verifyNoMoreInteractions(destinacijaService);
 	}
 	

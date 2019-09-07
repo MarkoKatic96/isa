@@ -187,7 +187,7 @@ public class AvioKompanijaController
 		
 		Float prihod = avioService.getPrihodZaOdredjeniPeriod(id, datum1, datum2);
 		
-		return(prihod == null) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<Float>(prihod, HttpStatus.OK);
+		return(prihod == null) ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<Float>(prihod, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.POST)
