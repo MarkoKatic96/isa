@@ -99,7 +99,7 @@ public class AvioKompanijaService
 //	}
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public AvioKompanija updateOne(Long id, AvioKompanijaDTO dto)
+	public AvioKompanijaDTO updateOne(Long id, AvioKompanijaDTO dto)
 	{
 		AvioKompanija avio = avioRepo.getOne(id);
 		
@@ -115,7 +115,7 @@ public class AvioKompanijaService
 			
 			avioRepo.save(avio);
 			
-			return avio;
+			return avioConv.convertToDTO(avio);
 		}
 		else
 			return null;

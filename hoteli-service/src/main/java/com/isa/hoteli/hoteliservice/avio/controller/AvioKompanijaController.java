@@ -104,8 +104,8 @@ public class AvioKompanijaController
 		Korisnik k = korServ.zaTokene(req);
 		if(k != null && k.getRola().equals(Rola.ADMIN_AVIO_KOMPANIJE) && k.getZaduzenZaId() == Long.parseLong(id, 10))
 		{
-			AvioKompanija avio = avioService.updateOne(Long.parseLong(id, 10), dto);
-			return (avio == null) ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST) : new ResponseEntity<AvioKompanijaDTO>(avioConv.convertToDTO(avio), HttpStatus.CREATED);
+			AvioKompanijaDTO avio = avioService.updateOne(Long.parseLong(id, 10), dto);
+			return (avio == null) ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST) : new ResponseEntity<AvioKompanijaDTO>(avio, HttpStatus.CREATED);
 		}
 		
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -187,7 +187,7 @@ public class AvioKompanijaController
 		
 		Float prihod = avioService.getPrihodZaOdredjeniPeriod(id, datum1, datum2);
 		
-		return(prihod == null) ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) : new ResponseEntity<Float>(prihod, HttpStatus.OK);
+		return(prihod == null) ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<Float>(prihod, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.POST)

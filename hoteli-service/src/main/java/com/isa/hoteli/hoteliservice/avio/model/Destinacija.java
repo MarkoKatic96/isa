@@ -42,4 +42,13 @@ public class Destinacija
 	
 	@ManyToMany(mappedBy = "destinacijePresedanja")
 	private List<Let> letovi;
+
+	public Destinacija(long idDestinacije, String naziv, String informacije) {
+		super();
+		this.idDestinacije = idDestinacije;
+		this.naziv = naziv;
+		this.informacije = informacije;
+	}
+	
+	
 }
