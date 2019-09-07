@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.avio.converter.AvioKompanijaConverter;
 import com.isa.hoteli.hoteliservice.avio.dto.AvioKompanijaDTO;
@@ -38,7 +40,7 @@ public class AvioKompanijaService
 	@Autowired
 	private KartaRepository kartaRepo;
 	
-	
+	@Transactional(readOnly = true)
 	public AvioKompanija findById(Long id)
 	{
 		AvioKompanija avio = avioRepo.getOne(id);
@@ -49,6 +51,7 @@ public class AvioKompanijaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<AvioKompanijaDTO> findAll()
 	{
 		List<AvioKompanija> list = avioRepo.findAll();
@@ -61,11 +64,13 @@ public class AvioKompanijaService
 			return listDto;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<AvioKompanija> traziSve()
 	{
 		return avioRepo.findAll();
 	}
 	
+	@Transactional(readOnly = false)
 	public AvioKompanija saveOne(AvioKompanija avioKom)
 	{
 		AvioKompanija avio = avioRepo.getOne(avioKom.getIdAvioKompanije());
@@ -93,6 +98,7 @@ public class AvioKompanijaService
 //		return true;
 //	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public AvioKompanija updateOne(Long id, AvioKompanijaDTO dto)
 	{
 		AvioKompanija avio = avioRepo.getOne(id);
@@ -115,6 +121,7 @@ public class AvioKompanijaService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public AvioKompanija updateOne(Long id, AvioKompanija dto)
 	{
 		AvioKompanija avio = avioRepo.getOne(id);
@@ -137,7 +144,7 @@ public class AvioKompanijaService
 			return null;
 	}
 	
-	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean deleteOne(Long id)
 	{
 		AvioKompanija avio = avioRepo.getOne(id);
@@ -166,6 +173,7 @@ public class AvioKompanijaService
 	 */
 	
 
+	@Transactional(readOnly = true)
 	public Float getSrednjaOcenaAvioKompanije(Long id)
 	{
 		
@@ -179,7 +187,7 @@ public class AvioKompanijaService
 		return null;
 	}
 
-	
+	@Transactional(readOnly = true)
 	public List<BrojKarataDnevnoDTO> getBrojProdatihKarataDnevno(Long id)
 	{
 		List<BrojKarataDnevnoDTO> returnList = new ArrayList<BrojKarataDnevnoDTO>();
@@ -214,6 +222,7 @@ public class AvioKompanijaService
 		return returnList;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<BrojKarataDnevnoDTO> getBrojProdatihKarataNedeljno(Long id)
 	{
 		List<BrojKarataDnevnoDTO> returnList = new ArrayList<BrojKarataDnevnoDTO>();
@@ -252,6 +261,7 @@ public class AvioKompanijaService
 		return returnList;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<BrojKarataDnevnoDTO> getBrojProdatihKarataMesecno(Long id)
 	{
 		List<BrojKarataDnevnoDTO> returnList = new ArrayList<BrojKarataDnevnoDTO>();
@@ -284,6 +294,7 @@ public class AvioKompanijaService
 		return returnList;
 	}
 
+	@Transactional(readOnly = true)
 	public Float getPrihodZaOdredjeniPeriod(Long id, LocalDate datumOd, LocalDate datumDo)
 	{
 		float prihod = 0;
@@ -307,11 +318,6 @@ public class AvioKompanijaService
 		}
 		
 		return prihod;
-	}
-
-	public List<AvioKompanija> getAvioCompanies() {
-		
-		return this.avioRepo.findAll();
 	}
 	
 }

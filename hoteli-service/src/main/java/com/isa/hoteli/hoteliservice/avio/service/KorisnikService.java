@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +52,7 @@ public class KorisnikService
 	private JwtTokenUtils jwtTokenProvider;
 	
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String posaljiZahtev(Long idKorisnika, String email)
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
@@ -87,6 +90,7 @@ public class KorisnikService
 	/*
 	 * Prihvatanje zahteva korisnika za prijateljstvo (BACA CONCURENTMODIFICATIONEXCEPTION)
 	 */
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String prihvatiZahtev(Long idTrenutni, Long idPosiljalac) 
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idTrenutni);
@@ -126,6 +130,7 @@ public class KorisnikService
 	}
 	
 	//moze i jednostavniji nacin al model nije ok
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String odbijZahtev(Long idTrenutni, Long idPosiljalac) 
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idTrenutni);
@@ -215,6 +220,7 @@ public class KorisnikService
 	}
 	
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String obrisiPrijatelja(Long idTrenutni, Long idZaBrisanje)
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idTrenutni);
@@ -298,6 +304,7 @@ public class KorisnikService
 	/*
 	 * OCENA KORISNIKA NAKON ZAVRSENOG LETA
 	 */
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String oceniLet(Long idKorisnika, Long idKarte, Integer ocena)
 	{
 		Optional<Karta> karta = kartaRepo.findById(idKarte);
@@ -350,22 +357,25 @@ public class KorisnikService
 	}
 	
 	
-	
+	@Transactional(readOnly = true)
 	public List<Korisnik> getUsers()
 	{
 		return korisnikRepo.findAll();
 	}
 	
+	@Transactional(readOnly = true)
 	public Korisnik getUserById(Long id)
 	{
 		return korisnikRepo.getOne(id);
 	}
 	
+	@Transactional(readOnly = true)
 	public Korisnik getUserByEmail(String email)
 	{
 		return korisnikRepo.findUserByEmailOptional(email).get();
 	}
 	
+	@Transactional(readOnly = false)
 	public KorisnikDTO createKorisnika(Korisnik kor)
 	{
 		if(korisnikRepo.getUserByEmail(kor.getEmail()) == null)
@@ -374,6 +384,7 @@ public class KorisnikService
 		return null;
 	}
 	
+	@Transactional(readOnly = false)
 	public KorisnikDTO createUser(Korisnik obj) {
 		if(korisnikRepo.getUserByEmail(obj.getEmail())==null) {
 			return new KorisnikDTO(korisnikRepo.save(obj));
@@ -381,11 +392,13 @@ public class KorisnikService
 		return null;//korisnik sa istim emailom vec postoji
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String deleteUser(Long id) {
 		korisnikRepo.deleteById(id);
 		return "Uspesno obrisan korisnik sa id: " + id;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public KorisnikDTO updateKorisnika(Korisnik obj, Long id)
 	{
 		Optional<Korisnik> obj1 = korisnikRepo.findById(id);
@@ -410,6 +423,7 @@ public class KorisnikService
 		return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public KorisnikDTO updateUser(Korisnik obj, Long id) {
 		Optional<Korisnik> obj1 = korisnikRepo.findById(id);
 		if(obj1.isPresent()) {
@@ -428,6 +442,7 @@ public class KorisnikService
 		return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public KorisnikDTO updateFirstLogin(Long id, String s) {
 		Optional<Korisnik> obj1 = korisnikRepo.findById(id);
 		if(obj1.isPresent()) {
@@ -439,6 +454,7 @@ public class KorisnikService
 		return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String login(String email, String lozinka)
 	{
 		Korisnik k = korisnikRepo.getUserByEmail(email);
@@ -473,14 +489,17 @@ public class KorisnikService
 	/*
 	 * hoteli operacije
 	 */
+	@Transactional(readOnly = true)
 	public List<Korisnik> getHotelAdmins() {
 		return korisnikRepo.findAdmineHotela();
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Korisnik> getAvioAdmins() {
 		return korisnikRepo.findAdmineAvio();
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Korisnik> getRentAdmins() {
 		return korisnikRepo.findAdmineRent();
 	}
@@ -489,6 +508,7 @@ public class KorisnikService
 	 * avio operacije
 	 */
 
+	@Transactional(readOnly = true)
 	public List<KartaDTO> getAllRezervisaneKarteZaTogKorisnika(Long idKorisnika)
 	{
 		List<Karta> karte = kartaRepo.findAll();
@@ -512,6 +532,7 @@ public class KorisnikService
 	/*
 	 * Uzima zahteve koji su poslati OVOM korisniku (a ne koje je ovaj korisnik poslao)
 	 */
+	@Transactional(readOnly = true)
 	public List<KorisnikDTO> getAllZahteviZaPrijateljstvo(Long idKorisnika)
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
@@ -526,6 +547,7 @@ public class KorisnikService
 		return korisniciRet;
 	}
 
+	@Transactional(readOnly = true)
 	public List<KorisnikDTO> getaAllPrijatelji(Long idKorisnika)
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
@@ -546,6 +568,7 @@ public class KorisnikService
 		return korisniciRet;
 	}
 
+	@Transactional(readOnly = true)
 	public List<KartaDTO> getAllPozivniceZaPutovanje(Long idKorisnika)
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
@@ -565,6 +588,7 @@ public class KorisnikService
 		return karteRet;
 	}
 
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String prihvatiPozivnicu(Long idKarte)
 	{
 		Optional<Karta> karta = kartaRepo.findById(idKarte);
@@ -588,6 +612,7 @@ public class KorisnikService
 		return "SUCCESS";
 	}
 
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String odbijPozivnicu(Long idKarte)
 	{
 		Optional<Korisnik> kor = korisnikRepo.findById((long) 1);

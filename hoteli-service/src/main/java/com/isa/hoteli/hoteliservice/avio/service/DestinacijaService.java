@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.avio.converter.DestinacijaConverter;
 import com.isa.hoteli.hoteliservice.avio.dto.DestinacijaDTO;
@@ -28,6 +30,7 @@ public class DestinacijaService
 	private AvioKompanijaRepository avioRepo;
 	
 	
+	@Transactional(readOnly = true)
 	public DestinacijaDTO findById(Long id)
 	{
 		Destinacija dest = destRepo.getOne(id);
@@ -38,6 +41,7 @@ public class DestinacijaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public Destinacija traziById(Long id)
 	{
 		Destinacija dest = destRepo.getOne(id);
@@ -48,6 +52,7 @@ public class DestinacijaService
 				return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<DestinacijaDTO> findAll()
 	{
 		Optional<List<Destinacija>> list = Optional.of(destRepo.findAll());
@@ -65,6 +70,7 @@ public class DestinacijaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Destinacija> traziSve()
 	{
 		List<Destinacija> list = destRepo.findAll();
@@ -72,6 +78,7 @@ public class DestinacijaService
 		return list;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<DestinacijaDTO> getAllDestinacijeByAvioKompanija(Long idAvioKompanije)
 	{
 		Optional<AvioKompanija> avio = avioRepo.findById(idAvioKompanije);
@@ -87,6 +94,7 @@ public class DestinacijaService
 			return listDto;
 	}
 	
+	@Transactional(readOnly = false)
 	public DestinacijaDTO saveOne(DestinacijaDTO dto)
 	{
 		Optional<Destinacija> dest = destRepo.findById(dto.getIdDestinacije());
@@ -101,6 +109,7 @@ public class DestinacijaService
 		}
 	}
 	
+	@Transactional(readOnly = false)
 	public Destinacija saveOne(Destinacija dto)
 	{
 		Destinacija dest = destRepo.getOne(dto.getIdDestinacije());
@@ -114,6 +123,7 @@ public class DestinacijaService
 		}
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public DestinacijaDTO updateOne(Long id, DestinacijaDTO dto)
 	{
 		Optional<Destinacija> dest = destRepo.findById(id);
@@ -132,6 +142,7 @@ public class DestinacijaService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Destinacija updateOne(Long id, Destinacija dto)
 	{
 		Destinacija dest = destRepo.getOne(id);
@@ -150,6 +161,7 @@ public class DestinacijaService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean deleteOne(Long id)
 	{
 		Destinacija dest = destRepo.getOne(id);

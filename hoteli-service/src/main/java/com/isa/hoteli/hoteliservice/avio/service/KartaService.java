@@ -10,6 +10,8 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.avio.converter.KartaConverter;
 import com.isa.hoteli.hoteliservice.avio.converter.KorisnikConverter;
@@ -45,6 +47,7 @@ public class KartaService
 	private MailService mailService;
 	
 	
+	@Transactional(readOnly = true)
 	public KartaDTO findById(Long id)
 	{
 		Optional<Karta> karta = kartaRepo.findById(id);
@@ -55,6 +58,7 @@ public class KartaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public Karta traziById(Long id)
 	{
 		Karta karta = kartaRepo.getOne(id);
@@ -65,6 +69,7 @@ public class KartaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<KartaDTO> findAll()
 	{
 		Optional<List<Karta>> list = Optional.of(kartaRepo.findAll());
@@ -82,11 +87,13 @@ public class KartaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Karta> traziSve()
 	{
 		return kartaRepo.findAll();
 	}
 	
+	@Transactional(readOnly = false)
 	public KartaDTO saveOne(KartaDTO dto)
 	{
 		Optional<Karta> karta = kartaRepo.findById(dto.getIdKarte());
@@ -101,6 +108,7 @@ public class KartaService
 		}
 	}
 	
+	@Transactional(readOnly = false)
 	public Karta saveOne(Karta dto)
 	{
 		Karta karta = kartaRepo.getOne(dto.getIdKarte());
@@ -115,6 +123,7 @@ public class KartaService
 		}
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public KartaDTO updateOne(Long id, KartaDTO dto)
 	{
 		Optional<Karta> karta = kartaRepo.findById(id);
@@ -138,6 +147,7 @@ public class KartaService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Karta updateOne(Long id, Karta dto)
 	{
 		Karta karta = kartaRepo.getOne(id);
@@ -161,6 +171,7 @@ public class KartaService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean deleteOne(Long id)
 	{
 		Karta karta = kartaRepo.getOne(id);
@@ -178,6 +189,7 @@ public class KartaService
 
 	////////////////////////
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Boolean brzaRezervacijaJedneKarte(Long idKorisnika, Long idKarte)
 	{
 		System.out.println("USAO U SERVIS");
@@ -220,6 +232,7 @@ public class KartaService
 		return true;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean postaviKartuNaBrzuRezervaciju(Long idKarte, Integer popust)
 	{
 		Optional<Karta> karta = kartaRepo.findById(idKarte);
@@ -232,6 +245,7 @@ public class KartaService
 		return true;
 	}
 
+	@Transactional(readOnly = true)
 	public List<KartaDTO> getAllNerezervisaneKarte() 
 	{
 		List<Karta> karte = kartaRepo.findAll();
@@ -252,6 +266,7 @@ public class KartaService
 	/*
 	 * Rezervacija vise karata 
 	 */
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String rezervisiViseKarata(Long idKorisnika, SlanjePozivniceZaRezervacijuDTO pozivnica)
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
@@ -380,7 +395,7 @@ public class KartaService
 			return "REZERVISANE";
 	}
 	
-	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean obrisiRezervacijuJedneKarte(Long idKorisnika, Long idKarte) 
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
@@ -419,6 +434,7 @@ public class KartaService
 	/*
 	 * Vraca sve nerezervisane karte za jedan let
 	 */
+	@Transactional(readOnly = true)
 	public List<KartaDTO> getAllNerezervisaneKarte(Long idLeta)
 	{
 		List<Karta> karte = kartaRepo.findAll();

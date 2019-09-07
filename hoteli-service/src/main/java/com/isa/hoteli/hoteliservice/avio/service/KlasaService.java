@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.avio.converter.KlasaConverter;
 import com.isa.hoteli.hoteliservice.avio.dto.KlasaDTO;
@@ -22,6 +24,7 @@ public class KlasaService
 	KlasaConverter klasaConv;
 	
 	
+	@Transactional(readOnly = true)
 	public KlasaDTO findById(Long id)
 	{
 		Optional<Klasa> klasa = klasaRepo.findById(id);
@@ -32,6 +35,7 @@ public class KlasaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public Klasa traziById(Long id)
 	{
 		Klasa klasa = klasaRepo.getOne(id);
@@ -42,6 +46,7 @@ public class KlasaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<KlasaDTO> findAll()
 	{
 		Optional<List<Klasa>> list = Optional.of(klasaRepo.findAll());
@@ -59,11 +64,13 @@ public class KlasaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Klasa> traziSve()
 	{
 		return klasaRepo.findAll();
 	}
 	
+	@Transactional(readOnly = false)
 	public KlasaDTO saveOne(KlasaDTO dto)
 	{
 		Optional<Klasa> klasa = klasaRepo.findById(dto.getIdKlase());
@@ -77,6 +84,7 @@ public class KlasaService
 		}
 	}
 	
+	@Transactional(readOnly = false)
 	public Klasa saveOne(Klasa dto)
 	{
 		Klasa klasa = klasaRepo.getOne(dto.getIdKlase());
@@ -90,6 +98,7 @@ public class KlasaService
 		}
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public KlasaDTO updateOne(Long id, KlasaDTO dto)
 	{
 		Optional<Klasa> klasa = klasaRepo.findById(id);
@@ -107,6 +116,7 @@ public class KlasaService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Klasa updateOne(Long id, Klasa dto)
 	{
 		Klasa klasa = klasaRepo.getOne(id);
@@ -124,6 +134,7 @@ public class KlasaService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean deleteOne(Long id)
 	{
 		Klasa klasa = klasaRepo.getOne(id);

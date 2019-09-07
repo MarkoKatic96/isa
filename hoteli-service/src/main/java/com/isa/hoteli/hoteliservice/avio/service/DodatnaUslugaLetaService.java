@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.avio.converter.DodatnaUslugaLetaConverter;
 import com.isa.hoteli.hoteliservice.avio.dto.DodatnaUslugaLetaDTO;
@@ -22,6 +24,7 @@ public class DodatnaUslugaLetaService
 	DodatnaUslugaLetaConverter uslugaConv;
 	
 	
+	@Transactional(readOnly = true)
 	public DodatnaUslugaLetaDTO findById(Long id)
 	{
 		Optional<DodatnaUslugaLeta> dest = uslugaRepo.findById(id);
@@ -32,6 +35,7 @@ public class DodatnaUslugaLetaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public DodatnaUslugaLeta traziById(Long id)
 	{
 		DodatnaUslugaLeta dest = uslugaRepo.getOne(id);
@@ -42,6 +46,7 @@ public class DodatnaUslugaLetaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<DodatnaUslugaLetaDTO> findAll()
 	{
 		Optional<List<DodatnaUslugaLeta>> list = Optional.of(uslugaRepo.findAll());
@@ -59,11 +64,13 @@ public class DodatnaUslugaLetaService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<DodatnaUslugaLeta> traziSve()
 	{
 		return uslugaRepo.findAll();
 	}
 	
+	@Transactional(readOnly = false)
 	public DodatnaUslugaLetaDTO saveOne(DodatnaUslugaLetaDTO dto)
 	{
 		Optional<DodatnaUslugaLeta> dest = uslugaRepo.findById(dto.getIdDodatneUsluge());
@@ -78,6 +85,7 @@ public class DodatnaUslugaLetaService
 		}
 	}
 	
+	@Transactional(readOnly = false)
 	public DodatnaUslugaLeta saveOne(DodatnaUslugaLeta dto)
 	{
 		DodatnaUslugaLeta dest = uslugaRepo.getOne(dto.getIdDodatneUsluge());
@@ -91,6 +99,7 @@ public class DodatnaUslugaLetaService
 		}
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public DodatnaUslugaLetaDTO updateOne(Long id, DodatnaUslugaLetaDTO dto)
 	{
 		Optional<DodatnaUslugaLeta> dest = uslugaRepo.findById(id);
@@ -108,6 +117,7 @@ public class DodatnaUslugaLetaService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public DodatnaUslugaLeta updateOne(Long id, DodatnaUslugaLeta dto)
 	{
 		DodatnaUslugaLeta dest = uslugaRepo.getOne(id);
@@ -125,6 +135,7 @@ public class DodatnaUslugaLetaService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean deleteOne(Long id)
 	{
 		DodatnaUslugaLeta dest = uslugaRepo.getOne(id);

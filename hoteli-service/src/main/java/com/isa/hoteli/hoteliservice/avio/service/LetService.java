@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.avio.converter.LetConverter;
 import com.isa.hoteli.hoteliservice.avio.dto.KlasaDTO;
@@ -48,6 +50,7 @@ public class LetService
 	private KartaRepository kartaRepo;
 	
 	
+	@Transactional(readOnly = true)
 	public LetDTO findById(Long id)
 	{
 		Optional<Let> let = letRepo.findById(id);
@@ -58,6 +61,7 @@ public class LetService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public Let traziById(Long id)
 	{
 		Let let = letRepo.getOne(id);
@@ -68,6 +72,7 @@ public class LetService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<LetDTO> findAll()
 	{
 		Optional<List<Let>> list = Optional.of(letRepo.findAll());
@@ -85,6 +90,7 @@ public class LetService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Let> traziSve()
 	{
 		return letRepo.findAll();
@@ -93,6 +99,7 @@ public class LetService
 	/*
 	 * ADMIN
 	 */
+	@Transactional(readOnly = true)
 	public List<LetDTO> getAllLetoviZaOdredjenogAdmina(Long idKompanije)
 	{
 		List<LetDTO> retList = new ArrayList<LetDTO>();
@@ -111,6 +118,7 @@ public class LetService
 		return retList;
 	}
 	
+	@Transactional(readOnly = false)
 	public Boolean saveOne(LetDTO dto)
 	{
 		
@@ -142,6 +150,7 @@ public class LetService
 		
 	}
 	
+	@Transactional(readOnly = false)
 	public Let saveOne(Let dto)
 	{
 		
@@ -170,6 +179,7 @@ public class LetService
 		
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public LetDTO updateOne(Long id, LetDTO dto)
 	{
 		Optional<Let> let = letRepo.findById(id);
@@ -204,6 +214,7 @@ public class LetService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Let updateOne(Long id, Let dto)
 	{
 		Let let = letRepo.getOne(id);
@@ -238,6 +249,7 @@ public class LetService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean deleteOne(Long id)
 	{
 		Let let = letRepo.getOne(id);
@@ -271,6 +283,7 @@ public class LetService
 	/*
 	 * Postavljanje klasa za odredjeni let
 	 */
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public LetDTO addKlaseLeta(LetDTO dto)
 	{
 		Optional<Let> let = letRepo.findById(letConv.convertFromDTO(dto).getIdLeta());
@@ -284,6 +297,7 @@ public class LetService
 	/*
 	 * Vraca id kompanije za odredjeni let
 	 */
+	@Transactional(readOnly = true)
 	public Long getIdKompanije(Integer idLeta)
 	{
 		Long idKompanije = null;
@@ -310,6 +324,7 @@ public class LetService
 	 * GENERALNA PRETRAGA
 	 * @return -> spisak letova koji zadovoljavaju kriterijume
 	 */
+	@Transactional(readOnly = true)
 	public List<LetDTO> searchLetove(PretragaDTO dto)
 	{
 		List<Let> SVI_LETOVI = letRepo.findAll();
@@ -441,6 +456,7 @@ public class LetService
 	/*
 	 * Pretraga po datumu od-do
 	 */
+	@Transactional(readOnly = true)
 	public List<LetDTO> searchLetoviPoVremenu(LocalDateTime time1, LocalDateTime time2) 
 	{
 		Optional<List<Let>> letovi = letRepo.findFlightsByDate(time1, time2);
@@ -463,6 +479,7 @@ public class LetService
 	/*
 	 * Pretraga po polaznim i odredisnim destinacijama
 	 */
+	@Transactional(readOnly = true)
 	public List<LetDTO> searchLetoviPoDestinaciji(Long takeOffDestination, Long landingDestination)
 	{
 		Optional<List<Let>> letovi = letRepo.findFlightsByDestination(takeOffDestination, landingDestination);
@@ -483,6 +500,7 @@ public class LetService
 	/*
 	 * Pretraga letova po tipu leta
 	 */
+	@Transactional(readOnly = true)
 	public List<LetDTO> searchLetoviPoTipu(String type)
 	{
 		Optional<List<Let>> letovi = letRepo.findFlightsByType(type);
@@ -504,6 +522,7 @@ public class LetService
 	/*
 	 * Pretraga po broju preostalih slobodnih mesta
 	 */
+	@Transactional(readOnly = true)
 	public List<LetDTO> searchLetoviPoBrojuMesta(Integer number)
 	{
 		List<Let> letovi = letRepo.findAll();
@@ -523,6 +542,7 @@ public class LetService
 	/*
 	 * Pretraga po klasama koje let podrzava
 	 */
+	@Transactional(readOnly = true)
 	public List<LetDTO> searchLetoviPoKlasama(List<KlasaDTO> klase)
 	{
 		List<Let> letovi = letRepo.findAll();
@@ -558,6 +578,7 @@ public class LetService
 	 * Trebalo bi da se poziva nakon svakog ocenjivanja od strane korisnika
 	 * Tako da u ril tajmu podesi prosecnu ocenu
 	 */
+	@Transactional(readOnly = false)
 	public Float getSrednjaOcenaLeta(Long id)
 	{
 		Optional<Float> avg = letRepo.findAverageRating(id);

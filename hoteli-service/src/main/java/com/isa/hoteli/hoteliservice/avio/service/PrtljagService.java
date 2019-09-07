@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isa.hoteli.hoteliservice.avio.converter.PrtljagConverter;
 import com.isa.hoteli.hoteliservice.avio.dto.PrtljagDTO;
@@ -22,6 +24,7 @@ public class PrtljagService
 	PrtljagConverter prtljagConv;
 	
 	
+	@Transactional(readOnly = true)
 	public PrtljagDTO findById(Long id)
 	{
 		Optional<Prtljag> prtljag = prtljagRepo.findById(id);
@@ -32,6 +35,7 @@ public class PrtljagService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public Prtljag traziById(Long id)
 	{
 		Prtljag prtljag = prtljagRepo.getOne(id);
@@ -42,6 +46,7 @@ public class PrtljagService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<PrtljagDTO> findAll()
 	{
 		Optional<List<Prtljag>> list = Optional.of(prtljagRepo.findAll());
@@ -59,11 +64,13 @@ public class PrtljagService
 			return null;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Prtljag> traziSve()
 	{
 		return prtljagRepo.findAll();
 	}
 	
+	@Transactional(readOnly = false)
 	public PrtljagDTO saveOne(PrtljagDTO dto)
 	{
 		Optional<Prtljag> prtljag = prtljagRepo.findById(dto.getIdPrtljaga());
@@ -77,6 +84,7 @@ public class PrtljagService
 		}
 	}
 	
+	@Transactional(readOnly = false)
 	public Prtljag saveOne(Prtljag dto)
 	{
 		Prtljag prtljag = prtljagRepo.getOne(dto.getIdPrtljaga());
@@ -90,6 +98,7 @@ public class PrtljagService
 		}
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public PrtljagDTO updateOne(Long id, PrtljagDTO dto)
 	{
 		Optional<Prtljag> prtljag = prtljagRepo.findById(id);
@@ -108,6 +117,7 @@ public class PrtljagService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Prtljag updateOne(Long id, Prtljag dto)
 	{
 		Prtljag prtljag = prtljagRepo.getOne(id);
@@ -126,6 +136,7 @@ public class PrtljagService
 			return null;
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean deleteOne(Long id)
 	{
 		Prtljag prtljag = prtljagRepo.getOne(id);
