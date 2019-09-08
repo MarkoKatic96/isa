@@ -594,6 +594,23 @@ public class LetService
 		
 		return null;
 	}
+	
+	@Transactional(readOnly = false)
+	public Float getSrednjaOcenaLetaTwin(Long id)
+	{
+		Float avg = letRepo.findAverageRatingTwin(id);
+		
+		if(avg != null)
+		{
+			Let let = letRepo.getOne(id);
+			let.setProsecnaOcena(avg);
+			letRepo.save(let);
+			
+			return avg;
+		}
+		
+		return null;
+	}
 
 	
 

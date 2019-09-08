@@ -3,6 +3,7 @@ package com.isa.hoteli.hoteliservice.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -10,6 +11,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.isa.hoteli.hoteliservice.avio.dto.AvioKompanijaDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.BrojKarataDnevnoDTO;
 import com.isa.hoteli.hoteliservice.avio.model.AvioKompanija;
+import com.isa.hoteli.hoteliservice.avio.model.Karta;
 import com.isa.hoteli.hoteliservice.avio.repository.AvioKompanijaRepository;
+import com.isa.hoteli.hoteliservice.avio.repository.KartaRepository;
 import com.isa.hoteli.hoteliservice.avio.service.AvioKompanijaService;
 
 @RunWith(SpringRunner.class)
@@ -32,13 +36,19 @@ public class AvioKompanijaServiceTest
 	private List<AvioKompanija> kompanije = new ArrayList<>();
 	private AvioKompanija kompanija1 = new AvioKompanija(1l, "a", "a", "a", null, null);
 	private AvioKompanija kompanija2 = new AvioKompanija(2l, "b", "b", "b", null, null);
-	private Float srednjaOcena;
+	private Float srednjaOcena = 1f;
+	
+	private List<Karta> karte = new ArrayList<>();
+	private Karta karta1 = new Karta(1l, 100, 5, false, 0, "a", null, LocalDateTime.now(), null, null);
 	
 	private LocalDate datumOd = LocalDate.now();
 	private LocalDate datumDo = LocalDate.now();
 	
 	@Mock
 	private AvioKompanijaRepository avioRepo;
+	
+	@Mock
+	private KartaRepository kartaRepo;
 	
 	@InjectMocks
 	private AvioKompanijaService avioService;
@@ -49,6 +59,7 @@ public class AvioKompanijaServiceTest
 	{
 		kompanije.add(kompanija1);
 		kompanije.add(kompanija2);
+		karte.add(karta1);
 	}
 	
 	@Test
@@ -124,31 +135,33 @@ public class AvioKompanijaServiceTest
 	}
 	
 	@Test
-	public void getBrojProdatihKarataDnevnoSuccess()
+	public void getSrednjaOcenaAviokompanijeFailed()
 	{
-		List<BrojKarataDnevnoDTO> karteM = avioService.getBrojProdatihKarataDnevno(1l);
-		assertNotNull(karteM);
+		when(avioRepo.findAverageRating(1l)).thenReturn(null);
+		Float avg = avioService.getSrednjaOcenaAvioKompanije(1l);
+		verify(avioRepo, times(1)).findAverageRating(1l);
+		verifyNoMoreInteractions(avioRepo);
 	}
 	
-	@Test
-	public void getBrojProdatihKarataNedeljnoSuccess()
-	{
-		List<BrojKarataDnevnoDTO> karteM = avioService.getBrojProdatihKarataNedeljno(1l);
-		assertNotNull(karteM);
-	}
-	
-	@Test
-	public void getBrojProdatihKarataMesecnoSuccess()
-	{
-		List<BrojKarataDnevnoDTO> karteM = avioService.getBrojProdatihKarataMesecno(1l);
-		assertNotNull(karteM);
-	}
-	
-	@Test
-	public void getPrihodZaOdredjeniPeriodSuccess()
-	{
-		float prihodM = avioService.getPrihodZaOdredjeniPeriod(1l, datumOd, datumDo);
-		assertNotNull(prihodM);
-	}
-	
+	//nema sta da se mokuje
+//	@Test
+//	public void getBrojProdatihKarataDnevnoSuccess()
+//	{
+//		List<BrojKarataDnevnoDTO> karteM = avioService.getBrojProdatihKarataDnevno(1l);
+//		assertNotNull(karteM);
+//	}
+//	
+//	@Test
+//	public void getBrojProdatihKarataNedeljnoSuccess()
+//	{
+//		List<BrojKarataDnevnoDTO> karteM = avioService.getBrojProdatihKarataNedeljno(1l);
+//		assertNotNull(karteM);
+//	}
+//	
+//	@Test
+//	public void getBrojProdatihKarataMesecnoSuccess()
+//	{
+//		List<BrojKarataDnevnoDTO> karteM = avioService.getBrojProdatihKarataMesecno(1l);
+//		assertNotNull(karteM);
+//	}
 }

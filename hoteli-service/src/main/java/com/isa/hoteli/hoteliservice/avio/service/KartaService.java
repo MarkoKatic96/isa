@@ -232,6 +232,43 @@ public class KartaService
 		return true;
 	}
 	
+	public Boolean brzaRezervacijaJedneKarteTwin(Long idKorisnika, Long idKarte)
+	{
+		System.out.println("USAO U SERVIS");
+		Karta karta = kartaRepo.getOne(idKarte);
+		System.out.println(karta.getCena());
+		
+		Korisnik korisnik = korisnikRepo.getOne(idKorisnika);
+		
+		System.out.println(korisnik.getEmail());
+		
+		LocalDateTime date = LocalDateTime.now();
+		
+		if(karta != null && korisnik != null)
+		{
+				Long id = 9999L;
+				//rezervisacemo je
+				
+				karta.setVremeRezervisanja(date);
+				karta.setKorisnik(korisnik);
+				karta.setBrojPasosa(korisnik.getBrojPasosa());
+				karta.getLet().setBrojOsoba(karta.getLet().getBrojOsoba()+1);
+				karta.getLet().setUkupanPrihod(karta.getLet().getUkupanPrihod() + karta.getCena() - (karta.getCena() * karta.getPopust()/100));
+//				try {
+//					mailService.sendNotificaitionAsync(korisnik, null, "RESERVATION");
+//				} catch (MailException | InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+				
+				kartaRepo.save(karta);
+		}
+		else
+			return false;
+		
+		return true;
+	}
+	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean postaviKartuNaBrzuRezervaciju(Long idKarte, Integer popust)
 	{
@@ -394,6 +431,150 @@ public class KartaService
 			
 			return "REZERVISANE";
 	}
+	
+	
+	////////////////////////////////////
+	////////////////////////////////////
+	////////////////////////////////////
+	////////////////////////////////////
+	/*
+	 * ZA POTREBE TESTIRANJA
+	 */
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public String rezervisiViseKarataTwin(Long idKorisnika, SlanjePozivniceZaRezervacijuDTO pozivnica)
+	{
+		Korisnik korisnik = korisnikRepo.getOne(idKorisnika);
+		
+		List<KorisnikDTO> prijatelji = pozivnica.getListaPrijatelja();
+		List<KartaDTO> karte = pozivnica.getListaKarata();
+		List<String> brojeviPasosa = pozivnica.getBrojeviPasosa();
+		
+		//ako postoji neka osoba da nije u prijateljima
+		for(KorisnikDTO dto : prijatelji)
+		{
+			//nez zasto ovakav uslov al radi tako da ne diraj nista :D
+//			if(korisnik.getPrijateljiKorisnika().contains(korisnikConv.convertFromDTO(dto)))
+//				return "NOT_FRIEND_ERR";
+		}
+			
+		
+		//za te prijatelje koje dobijemo ovde (npr rezervisali smo 5 karata a pozvali 2 prijatelja, preostale 3 ce ici na nas)
+		//jedan prijatelj = jedna rezervacija
+
+		
+		//izbacujemo duplikate iz prijatelja (nisam uspeo u reactu)
+		Set<KorisnikDTO> dist = new LinkedHashSet<KorisnikDTO>(); 
+		dist.addAll(prijatelji); 
+		prijatelji.clear(); 
+		prijatelji.addAll(dist);
+		
+		LocalDateTime date = LocalDateTime.now();
+		
+		for(KartaDTO karta : karte)
+		{
+			if(prijatelji.isEmpty())
+				break;
+				
+				for(KorisnikDTO prijatelj : prijatelji)
+				{
+//						if(karta.getKorisnik().getId() == 1)
+//						{
+							karta.setKorisnik(prijatelj);
+							karta.setBrojPasosa(prijatelj.getBrojPasosa());
+							karta.setKorisnikKojiSaljePozivnicu(korisnikConv.convertToDTO(korisnik));
+							//necemo ovde rezervisati vreme, to cemo tek kad prijatelj prihvati rezervaciju
+							//karta.setVremeRezervisanja(date); 
+							kartaRepo.save(kartaConv.convertFromDTO(karta));
+							
+							//slanje mail-a sa linkom
+							try {
+								mailService.sendNotificaitionAsync(korisnik, korisnikConv.convertFromDTO(prijatelj), "FR_INV");
+							} catch (MailException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							prijatelji.remove(prijatelj);
+							if(prijatelji.isEmpty())
+							{
+								break;
+							}
+//						}
+				}
+		}
+		
+		
+		//sad pravimo novu listu karata koje su preostale, dakle koje nisu otisle kao pozivnice
+		
+		List<KartaDTO> novaListaKarata = new ArrayList<KartaDTO>();
+		
+		for(KartaDTO karta : karte)
+		{
+			if(karta.getKorisnik().getId() == 1)
+			{
+				novaListaKarata.add(karta);
+			}
+		}
+		
+		boolean flag = false;
+		//Jedna ide na nas, ostale idu na prosledjene brojeve pasosa
+			for(KartaDTO dto : novaListaKarata)
+			{
+				Karta card = kartaConv.convertFromDTO(dto);
+				if(!flag)
+				{
+					//postavljamo broj zauzetih mesta za konkretan let
+					Let let = letRepo.getOne(dto.getLet().getIdLeta());
+					let.setBrojOsoba(let.getBrojOsoba() + karte.size());
+					letRepo.save(let);
+					
+					//prvi broj pasosa ide na korisnika
+					card.setBrojPasosa(korisnik.getBrojPasosa());
+					card.setKorisnik(korisnik); 
+					card.setVremeRezervisanja(date);
+					kartaRepo.save(card);
+					flag = true;
+				}	
+				else
+				{
+					card.setKorisnik(korisnik); 
+					card.setVremeRezervisanja(date);
+					
+					for(String pasos : brojeviPasosa)
+					{
+						card.setBrojPasosa(pasos);
+						brojeviPasosa.remove(pasos);
+						break;
+					}
+					
+					kartaRepo.save(card);
+				}
+				
+				
+			}
+			
+			try {
+				mailService.sendNotificaitionAsync(korisnik, null, "RESERVATION");
+			} catch (MailException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return "REZERVISANE";
+	}
+	
+	////////////////////////////////////
+	////////////////////////////////////
+	////////////////////////////////////
+	////////////////////////////////////
+	
+	
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public boolean obrisiRezervacijuJedneKarte(Long idKorisnika, Long idKarte) 

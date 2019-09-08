@@ -41,6 +41,9 @@ public interface LetRepository extends JpaRepository<Let, Long>
 	 */
 	@Query(value = "select avg(t.ocena) from karta t, let f where f.id_leta = :id ;", nativeQuery = true)
 	Optional<Float> findAverageRating(@Param("id") Long id);
+	
+	@Query(value = "select avg(t.ocena) from karta t, let f where f.id_leta = :id ;", nativeQuery = true)
+	Float findAverageRatingTwin(@Param("id") Long id);
 
 	public Let findByBrojLeta(Long brojLeta);
 	public Boolean existsByBrojLeta(Long brojLeta);
