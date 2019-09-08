@@ -1,5 +1,7 @@
 package com.isa.hoteli.hoteliservice.controllers;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -45,6 +47,8 @@ import com.isa.hoteli.hoteliservice.avio.controller.AvioKompanijaController;
 import com.isa.hoteli.hoteliservice.avio.controller.DestinacijaController;
 import com.isa.hoteli.hoteliservice.avio.controller.KartaController;
 import com.isa.hoteli.hoteliservice.avio.dto.KartaDTO;
+import com.isa.hoteli.hoteliservice.avio.dto.KorisnikDTO;
+import com.isa.hoteli.hoteliservice.avio.dto.SlanjePozivniceZaRezervacijuDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.AvioKompanijaDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.BrojKarataDnevnoDTO;
 import com.isa.hoteli.hoteliservice.avio.model.Karta;
@@ -70,7 +74,7 @@ public class KartaControllerTest
 	private List<Karta> karte = new ArrayList<>();
 	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
 
-	private Karta karta1 = new Karta(1l, 10, 5, false, 0, "a", null, vremeRez, null, null);
+	private Karta karta1 = new Karta(1l, 10, 5, false, 0, "a", null, vremeRez, korisnik, null);
 	private Karta karta2 = new Karta(2l, 20, 1, false, 0, "b", null, vremeRez, korisnik, null);
 
 	private MockHttpServletRequest request = new MockHttpServletRequest();
@@ -78,13 +82,27 @@ public class KartaControllerTest
 	private Let let1 = new Let(1l, 1l, LocalDateTime.now(), LocalDateTime.now(), 10, 10, 5, "a", 10, 10, 10, 10, null, null, null, null, null, null, null, null);
 	private List<Let> letovi = new ArrayList<>();
 	
-	private String brzaRez;
+	private Boolean brzaRez = true;
+	private Integer popust = 5;
+
 	
 	//DTO
 	private Korisnik korisnikDto = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
 	private List<KartaDTO> karteDto = new ArrayList<>();
 	private KartaDTO karta1Dto = new KartaDTO(1l, 10, 5, false, 0, "a", null, vremeRez, null, null);
 	private KartaDTO karta2Dto = new KartaDTO(karta2);
+	
+	
+	//ZA REZERVISANJE
+	private String rezervisane = "REZERVISANE";
+	private KorisnikDTO korisnikUser = new KorisnikDTO(3l, "r", "r", "r", "r", "r", "r", true, Rola.KORISNIK, 1l, false, "a", null, null);
+	private KorisnikDTO korisnikFriend = new KorisnikDTO(4l, "rr", "rr", "rr", "rr", "rr", "rr", true, Rola.KORISNIK, 1l, false, "a", null, null);
+	private SlanjePozivniceZaRezervacijuDTO pozivnica = new SlanjePozivniceZaRezervacijuDTO();
+	private String pasos1 = "aaa";
+	private List<String> brojeviPasosa = new ArrayList<>();
+	private List<KorisnikDTO> listaPrijatelja = new ArrayList<>();
+	
+
 
 	@MockBean
 	private KartaService kartaService;
@@ -109,6 +127,13 @@ public class KartaControllerTest
 		
 		karteDto.add(karta1Dto);
 		karteDto.add(karta2Dto);
+		
+		listaPrijatelja.add(korisnikFriend);
+		brojeviPasosa.add(pasos1);
+		pozivnica.setBrojeviPasosa(brojeviPasosa);
+		pozivnica.setListaKarata(karteDto);
+		pozivnica.setListaPrijatelja(listaPrijatelja);
+		
 		request.addParameter("parameterName", "someValue");
 		
 	}
@@ -254,23 +279,94 @@ public class KartaControllerTest
 	}
 	
 	
+
+	
+	@Test
+	public void getAllBrzaRezervacijaKarteSuccess() throws Exception
+	{
+		when(kartaService.getAllBrzaRezervacijaKarte()).thenReturn(karteDto);
+		MvcResult result = this.mockMvc.
+				perform(get(this.route + "/getexpress")).
+				andExpect(status().isOk()).
+				andReturn();
+		List<KartaDTO> dtos = objectMapper.readValue(result
+				.getResponse()
+				.getContentAsString(), new TypeReference<List<KartaDTO>>() {});
+		assertEquals(dtos.size(), 2);
+		for(Karta kartaa : karte)
+		{
+			karteDto.add(new KartaDTO(kartaa));
+		}
+		assertThat(karteDto.equals(dtos));
+		verify(kartaService, times(1)).getAllBrzaRezervacijaKarte();
+		verifyNoMoreInteractions(kartaService);
+	}
+	
+	
 	@Test
 	public void brzaRezervacijaJedneKarteSuccess() throws Exception
 	{
 		when(kartaService.brzaRezervacijaJedneKarte(2l, 2l)).thenReturn(brzaRez);
-		System.out.println("REZERVACIJA: " + brzaRez);
+
 		String s = objectMapper.writeValueAsString(brzaRez);
 		MvcResult result = this.mockMvc.
 				perform(post(this.route + "/expressreservation/2/2")).
 				andExpect(status().isCreated()).
 				andReturn();
-		String dto = objectMapper.readValue(result
+		Boolean dto = objectMapper.readValue(result
 				.getResponse()
-				.getContentAsString(), String.class);
-		assertEquals("success", brzaRez);
+				.getContentAsString(), Boolean.class);
+		assertEquals(dto, brzaRez);
 		verify(kartaService, times(1)).brzaRezervacijaJedneKarte(2l, 2l);
 		verifyNoMoreInteractions(kartaService);
 	}
 	
+	@Test
+	public void postaviKartuNaBrzuRezervacijuSuccess() throws Exception
+	{
+		when(kartaService.postaviKartuNaBrzuRezervaciju(Mockito.any(Long.class), Mockito.any(Integer.class))).thenReturn(brzaRez);
+		MvcResult result = this.mockMvc.
+				perform(put(this.route + "/settoexpress/1/" + this.popust)).
+				andExpect(status().isCreated()).
+				andReturn();
+		assertThat(result.equals(true));
+		verify(kartaService, times(1)).postaviKartuNaBrzuRezervaciju(Mockito.any(Long.class), Mockito.any(Integer.class));
+		verifyNoMoreInteractions(kartaService);
+		
+	}
+	
+//	@Test
+//	public void rezervisiViseKarataSuccess() throws Exception
+//	{
+//		when(kartaService.rezervisiViseKarata(3l, this.pozivnica)).thenReturn(this.rezervisane);
+//		String s = objectMapper.writeValueAsString(pozivnica);
+//		MvcResult result = this.mockMvc.
+//				perform(post(this.route + "/reservemore/3").contentType(MediaType.APPLICATION_JSON).content(s)).
+//				andExpect(status().isCreated()).
+//				andReturn();
+//		String dto = objectMapper.readValue(result
+//				.getResponse()
+//				.getContentAsString(), String.class);
+//		assertEquals(dto, rezervisane);
+//		verify(kartaService, times(1)).rezervisiViseKarata(3l, this.pozivnica);
+//		verifyNoMoreInteractions(kartaService);
+//	}
+	
+//	@Test
+//	public void rezervisiViseKarataFailed() throws Exception
+//	{
+//		when(kartaService.rezervisiViseKarata(3l, this.pozivnica)).thenReturn(null);
+//		String s = objectMapper.writeValueAsString(pozivnica);
+//		MvcResult result = this.mockMvc.
+//				perform(post(this.route + "/reservemore/3").contentType(MediaType.APPLICATION_JSON).content(s)).
+//				andExpect(status().is4xxClientError()).
+//				andReturn();
+//		String dto = objectMapper.readValue(result
+//				.getResponse()
+//				.getContentAsString(), String.class);
+//		assertThat(result.equals(pozivnica));
+//		verify(kartaService, times(1)).rezervisiViseKarata(3l, this.pozivnica);
+//		verifyNoMoreInteractions(kartaService);
+//	}
 	
 }

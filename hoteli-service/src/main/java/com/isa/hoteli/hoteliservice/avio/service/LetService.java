@@ -298,7 +298,7 @@ public class LetService
 	 * Vraca id kompanije za odredjeni let
 	 */
 	@Transactional(readOnly = true)
-	public Long getIdKompanije(Integer idLeta)
+	public Long getIdKompanije(Long idLeta)
 	{
 		Long idKompanije = null;
 		

@@ -36,7 +36,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isa.hoteli.hoteliservice.avio.controller.LetController;
 import com.isa.hoteli.hoteliservice.avio.dto.LetDTO;
+import com.isa.hoteli.hoteliservice.avio.dto.PretragaDTO;
 import com.isa.hoteli.hoteliservice.avio.model.Let;
+import com.isa.hoteli.hoteliservice.avio.model.AvioKompanija;
 import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
 import com.isa.hoteli.hoteliservice.avio.model.Rola;
 import com.isa.hoteli.hoteliservice.avio.service.KorisnikService;
@@ -50,18 +52,26 @@ public class LetControllerTest
 	private String route = "/flight";
 	
 	private List<Let> letovi = new ArrayList<>();
-	private Let let1 = new Let(1l, 1l, LocalDateTime.now(), LocalDateTime.now(), 10, 10, 5, "a", 10, 10, 10, 10, null, null, null, null, null, null, null, null);
+	private AvioKompanija kompanija1 = new AvioKompanija();
+	private Let let1 = new Let(1l, 1l, LocalDateTime.now(), LocalDateTime.now(), 10, 10, 5, "a", 10, 10, 10, 10, kompanija1, null, null, null, null, null, null, null);
 	private Let let2 = new Let(2l, 2l, LocalDateTime.now(), LocalDateTime.now(), 20, 20, 1, "b", 20, 20, 20, 20, null, null, null, null, null, null, null, null);
 	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
-	private Boolean created;
+	private Boolean created = true;
 	
 	private MockHttpServletRequest request = new MockHttpServletRequest();
 
+	private Long idKompanije = 1l;
+	
 	//DTO
 	private List<LetDTO> letoviDto = new ArrayList<>();
 	private LetDTO let1Dto = new LetDTO(1l, 1l, LocalDateTime.now(), LocalDateTime.now(), 10, 10, 5, "a", 10, 10, 10, 10, null, null, null, null, null, null, null);
 	private LetDTO let2Dto = new LetDTO(2l, 2l, LocalDateTime.now(), LocalDateTime.now(), 20, 20, 1, "b", 20, 20, 20, 20, null, null, null, null, null, null, null);
 
+	//PRETRAGA//
+	private PretragaDTO pretraga = new PretragaDTO(LocalDateTime.now(), LocalDateTime.now(), 1l, 1l, "a", 1, null, null, null);
+	
+	
+	
 	@MockBean
 	private LetService letService;
 	
@@ -84,6 +94,7 @@ public class LetControllerTest
 		MockitoAnnotations.initMocks(this);
 		letovi.add(let1);
 		letovi.add(let2);
+		kompanija1.setIdAvioKompanije(1l);
 		
 		letoviDto.add(let1Dto);
 		letoviDto.add(let2Dto);
@@ -141,23 +152,22 @@ public class LetControllerTest
 		verifyNoMoreInteractions(letService);
 	}
 	
-	//ispravi metodu, nije standardna da vraca objekat vec vraca true/false
-//	@Test
-//	public void addLetSuccess() throws Exception
-//	{
-//		when(letService.saveOne(let1Dto)).thenReturn(created);
-//		String s = objectMapper.writeValueAsString(let1Dto);
-//		MvcResult result = this.mockMvc.
-//				perform(post(this.route + "/add/").content(s).contentType(MediaType.APPLICATION_JSON)).
-//				andExpect(status().isCreated()).
-//				andReturn();
-//		String dto = objectMapper.readValue(result
-//				.getResponse()
-//				.getContentAsString(), String.class);
-//		assertTrue(dto, created);
-//		verify(letService, times(1)).saveOne(Mockito.any(Let.class));
-//		verifyNoMoreInteractions(letService);
-//	}
+	@Test
+	public void addLetSuccess() throws Exception
+	{
+		when(letService.saveOne(let1Dto)).thenReturn(created);
+		String s = objectMapper.writeValueAsString(let1Dto);
+		MvcResult result = this.mockMvc.
+				perform(post(this.route + "/add/").content(s).contentType(MediaType.APPLICATION_JSON)).
+				andExpect(status().isCreated()).
+				andReturn();
+		Boolean dto = objectMapper.readValue(result
+				.getResponse()
+				.getContentAsString(), Boolean.class);
+		assertEquals(dto, created);
+		verify(letService, times(1)).saveOne(let1Dto);
+		verifyNoMoreInteractions(letService);
+	}
 	
 	@Test
 	public void addLetFailed() throws Exception
@@ -168,6 +178,23 @@ public class LetControllerTest
 				andExpect(status().is4xxClientError()).
 				andReturn();
 		verify(letService, times(1)).saveOne(Mockito.any(LetDTO.class));
+		verifyNoMoreInteractions(letService);
+	}
+	
+	@Test
+	public void searchLetoveSuccess() throws Exception
+	{
+		when(letService.searchLetove(pretraga)).thenReturn(letoviDto);
+		String s = objectMapper.writeValueAsString(pretraga);
+		MvcResult result = this.mockMvc.
+				perform(post(this.route + "/searchflights").content(s).contentType(MediaType.APPLICATION_JSON)).
+				andExpect(status().isOk()).
+				andReturn();
+		List<LetDTO> dto = objectMapper.readValue(result
+				.getResponse()
+				.getContentAsString(), new TypeReference<List<LetDTO>>() {});
+		assertEquals(dto.size(), 2);
+		verify(letService, times(1)).searchLetove(pretraga);
 		verifyNoMoreInteractions(letService);
 	}
 	
@@ -210,5 +237,53 @@ public class LetControllerTest
 		verify(letService, times(1)).deleteOne(1l);
 		verifyNoMoreInteractions(letService);
 	}
+	
+	
+	@Test
+	public void addKlaseLetaSuccess() throws Exception
+	{
+		when(letService.addKlaseLeta(let1Dto)).thenReturn(let1Dto);
+		String s = objectMapper.writeValueAsString(let1Dto);
+		MvcResult result = this.mockMvc.
+				perform(put(this.route + "/addclass").content(s).contentType(MediaType.APPLICATION_JSON))
+						.andExpect(status().isCreated())
+						.andReturn();
+		assertThat(result.equals(let1Dto));
+		verify(letService, times(1)).addKlaseLeta(let1Dto);
+		verifyNoMoreInteractions(letService);
+		
+	}
+	
+	@Test
+	public void addKlaseLetaFailed() throws Exception
+	{
+		when(letService.addKlaseLeta(let1Dto)).thenReturn(null);
+		String s = objectMapper.writeValueAsString(let1Dto);
+		MvcResult result = this.mockMvc.
+				perform(put(this.route + "/addclass").contentType(MediaType.APPLICATION_JSON).content(s)).
+				andExpect(status().is4xxClientError()).
+				andReturn();
+		assertThat(result.equals(let1Dto));
+		verify(letService, times(1)).addKlaseLeta(let1Dto);
+		verifyNoMoreInteractions(letService);
+		
+	}
+	
+	@Test
+	public void getIdKompanijeSuccess() throws Exception
+	{
+		when(letService.getIdKompanije(let1.getIdLeta())).thenReturn(idKompanije);
+		MvcResult result = this.mockMvc.
+				perform(get(this.route + "/getcompanyid/1")).
+				andExpect(status().isOk()).
+				andReturn();
+		Long dto = objectMapper.readValue(result
+				.getResponse()
+				.getContentAsString(), Long.class);
+		assertEquals(dto, idKompanije);
+		verify(letService, times(1)).getIdKompanije(let1.getIdLeta());
+		verifyNoMoreInteractions(letService);
+	}
 
+	
 }

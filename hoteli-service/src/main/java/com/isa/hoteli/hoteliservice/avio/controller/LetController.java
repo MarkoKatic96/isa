@@ -132,7 +132,7 @@ public class LetController
 	 * Vraca id aviokompanije za koju je vezan let koji je prosledjen preko id-ja
 	 */
 	@GetMapping("/getcompanyid/{flightid}")
-	public ResponseEntity<Long> getIdKompanije(@PathVariable("flightid") Integer idLeta)
+	public ResponseEntity<Long> getIdKompanije(@PathVariable("flightid") Long idLeta)
 	{
 		System.out.println("getIdKompanije()");
 		

@@ -190,7 +190,7 @@ public class KartaService
 	////////////////////////
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public String brzaRezervacijaJedneKarte(Long idKorisnika, Long idKarte)
+	public Boolean brzaRezervacijaJedneKarte(Long idKorisnika, Long idKarte)
 	{
 		System.out.println("USAO U SERVIS");
 		Optional<Karta> karta = kartaRepo.findById(idKarte);
@@ -224,12 +224,12 @@ public class KartaService
 				kartaRepo.save(karta.get());
 			}
 			else
-				return "error";
+				return false;
 		}
 		else
-			return "error";
+			return false;
 		
-		return "success";
+		return true;
 	}
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
@@ -246,7 +246,7 @@ public class KartaService
 	}
 
 	@Transactional(readOnly = true)
-	public List<KartaDTO> getAllNerezervisaneKarte() 
+	public List<KartaDTO> getAllBrzaRezervacijaKarte() 
 	{
 		List<Karta> karte = kartaRepo.findAll();
 		

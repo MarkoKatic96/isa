@@ -62,8 +62,8 @@ public class AvioKompanijaControllerTest
 	private List<AvioKompanija> kompanije = new ArrayList<>();
 	private AvioKompanija kompanija1 = new AvioKompanija(1l, "a", "a", "a");
 	private AvioKompanija kompanija2 = new AvioKompanija(2l, "b", "b", "b");
-	private Float srednjaOcena;
-	private Float prihod;
+	private Float srednjaOcena = 2f;
+	private Float prihod = 100f;
 	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
 	private Korisnik korisnik2 = new Korisnik(2l, "a", "a", "a", "a", "a", "a", true, Rola.MASTER_ADMIN, 1l, true, "a", null, null, null, null, null, null);
 	
@@ -217,24 +217,6 @@ public class AvioKompanijaControllerTest
 		
 	}
 	
-	//nije mi jasno sto ne radi ako sam ubacio let koji ima srednju ocenu
-	@Test
-	public void getSrednjaOcenaAviokompanijeSuccess() throws Exception
-	{
-		when(avioService.getSrednjaOcenaAvioKompanije(1l)).thenReturn(srednjaOcena);
-		MvcResult result = this.mockMvc.
-				perform(get(this.route + "/getavgrating/1")).
-				andExpect(status().isOk()).
-				andReturn();
-		Float vrednost = objectMapper.readValue(result
-				.getResponse()
-				.getContentAsString(), Float.class);
-		assertNotNull(vrednost);
-		verify(avioService, times(1)).getSrednjaOcenaAvioKompanije(1l);
-		verifyNoMoreInteractions(avioService);
-	}
-	
-	
 	@Test
 	public void getBrojProdatihKarataDnevnoSuccess() throws Exception
 	{
@@ -249,6 +231,33 @@ public class AvioKompanijaControllerTest
 		assertEquals(vrednost, karte);
 		verify(avioService, times(1)).getBrojProdatihKarataDnevno(1l);
 		verifyNoMoreInteractions(avioService);
+	}
+	
+	@Test
+	public void createAvioAdminSuccess() throws Exception
+	{
+		when(korisnikService.zaTokene(Mockito.any(HttpServletRequest.class))).thenReturn(korisnik2);
+		when(avioService.saveOne(kompanija1)).thenReturn(kompanija1);
+		when(korisnikService.getUserById(1l)).thenReturn(korisnik);
+		when(korisnikRepo.save(korisnik)).thenReturn(korisnik);
+		String s = objectMapper.writeValueAsString(kompanija1);
+		MvcResult result = this.mockMvc.
+				perform(post(this.route + "/1")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(s))
+						.andExpect(status().isOk())
+						.andReturn();
+		AvioKompanija dto = objectMapper.readValue(result
+				.getResponse()
+				.getContentAsString(), AvioKompanija.class);
+		assertEquals(dto, kompanija1);
+		verify(korisnikService, times(1)).zaTokene(Mockito.any(HttpServletRequest.class));
+		verify(avioService, times(1)).saveOne(kompanija1);
+		verify(korisnikService, times(1)).getUserById(1l);
+		verify(korisnikRepo, times(1)).save(korisnik);
+		verifyNoMoreInteractions(avioService);
+		verifyNoMoreInteractions(korisnikService);
+		verifyNoMoreInteractions(korisnikRepo);
 	}
 	
 	@Test
@@ -283,6 +292,27 @@ public class AvioKompanijaControllerTest
 		verifyNoMoreInteractions(avioService);
 	}
 	
+	
+	
+	
+	
+	//nije mi jasno sto ne radi ako sam ubacio let koji ima srednju ocenu
+	@Test
+	public void getSrednjaOcenaAviokompanijeSuccess() throws Exception
+	{
+		when(avioService.getSrednjaOcenaAvioKompanije(1l)).thenReturn(srednjaOcena);
+		MvcResult result = this.mockMvc.
+				perform(get(this.route + "/getavgrating/1")).
+				andExpect(status().isOk()).
+				andReturn();
+		Float vrednost = objectMapper.readValue(result
+				.getResponse()
+				.getContentAsString(), Float.class);
+		assertNotNull(vrednost);
+		verify(avioService, times(1)).getSrednjaOcenaAvioKompanije(1l);
+		verifyNoMoreInteractions(avioService);
+	}
+	
 	@Test
 	public void getPrihodZaOdredjeniPeriodSuccess() throws Exception
 	{
@@ -300,31 +330,7 @@ public class AvioKompanijaControllerTest
 		verify(avioService, times(1)).getPrihodZaOdredjeniPeriod(1l, datumOd, datumDo);
 		verifyNoMoreInteractions(avioService);
 	}
-	
-	@Test
-	public void createAvioAdminSuccess() throws Exception
-	{
-		when(korisnikService.zaTokene(Mockito.any(HttpServletRequest.class))).thenReturn(korisnik2);
-		when(avioService.saveOne(kompanija1)).thenReturn(kompanija1);
-		when(korisnikService.getUserById(1l)).thenReturn(korisnik);
-		when(korisnikRepo.save(korisnik)).thenReturn(korisnik);
-		String s = objectMapper.writeValueAsString(kompanija1);
-		MvcResult result = this.mockMvc.
-				perform(post(this.route + "/1").contentType(MediaType.APPLICATION_JSON).content(s)).
-				andExpect(status().isOk()).
-				andReturn();
-		AvioKompanija dto = objectMapper.readValue(result
-				.getResponse()
-				.getContentAsString(), AvioKompanija.class);
-		assertEquals(dto, kompanija1);
-		verify(korisnikService, times(1)).zaTokene(Mockito.any(HttpServletRequest.class));
-		verify(avioService, times(1)).saveOne(kompanija1);
-		verify(korisnikService, times(1)).getUserById(1l);
-		verify(korisnikRepo, times(1)).save(korisnik);
-		verifyNoMoreInteractions(avioService);
-		verifyNoMoreInteractions(korisnikService);
-		verifyNoMoreInteractions(korisnikRepo);
-	}
+
 
 	
 }

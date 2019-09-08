@@ -99,7 +99,7 @@ public class KartaController
 	 * BRZA REZERVACIJA
 	 */
 	@PostMapping("/expressreservation/{userid}/{ticketid}")
-	public ResponseEntity<String> brzaRezervacijaJedneKarte(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte)
+	public ResponseEntity<Boolean> brzaRezervacijaJedneKarte(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte)
 	{
 		System.out.println("brzaRezervacijaJedneKarte()");
 		
@@ -112,9 +112,7 @@ public class KartaController
 		
 		System.out.println("ID_KORISNIK: " + idKorisnika + "\nID_KARTE: " + idKarte);
 		
-		String res = kartaService.brzaRezervacijaJedneKarte(idKorisnika, idKarte);
-		
-		return (res.equals("error")) ? new ResponseEntity<String>(res, HttpStatus.BAD_REQUEST) : new ResponseEntity<String>(res, HttpStatus.CREATED);
+		return (!kartaService.brzaRezervacijaJedneKarte(idKorisnika, idKarte)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
 	}
 	
 	/*
@@ -136,7 +134,7 @@ public class KartaController
 	{
 		System.out.println("getAllBrzaRezervacijaKarte()");
 		
-		List<KartaDTO> listDto = kartaService.getAllNerezervisaneKarte();
+		List<KartaDTO> listDto = kartaService.getAllBrzaRezervacijaKarte();
 		
 		return (listDto.isEmpty()) ? new ResponseEntity<List<KartaDTO>>(new ArrayList<KartaDTO>(), HttpStatus.NOT_FOUND) : new ResponseEntity<List<KartaDTO>>(listDto, HttpStatus.OK);
 	}
