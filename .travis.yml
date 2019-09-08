@@ -2,4 +2,4 @@ language: java
 jdk:
   - openjdk8
 
-before_script: cd "hoteli-service"
+script: ant build
