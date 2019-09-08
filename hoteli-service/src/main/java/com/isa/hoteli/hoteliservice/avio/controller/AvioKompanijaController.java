@@ -92,7 +92,6 @@ public class AvioKompanijaController
 //		
 //		return (!avioService.addDefaultDestination(id)) ? new ResponseEntity<>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
 //	}
-	private AvioKompanijaConverter avioConv;
 	/*
 	 * ADMIN
 	 */
