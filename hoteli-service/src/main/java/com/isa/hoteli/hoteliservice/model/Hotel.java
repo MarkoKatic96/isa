@@ -12,15 +12,7 @@ import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.isa.hoteli.hoteliservice.dto.HotelDTO;
-/*
- {
-    "naziv": "h",
-    "hotel": {
-        "id": 2
-    },
-    "hotelskaSobaList": []
-}
- */
+
 @Entity
 public class Hotel {
 
