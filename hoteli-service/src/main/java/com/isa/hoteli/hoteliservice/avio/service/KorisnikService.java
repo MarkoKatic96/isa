@@ -372,7 +372,7 @@ public class KorisnikService
 	@Transactional(readOnly = true)
 	public Korisnik getUserByEmail(String email)
 	{
-		return korisnikRepo.findUserByEmailOptional(email).get();
+		return korisnikRepo.getUserByEmail(email);
 	}
 	
 	@Transactional(readOnly = false)
@@ -425,18 +425,18 @@ public class KorisnikService
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public KorisnikDTO updateUser(Korisnik obj, Long id) {
-		Optional<Korisnik> obj1 = korisnikRepo.findById(id);
-		if(obj1.isPresent()) {
+		Korisnik obj1 = korisnikRepo.getOne(id);
+		if(obj1!=null) {
 			Korisnik k = korisnikRepo.getUserByEmail(obj.getEmail());
 			if(k==null || k.getId()==id) {//ako jedino taj korisnik koji se trenutno menja ima isti email
-				obj1.get().setEmail(obj.getEmail());
-				obj1.get().setLozinka(obj.getLozinka());
-				obj1.get().setIme(obj.getIme());
-				obj1.get().setPrezime(obj.getPrezime());
-				obj1.get().setGrad(obj.getGrad());
-				obj1.get().setTelefon(obj.getTelefon());
-				korisnikRepo.save(obj1.get());
-				return new KorisnikDTO(obj1.get());
+				obj1.setEmail(obj.getEmail());
+				obj1.setLozinka(obj.getLozinka());
+				obj1.setIme(obj.getIme());
+				obj1.setPrezime(obj.getPrezime());
+				obj1.setGrad(obj.getGrad());
+				obj1.setTelefon(obj.getTelefon());
+				korisnikRepo.save(obj1);
+				return new KorisnikDTO(obj1);
 			}
 		}
 		return null;
