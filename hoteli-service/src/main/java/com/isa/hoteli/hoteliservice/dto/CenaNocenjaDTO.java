@@ -65,7 +65,5 @@ public class CenaNocenjaDTO {
 	public void setHotelskaSoba(HotelskaSoba hotelskaSoba) {
 		this.hotelskaSoba = hotelskaSoba;
 	}
-    
-    
-	
+
 }
