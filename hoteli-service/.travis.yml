@@ -4,4 +4,4 @@ jdk:
   - openjdk8
 
 install:
-  - chmod +x gradlew
+  - chmod +x mvnw
