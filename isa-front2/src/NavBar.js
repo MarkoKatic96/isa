@@ -59,6 +59,7 @@ class NavBar extends Component{
                         <li><Link to="/master/add_avio">Kreiraj aviokompaniju</Link></li>
                         <li><Link to="/master/add_hotel">Kreiraj hotel</Link></li>
                         <li><Link to="/master/add_rent">Kreiraj rent-a-car</Link></li>
+                        <li><Link to="/master/edit_bonus">Bonus poeni</Link></li>
                         <li><Link to="/" onClick={this.odjava}>Odjava</Link></li>
                     </ul>
         }

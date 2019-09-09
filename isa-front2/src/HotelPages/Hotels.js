@@ -44,6 +44,10 @@ class Hotels extends Component{
         this.props.history.push("/rooms/" + hotelId);
     }
 
+    sobeSlowClick=(hotelId)=>{
+        this.props.history.push("/slow/rooms/" + hotelId);
+    }
+
     brzaClick=(hotelId)=>{
         this.props.history.push("/fast/rooms/" + hotelId);
     }
@@ -90,7 +94,11 @@ class Hotels extends Component{
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                    <button className="btn waves-effect waves-light green" id="sobeBtn" onClick={()=>{this.sobeClick(hotel.id)}}>Sobe</button>
+                                    { 
+                                       sessionStorage.getItem('flag')=="1" ? (<button className="btn waves-effect waves-light green" id="sobeSlowBtn" onClick={()=>{this.sobeSlowClick(hotel.id)}}>Sobe</button>)
+                                       :(<button className="btn waves-effect waves-light green" id="sobeBtn" onClick={()=>{this.sobeClick(hotel.id)}}>Sobe</button>)
+                                        
+                                    }
                                     <button className="btn waves-effect waves-light green" id="uslugeBtn" onClick={()=>{this.uslugeClick(hotel.id)}}>Dodatne usluge</button>
                                     { 
                                        sessionStorage.getItem('flag')=="1" ? (<button className="btn waves-effect waves-light green" id="brzaBtn" onClick={()=>{this.brzaClick(hotel.id)}}>Brza rezervacija</button>):(<p></p>)

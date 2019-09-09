@@ -47,6 +47,8 @@ import PromeniSifru from './PromeniSifru';
 import AddRoomType from './HotelPages/Admin/AddRoomType';
 import RoomTypes from './HotelPages/Admin/RoomTypes';
 import FastRooms from './HotelPages/FastRooms';
+import SlowRooms from './HotelPages/SlowRooms';
+import EditBonus from './MasterAdminPages/EditBonus';
 
 class App extends Component {
 
@@ -97,6 +99,7 @@ class App extends Component {
           <Route path='/register' render={Register}/>
           <Route path='/rooms/:hotelId' render={props => <Rooms loggedIn={this.state.loggedIn}/>}/>
           <Route path='/fast/rooms/:hotelId' render={props => <FastRooms loggedIn={this.state.loggedIn}/>}/>
+          <Route path='/slow/rooms/:hotelId' render={props => <SlowRooms loggedIn={this.state.loggedIn}/>}/>
           <Route path='/services/:serviceId' render={Services}/>
           <Route path='/edit/hotel' render={EditHotel}/>
           <Route path='/admin/rooms' render={HotelRooms}/>
@@ -117,6 +120,7 @@ class App extends Component {
           <Route path='/master/add_hotel' render={AddHotel}/>
           <Route path='/master/add_avio' render={AddAvio}/>
           <Route path='/master/add_rent' render={AddRent}/>
+          <Route path='/master/edit_bonus' render={EditBonus}/>
           <Route path='/reserve/:hotelId/:sobaId' render={ReservationForm}/>
           <Route path='/my_reservations' render={MyReservations}/>
           <Route path='/rating/:rezervacijaId/:hotelId/:sobaId' render={Ocena}/>

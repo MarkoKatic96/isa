@@ -156,6 +156,28 @@ public class HotelskaSobaService {
 		return returnList2;
 	}
 	
+	@Transactional(readOnly = true)
+	public List<HotelskaSoba> getAllFreeRoomsFromHotelWithoutDiscount(Long id, Date datumOd, Date datumDo){
+		List<HotelskaSoba> sobe = hotelskaSobaRepository.getAllFromHotel(id);
+		List<HotelskaSoba> returnList = new ArrayList<>();
+		List<HotelskaSoba> returnList2 = new ArrayList<>();
+		for (HotelskaSoba hotelskaSoba : sobe) {
+			if(rezervacijeRepository.findKonfliktRezervacije(hotelskaSoba.getId(), datumOd, datumDo).isEmpty()){
+				returnList.add(hotelskaSoba);
+			}
+		}
+		for (HotelskaSoba hotelskaSoba : returnList) {
+			if(cenaNocenjaRepository.getValidFromHotelRoom(hotelskaSoba.getId(), datumOd)!=null) {
+				if(cenaNocenjaRepository.getValidFromHotelRoom(hotelskaSoba.getId(), datumOd).getCenaNocenja()>=hotelskaSoba.getOriginalnaCena()) {
+					returnList2.add(hotelskaSoba);
+				}
+			}else {
+				returnList2.add(hotelskaSoba);
+			}
+		}
+		return returnList2;
+	}
+	
 	/*
 	 * 
 	 * vraca cenu nocenja koja je manja od originalne za neku sobu
