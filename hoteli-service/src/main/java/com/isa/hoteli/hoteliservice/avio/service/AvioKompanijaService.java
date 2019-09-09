@@ -17,6 +17,7 @@ import com.isa.hoteli.hoteliservice.avio.dto.BrojKarataDnevnoDTO;
 import com.isa.hoteli.hoteliservice.avio.model.AvioKompanija;
 import com.isa.hoteli.hoteliservice.avio.model.Destinacija;
 import com.isa.hoteli.hoteliservice.avio.model.Karta;
+import com.isa.hoteli.hoteliservice.avio.model.Klasa;
 import com.isa.hoteli.hoteliservice.avio.model.Let;
 import com.isa.hoteli.hoteliservice.avio.repository.AvioKompanijaRepository;
 import com.isa.hoteli.hoteliservice.avio.repository.DestinacijaRepository;
@@ -39,6 +40,17 @@ public class AvioKompanijaService
 	
 	@Autowired
 	private KartaRepository kartaRepo;
+	
+	
+	public AvioKompanijaDTO traziById(Long id)
+	{
+		Optional<AvioKompanija> avio = avioRepo.findById(id);
+		
+		if(avio.isPresent())
+			return avioConv.convertToDTO(avio.get());
+		else
+			return null;
+	}
 	
 	@Transactional(readOnly = true)
 	public AvioKompanija findById(Long id)

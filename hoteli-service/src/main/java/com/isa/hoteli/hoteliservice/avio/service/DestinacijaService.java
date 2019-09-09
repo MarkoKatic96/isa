@@ -78,7 +78,7 @@ public class DestinacijaService
 		return list;
 	}
 	
-	@Transactional(readOnly = true)
+	//@Transactional(readOnly = true)
 	public List<DestinacijaDTO> getAllDestinacijeByAvioKompanija(Long idAvioKompanije)
 	{
 		Optional<AvioKompanija> avio = avioRepo.findById(idAvioKompanije);

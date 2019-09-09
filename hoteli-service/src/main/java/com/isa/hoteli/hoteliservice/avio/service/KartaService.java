@@ -477,8 +477,8 @@ public class KartaService
 				
 				for(KorisnikDTO prijatelj : prijatelji)
 				{
-//						if(karta.getKorisnik().getId() == 1)
-//						{
+						if(karta.getKorisnik().getId() == 1)
+						{
 							karta.setKorisnik(prijatelj);
 							karta.setBrojPasosa(prijatelj.getBrojPasosa());
 							karta.setKorisnikKojiSaljePozivnicu(korisnikConv.convertToDTO(korisnik));
@@ -502,7 +502,7 @@ public class KartaService
 							{
 								break;
 							}
-//						}
+						}
 				}
 		}
 		
@@ -582,13 +582,9 @@ public class KartaService
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
 		Optional<Karta> karta = kartaRepo.findById(idKarte);
 		
-		LocalDateTime date = LocalDateTime.now();
+		LocalDateTime date = LocalDateTime.now().minusHours(3);
 		
-		if(karta.get().getLet().getVremePoletanja().getHour() > 3 || karta.get().getLet().getVremePoletanja().getHour() < 24)
-		{
-			//nije najsrecniji uslov, ispravi ako stignes
-			if((karta.get().getLet().getVremePoletanja().getHour() - 3) > date.getHour() && karta.get().getLet().getVremePoletanja().getDayOfYear() == date.getDayOfYear() && 
-					karta.get().getLet().getVremePoletanja().getYear() == date.getYear() && karta.get().getLet().getVremePoletanja().getMonthValue() == date.getMonthValue())
+			if(karta.get().getLet().getVremePoletanja().isAfter(date))
 			{
 				//moze otkazati
 				karta.get().setKorisnik(korisnikRepo.findById((long) 1).get());
@@ -603,13 +599,6 @@ public class KartaService
 				System.out.println("IZASAO NA DRUGOM");
 				return false;
 			}
-				
-				
-		}
-		else
-			System.out.println("IZASAO NA PRVOM");
-		
-		return false;
 	}
 
 	/*

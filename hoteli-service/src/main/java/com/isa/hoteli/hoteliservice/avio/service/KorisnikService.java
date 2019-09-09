@@ -90,7 +90,7 @@ public class KorisnikService
 	/*
 	 * Prihvatanje zahteva korisnika za prijateljstvo (BACA CONCURENTMODIFICATIONEXCEPTION)
 	 */
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	//@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public String prihvatiZahtev(Long idTrenutni, Long idPosiljalac) 
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idTrenutni);
@@ -121,7 +121,7 @@ public class KorisnikService
 			if(prijateljZaht.getEmail().equals(prijateljKojiSalje.get().getEmail()))
 			{
 				sviZahtevi.remove(prijateljZaht);
-				korisnik.get().setZahteviKorisnika(sviZahtevi);
+				korisnik.get().setZahteviKorisnika(new ArrayList<>());
 				korisnikRepo.save(korisnik.get());
 			}
 		}

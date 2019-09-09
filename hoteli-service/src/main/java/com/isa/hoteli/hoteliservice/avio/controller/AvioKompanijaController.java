@@ -47,15 +47,15 @@ public class AvioKompanijaController
 	
 	
 	@GetMapping("/getone/{id}")
-	public ResponseEntity<AvioKompanija> getAvioKompanija(@PathVariable Long id, HttpServletRequest req)
+	public ResponseEntity<AvioKompanijaDTO> getAvioKompanija(@PathVariable Long id, HttpServletRequest req)
 	{
 		System.out.println("getAvioKompanija()");
 		
 //		Korisnik k = korServ.zaTokene(req);
 //		if(k != null && k.getRola().equals(Rola.ADMIN_AVIO_KOMPANIJE) && k.getZaduzenZaId() == id)
 //		{
-			AvioKompanija avioDto = avioService.findById(id);
-			return (avioDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<AvioKompanija>(avioDto, HttpStatus.OK);
+			AvioKompanijaDTO avioDto = avioService.traziById(id);
+			return (avioDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<AvioKompanijaDTO>(avioDto, HttpStatus.OK);
 //		}
 //		
 //		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
