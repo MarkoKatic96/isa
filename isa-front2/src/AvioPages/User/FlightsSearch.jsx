@@ -28,7 +28,9 @@ class FlightsSearch extends Component {
             showFlightInfo: true,
             showResBtn: false,
 
-            flightsRes: []
+            flightsRes: [],
+
+            advancedSearch: false
     }
 
 
@@ -167,6 +169,43 @@ class FlightsSearch extends Component {
         console.log(this.state.prtljag)
     }
 
+    handleBasicSearchSubmit = (e) => {
+        e.preventDefault();
+
+        let takeOffDestination = this.state.takeOffDestination;
+        let landingDestination = this.state.landingDestination;
+        let time1 = this.state.datumPoletanja1 + 'T' + this.state.vremePoletanja1 + ':00';
+        let time2 = this.state.datumPoletanja2 + 'T' + this.state.vremePoletanja2 + ':00';
+       
+        let number = this.state.number;
+        let object = new Object();
+       
+
+        axios.post('http://localhost:8080/flight/basicsearchflights', {
+           time1, time2, takeOffDestination, landingDestination, number
+        }).then(res => {
+            console.log(res)
+                if(res.status === 200)
+                {
+                    this.setState({
+                        flightsRes: res.data
+                    })
+                }
+                else
+                {
+                    this.setState({
+                        flightsRes: []
+                    }) 
+                }
+            }
+        ).catch(error => {
+            this.setState({
+                flightsRes: []
+            }) 
+        })
+
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
 
@@ -222,6 +261,22 @@ class FlightsSearch extends Component {
 
     }
 
+    showAdvancedSearch = () =>
+    {
+        if(this.state.advancedSearch)
+        {
+            this.setState({
+                advancedSearch: false
+            })
+        }
+        else
+        {
+            this.setState({
+                advancedSearch: true
+            })
+        }
+    }
+
   
 
     showCompanyInfo = (idLeta) => {
@@ -273,6 +328,126 @@ class FlightsSearch extends Component {
 
         let show = this.state.showResBtn;
 
+        //osnovna pretraga
+
+        const advancedS = this.state.advancedSearch ? (<div className="center container">
+        <div>
+            <div className="container">
+                <form className="white" onSubmit={(e) => { this.handleSubmit(e) }}>
+                    <h2 className="red-text lighten-1 center">Pretraga letova</h2>
+                    <div className="container">
+                        <label htmlFor="takeoffdest">Mesto polaska</label>
+                        <div className="input-field">
+                            <select id="takeoffdest" className="browser-default" name="destinationTakeOff" onChange = {(e) => {this.changeMestoPolaska(e)}}>
+                                {this.state.destinacije.map(dest =>
+                                    <option>{dest.naziv}</option>
+                                )}
+                            </select>
+                        </div>
+                        <label htmlFor="landingdest">Mesto dolaska</label>
+                        <div className="input-field">
+                            <select id="landingdest" className="browser-default" name="destinationLanding" onChange={(e) => {this.changeMestoDolaska(e)}}>
+                                {this.state.destinacije.map(dest =>
+                                    <option>{dest.naziv}</option>
+                                )}
+                            </select>
+                        </div>
+                        <label htmlFor="takeoff">Datum i vreme poletanja OD:</label>
+                        <div className="input-field">
+                            <input type="date" className="datepicker" id="takeoff" onChange={(e) => {this.changeDatum1(e)}} />
+                            <input type="time" className="timepicker" id="takeofftime" onChange={(e) => {this.changeVreme1(e)}} />
+                        </div>
+                        <label htmlFor="landing">Datum i vreme poletanja DO:</label>
+                        <div className="input-field">
+                            <input type="date" className="datepicker" id="landing" onChange={(e) => {this.changeDatum2(e)}} />
+                            <input type="time" className="timepicker" id="landingtime" onChange={(e) => {this.changeVreme2(e)}} />
+                        </div>
+                        <label htmlFor="fltype">Tip leta</label>
+                        <div className="input-field">
+                            <select id="fltype" className="browser-default" name="travelType" onChange={(e) => {this.changeTipLeta(e)}}>
+                                {this.state.letovi.map(lett =>
+                                    <option>{lett.tipPuta}</option>
+                                )}
+                            </select>
+                        </div>
+
+                        <label htmlFor="takeoffdest">Broj osoba</label>
+                        <div className="input-field">
+                            <input type="number" id="takeoffdest" className="browser-default" name="takenNumber" onChange={(e) => {this.changeBrojOsoba(e)}}/>
+
+                        </div>
+
+                        <label htmlFor="klase">Klase u avionu</label>
+                        <Select
+                            value={klase}
+                            onChange={(klase) => { this.changeKlaseKojeLetSadrzi(klase) }}
+                            options={listaKlasa}
+                            id="klase" isMulti={true} />
+
+                            <label htmlFor="prtljag">Tipovi prtljaga</label>
+                        <Select
+                            value={prtljag}
+                            onChange={(prtljag) => { this.changePrtljag(prtljag) }}
+                            options={listaPrtljaga}
+                            id="prtljag" isMulti={true} />
+
+                        <div className="input-field">
+                            <input type="submit" value="Pretrazi" className="btn blue lighten-1 z-depth-0" /> <br /> <br />
+                        </div>
+                    </div>
+                </form>
+                <button onClick={this.showAdvancedSearch} className="btn blue center lighten-1 z-depth-0">Osnovna pretraga</button>
+            </div>
+        </div>
+        
+            <br/>
+            
+        </div>) : (<div>
+            <div className="container">
+                <form className="white" onSubmit={(e) => { this.handleBasicSearchSubmit(e) }}>
+                    <h2 className="red-text lighten-1 center">Pretraga letova</h2>
+                    <div className="container">
+                        <label htmlFor="takeoffdest">Mesto polaska</label>
+                        <div className="input-field">
+                            <select id="takeoffdest" className="browser-default" name="destinationTakeOff" onChange = {(e) => {this.changeMestoPolaska(e)}}>
+                                {this.state.destinacije.map(dest =>
+                                    <option>{dest.naziv}</option>
+                                )}
+                            </select>
+                        </div>
+                        <label htmlFor="landingdest">Mesto dolaska</label>
+                        <div className="input-field">
+                            <select id="landingdest" className="browser-default" name="destinationLanding" onChange={(e) => {this.changeMestoDolaska(e)}}>
+                                {this.state.destinacije.map(dest =>
+                                    <option>{dest.naziv}</option>
+                                )}
+                            </select>
+                        </div>
+                        <label htmlFor="takeoff">Datum i vreme poletanja OD:</label>
+                        <div className="input-field">
+                            <input type="date" className="datepicker" id="takeoff" onChange={(e) => {this.changeDatum1(e)}} />
+                            <input type="time" className="timepicker" id="takeofftime" onChange={(e) => {this.changeVreme1(e)}} />
+                        </div>
+                        <label htmlFor="landing">Datum i vreme poletanja DO:</label>
+                        <div className="input-field">
+                            <input type="date" className="datepicker" id="landing" onChange={(e) => {this.changeDatum2(e)}} />
+                            <input type="time" className="timepicker" id="landingtime" onChange={(e) => {this.changeVreme2(e)}} />
+                        </div>
+                        
+
+                        <label htmlFor="takeoffdest">Broj osoba</label>
+                        <div className="input-field">
+                            <input type="number" id="takeoffdest" className="browser-default" name="takenNumber" onChange={(e) => {this.changeBrojOsoba(e)}}/>
+                        </div>
+                        <div className="input-field">
+                            <input type="submit" value="Pretrazi" className="btn blue lighten-1 z-depth-0" /> <br /> <br />
+                        </div>
+                    </div>
+                </form>
+                <button onClick={this.showAdvancedSearch} className="btn blue center lighten-1 z-depth-0">Napredna pretraga</button>
+            </div>
+        </div>) 
+
         const flightsList = this.state.flightsRes.length ? (this.state.flightsRes.map(flight => {
             return (
                 <div className="center container" key={flight.idLeta}>
@@ -312,79 +487,8 @@ class FlightsSearch extends Component {
         return(
             <div><br />
             <Link to="/companies"><button className="btn red center lighten-1 z-depth-0">Nazad</button></Link>
-            <div className="center container">
-            <div>
-                {/* <button onClick={this.handleSearchButton} className="btn blue center lighten-1 z-depth-0">Pretraga</button> */}
-                <div className="container">
-                    <form className="white" onSubmit={(e) => { this.handleSubmit(e) }}>
-                        <h2 className="red-text lighten-1 center">Pretraga letova</h2>
-                        <div className="container">
-                            <label htmlFor="takeoffdest">Mesto polaska</label>
-                            <div className="input-field">
-                                <select id="takeoffdest" className="browser-default" name="destinationTakeOff" onChange = {(e) => {this.changeMestoPolaska(e)}}>
-                                    {this.state.destinacije.map(dest =>
-                                        <option>{dest.naziv}</option>
-                                    )}
-                                </select>
-                            </div>
-                            <label htmlFor="landingdest">Mesto dolaska</label>
-                            <div className="input-field">
-                                <select id="landingdest" className="browser-default" name="destinationLanding" onChange={(e) => {this.changeMestoDolaska(e)}}>
-                                    {this.state.destinacije.map(dest =>
-                                        <option>{dest.naziv}</option>
-                                    )}
-                                </select>
-                            </div>
-                            <label htmlFor="takeoff">Datum i vreme poletanja OD:</label>
-                            <div className="input-field">
-                                <input type="date" className="datepicker" id="takeoff" onChange={(e) => {this.changeDatum1(e)}} />
-                                <input type="time" className="timepicker" id="takeofftime" onChange={(e) => {this.changeVreme1(e)}} />
-                            </div>
-                            <label htmlFor="landing">Datum i vreme poletanja DO:</label>
-                            <div className="input-field">
-                                <input type="date" className="datepicker" id="landing" onChange={(e) => {this.changeDatum2(e)}} />
-                                <input type="time" className="timepicker" id="landingtime" onChange={(e) => {this.changeVreme2(e)}} />
-                            </div>
-                            <label htmlFor="fltype">Tip leta</label>
-                            <div className="input-field">
-                                <select id="fltype" className="browser-default" name="travelType" onChange={(e) => {this.changeTipLeta(e)}}>
-                                    {this.state.letovi.map(lett =>
-                                        <option>{lett.tipPuta}</option>
-                                    )}
-                                </select>
-                            </div>
-
-                            <label htmlFor="takeoffdest">Broj osoba</label>
-                            <div className="input-field">
-                                <input type="number" id="takeoffdest" className="browser-default" name="takenNumber" onChange={(e) => {this.changeBrojOsoba(e)}}/>
-
-                            </div>
-
-                            <label htmlFor="klase">Klase u avionu</label>
-                            <Select
-                                value={klase}
-                                onChange={(klase) => { this.changeKlaseKojeLetSadrzi(klase) }}
-                                options={listaKlasa}
-                                id="klase" isMulti={true} />
-
-                                <label htmlFor="prtljag">Tipovi prtljaga</label>
-                            <Select
-                                value={prtljag}
-                                onChange={(prtljag) => { this.changePrtljag(prtljag) }}
-                                options={listaPrtljaga}
-                                id="prtljag" isMulti={true} />
-
-                            <div className="input-field">
-                                <input type="submit" value="Pretrazi" className="btn blue lighten-1 z-depth-0" /> <br /> <br />
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            
-                <br/>
-                {flightsList}
-            </div>
+            {advancedS}
+            {flightsList}
             </div>
         )
         

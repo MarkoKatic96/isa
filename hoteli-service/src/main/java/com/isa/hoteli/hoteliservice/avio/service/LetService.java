@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.isa.hoteli.hoteliservice.avio.converter.LetConverter;
 import com.isa.hoteli.hoteliservice.avio.dto.KlasaDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.LetDTO;
+import com.isa.hoteli.hoteliservice.avio.dto.OsnovnaPretragaDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.PretragaDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.PrtljagDTO;
 import com.isa.hoteli.hoteliservice.avio.model.AvioKompanija;
@@ -320,8 +321,75 @@ public class LetService
 	 ///////////PRETRAGA//////////////
 	/////////////////////////////////
 	
+	/*
+	 * OSNOVNA PRETRAGA
+	 */
+	public List<LetDTO> basicSearchLetove(OsnovnaPretragaDTO dto)
+	{
+		List<Let> SVI_LETOVI = letRepo.findAll();
+		
+		List<LetDTO> ZA_PODUDARANJE = new ArrayList<LetDTO>();
+		for(Let let : SVI_LETOVI)
+		{
+			ZA_PODUDARANJE.add(letConv.convertToDTO(let));
+		}
+		
+		List<LetDTO> retVal = new ArrayList<LetDTO>();
+		for(Let let : SVI_LETOVI)
+		{
+			retVal.add(letConv.convertToDTO(let));
+		}
+		
+		ArrayList<LetDTO> letoviDate = new ArrayList<LetDTO>();
+		ArrayList<LetDTO> letoviDestination = new ArrayList<LetDTO>();
+		ArrayList<LetDTO> letoviNumber = new ArrayList<LetDTO>();
+		
+		if(dto.getTime1() != null && dto.getTime2() != null)
+		{
+			Optional<List<Let>> letovi = letRepo.findFlightsByDate(dto.getTime1(), dto.getTime2());
+			
+			if(letovi.isPresent())
+			{
+				for(Let let : letovi.get())
+				{
+					letoviDate.add(letConv.convertToDTO(let));
+				}
+			}
+			retVal.retainAll(letoviDate);
+		}
+	
+		
+		if(dto.getTakeOffDestination() != null && dto.getLandingDestination() != null)
+		{
+			Optional<List<Let>> letovi = letRepo.findFlightsByDestination(dto.getTakeOffDestination(), dto.getLandingDestination());
+			
+			if(letovi.isPresent())
+			{
+				for(Let let : letovi.get())
+				{
+					letoviDestination.add(letConv.convertToDTO(let));
+				}
+			}
+			retVal.retainAll(letoviDestination);
+		}
+		
+		if(dto.getNumber() != null)
+		{
+			List<Let> letoviBroj = letRepo.findAll();
+			
+			for(Let let : letoviBroj)
+			{
+				if((letConv.convertToDTO(let).getBrojMesta() - letConv.convertToDTO(let).getBrojOsoba()) >= dto.getNumber())
+					letoviNumber.add(letConv.convertToDTO(let));
+			}
+			retVal.retainAll(letoviNumber);
+		}
+		
+		return retVal;
+	}
+	
 	/**
-	 * GENERALNA PRETRAGA
+	 * GENERALNA PRETRAGA (NAPREDNA PRETRAGA, POSLE PROMENJENO)
 	 * @return -> spisak letova koji zadovoljavaju kriterijume
 	 */
 	@Transactional(readOnly = true)
@@ -611,6 +679,8 @@ public class LetService
 		
 		return null;
 	}
+
+	
 
 	
 

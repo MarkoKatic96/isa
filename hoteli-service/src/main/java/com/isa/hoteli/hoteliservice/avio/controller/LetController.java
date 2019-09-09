@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.isa.hoteli.hoteliservice.avio.dto.KlasaDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.LetDTO;
+import com.isa.hoteli.hoteliservice.avio.dto.OsnovnaPretragaDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.PretragaDTO;
 import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
 import com.isa.hoteli.hoteliservice.avio.model.Rola;
@@ -145,9 +146,20 @@ public class LetController
 	 /////////////////////////////////
 	/////////////////////////////////
 	
+	@PostMapping("/basicsearchflights")
+	public ResponseEntity<List<LetDTO>> basicSearchLetove(@RequestBody OsnovnaPretragaDTO pretraga)
+	{		
+		System.out.println("basicSearchLetove()");
+		
+		List<LetDTO> letovi = letService.basicSearchLetove(pretraga);
+		
+		return(letovi.isEmpty()) ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<List<LetDTO>>(letovi, HttpStatus.OK); 
+	}
+	
 	
 	/*
 	 * PRETRAGA KOJA OBUHVATA SVE OVE ISPOD POJEDINACNE
+	 * NAPREDNA PRETRAGA
 	 */
 	@PostMapping("/searchflights")
 	public ResponseEntity<List<LetDTO>> searchLetove(@RequestBody PretragaDTO pretraga)
