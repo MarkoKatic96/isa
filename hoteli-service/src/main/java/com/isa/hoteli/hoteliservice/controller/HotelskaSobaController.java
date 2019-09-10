@@ -22,6 +22,7 @@ import com.isa.hoteli.hoteliservice.dto.HotelskaSobaDTO;
 import com.isa.hoteli.hoteliservice.dto.HotelskaSobaInfoDTO;
 import com.isa.hoteli.hoteliservice.model.HotelskaSoba;
 import com.isa.hoteli.hoteliservice.model.Pretraga;
+import com.isa.hoteli.hoteliservice.model.PretragaSoba;
 import com.isa.hoteli.hoteliservice.service.CenaNocenjaService;
 import com.isa.hoteli.hoteliservice.service.HotelskaSobaService;
 import com.isa.hoteli.hoteliservice.service.OcenaService;
@@ -177,11 +178,46 @@ public class HotelskaSobaController {
 	}
 	
 	@RequestMapping(value="/slobodne/{id}", method = RequestMethod.POST)
-	public ResponseEntity<List<HotelskaSobaInfoDTO>> getFreeRoomsFromHotel(@PathVariable("id") Long id, @RequestBody Pretraga pretraga){
+	public ResponseEntity<List<HotelskaSobaInfoDTO>> getFreeRoomsFromHotel(@PathVariable("id") Long id, @RequestBody PretragaSoba pretraga){
 		List<HotelskaSobaInfoDTO> dto = new ArrayList<>();
+		List<HotelskaSobaInfoDTO> returnList = new ArrayList<>();
 		List<HotelskaSoba> lista = hotelskaSobaService.getAllFreeRoomsFromHotel(id, pretraga.getDatumOd(), pretraga.getDatumDo());
 		for (HotelskaSoba item : lista) {
 			dto.add(new HotelskaSobaInfoDTO(item.getId(), item.getBrojSobe(), item.getSprat(), item.getBrojKreveta(), item.getOriginalnaCena(), item.getHotel(), item.getTipSobe(), cenaNocenjaService.getValidPriceFromHotelRoom(item.getId()), ocenaService.getMeanRoomRating(item.getId())));
+		}
+		if(pretraga.getCenaOd()!=0.0 && pretraga.getCenaDo()!=0.0) {
+			for (HotelskaSobaInfoDTO item : dto) {
+				if(item.getCenaNocenja()>-1) {
+					if(item.getOriginalnaCena()<=item.getCenaNocenja()) {
+						if(item.getOriginalnaCena()<pretraga.getCenaDo() && item.getOriginalnaCena()>=pretraga.getCenaOd()) {
+							returnList.add(item);
+						}
+					}else {
+						if(item.getCenaNocenja()<pretraga.getCenaDo() && item.getCenaNocenja()>=pretraga.getCenaOd()) {
+							returnList.add(item);
+						}
+					}
+				}else {
+					if(item.getOriginalnaCena()<pretraga.getCenaDo() && item.getOriginalnaCena()>=pretraga.getCenaOd()) {
+						returnList.add(item);
+					}
+				}
+			}
+			
+			dto.clear();
+			dto.addAll(returnList);
+			returnList.clear();
+		}
+		
+		if(pretraga.getTipSobe()!=null) {
+			for (HotelskaSobaInfoDTO item : dto) {
+				if(item.getTipSobe().getId()==pretraga.getTipSobe().getId()) {
+					returnList.add(item);
+				}
+			}
+			dto.clear();
+			dto.addAll(returnList);
+			returnList.clear();
 		}
 		return new ResponseEntity<List<HotelskaSobaInfoDTO>>(dto, HttpStatus.OK);
 	}

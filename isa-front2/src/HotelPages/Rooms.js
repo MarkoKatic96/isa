@@ -1,13 +1,19 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { withRouter} from 'react-router-dom';
+import Select from 'react-select';
 
 class Rooms extends Component{
 
     state={
         sobe:[],
         datumOd:"",
-        datumDo:""
+        datumDo:"",
+        tipSobe:"",
+        tipoviSobe:[],
+        selectedTip: "",
+        cenaOd:"",
+        cenaDo:""
     }
 
     componentDidMount() {
@@ -18,7 +24,20 @@ class Rooms extends Component{
                 sobe: res.data
             })
         })
+
+        axios.get("http://localhost:8080/tip_sobe/all/" + id)
+        .then(res=>{
+            console.log(res.data);
+             this.setState({
+                tipoviSobe: res.data
+             })
+       })
     }
+
+    handleChangeTip = (selectedTip) => { //za tip selcet
+        console.log(selectedTip);
+        this.setState({ selectedTip });
+    };
 
     handleChange = (e) => { //za inpute
         this.setState({
@@ -27,8 +46,16 @@ class Rooms extends Component{
     }
 
     handleSubmit = (e) => {
+        var tipZaSlanje = "";
+        var {tipoviSobe} = this.state;
+        var i;
+        for(i=0; i<tipoviSobe.length; i++){
+            if(this.state.selectedTip.value===tipoviSobe[i].id){
+                tipZaSlanje = tipoviSobe[i];
+            }
+        }
         e.preventDefault();
-            axios.post("http://localhost:8080/sobe/slobodne/" + this.props.match.params.hotelId, {datumOd: this.state.datumOd, datumDo: this.state.datumDo})
+            axios.post("http://localhost:8080/sobe/slobodne/" + this.props.match.params.hotelId, {datumOd: this.state.datumOd, datumDo: this.state.datumDo, cenaOd: this.state.cenaOd, cenaDo: this.state.cenaDo, tipSobe: tipZaSlanje})
             .then(res => {
                 this.setState({
                     sobe: res.data
@@ -47,6 +74,15 @@ class Rooms extends Component{
     }
 
     render(){
+        var { selectedTip } = this.state;
+        var { tipoviSobe } = this.state;
+        var listaTipova = [];//lista objekata tip
+        tipoviSobe.map(tip => {            //prolazimo kroz sve tipove i za svaki pravimo novi objekat sa
+            var options = new Object();//poljima value i label posto su ta dva polja neophodna za rad react-select
+            options.value = tip.id;
+            options.label = tip.naziv;
+            listaTipova.push(options); //dodajemo objekat u listu
+        })
         var isLogged = localStorage.getItem("isLogged");
         var rola = localStorage.getItem('rola');
         var {sobe}=this.state;
@@ -94,6 +130,15 @@ class Rooms extends Component{
                         <input type="date" id="datumOd" onChange={this.handleChange}/>
                         <label className="left black-text" htmlFor="datumDo">Datum do:</label>
                         <input type="date" id="datumDo" onChange={this.handleChange}/>
+                        <label className="left black-text" htmlFor="cenaOd">Cena od:</label>
+                        <input type="number" id="cenaOd" onChange={this.handleChange}/>
+                        <label className="left black-text" htmlFor="cenaDo">Cena do:</label>
+                        <input type="number" id="cenaDo" onChange={this.handleChange}/>
+                        <Select 
+                                    value={selectedTip}
+                                    onChange={this.handleChangeTip}
+                                    options={ listaTipova } 
+                                    id="selectTip"/>
                         <button className="btn waves-effect waves-light green">Pretrazi</button>
                     </form>
                 </div>
