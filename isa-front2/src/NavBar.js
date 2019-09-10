@@ -11,7 +11,7 @@ class NavBar extends Component{
         localStorage.setItem("isLogged", false);
         sessionStorage.setItem("vremePoletanja", undefined);
         sessionStorage.setItem("vremeSletanja", undefined);
-        sessionStorage.setItem("flag", 0);
+        sessionStorage.setItem("flag", "0");
         this.props.logOut();  
         this.props.history.push("/");    
     }

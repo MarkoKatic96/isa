@@ -193,7 +193,7 @@ public class AvioKompanijaController
 	public ResponseEntity<AvioKompanija> createAvioAdmin(@PathVariable Long id, @RequestBody AvioKompanija avioKompanija, HttpServletRequest req){
 		Korisnik korisnik = korServ.zaTokene(req);
 		if(korisnik!=null && korisnik.getRola().equals(Rola.MASTER_ADMIN)) {
-			AvioKompanija avio = avioService.saveOne(avioKompanija);
+			AvioKompanija avio = avioService.createAvio(avioKompanija);
 			Korisnik k = korServ.getUserById(id);
 			if(avio!=null) {
 				k.setZaduzenZaId(avio.getIdAvioKompanije());

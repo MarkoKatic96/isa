@@ -35,7 +35,6 @@ class Services extends Component{
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
-                                    <p>Potencijlni dugmici</p>
                                 </div>
                             </div>
                         </div>

@@ -59,7 +59,7 @@ public class OcenaController {
 	@RequestMapping(value="/hotel/", method = RequestMethod.POST)
 	public ResponseEntity<OcenaHotelDTO> createHotelRating(@RequestBody OcenaHotelDTO dto, HttpServletRequest req){
 		Korisnik k = korisnikService.zaTokene(req);
-		if(k!=null && k.getRola().equals(Rola.KORISNIK) && k.getId()==dto.getKorisnikId()) {
+		if(k!=null && k.getRola().equals(Rola.KORISNIK)) {
 			OcenaHotel obj = new OcenaHotel(dto);
 			obj.setDatumOcene(new Date(System.currentTimeMillis()));
 			OcenaHotelDTO returnType = ocenaService.createHotelRating(obj);
@@ -75,7 +75,7 @@ public class OcenaController {
 	@RequestMapping(value="/soba/", method = RequestMethod.POST)
 	public ResponseEntity<OcenaHotelskaSobaDTO> createRoomRating(@RequestBody OcenaHotelskaSobaDTO dto, HttpServletRequest req){
 		Korisnik k = korisnikService.zaTokene(req);
-		if(k!=null && k.getRola().equals(Rola.KORISNIK) && k.getId()==dto.getKorisnikId()) {
+		if(k!=null && k.getRola().equals(Rola.KORISNIK)) {
 			OcenaHotelskaSoba obj = new OcenaHotelskaSoba(dto);
 			obj.setDatumOcene(new Date(System.currentTimeMillis()));
 			OcenaHotelskaSobaDTO returnType = ocenaService.createHotelRoomRating(obj);

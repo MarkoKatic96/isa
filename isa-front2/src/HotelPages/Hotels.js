@@ -3,6 +3,7 @@ import axios from 'axios'
 import { withRouter} from 'react-router-dom';
 import ChooseBar from '../ChooseBar';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import Select from 'react-select';
 
 class Hotels extends Component{
 
@@ -12,7 +13,8 @@ class Hotels extends Component{
         datumOd:"",
         datumDo:"",
         brojOsoba:"",
-        brojSoba:""
+        brojSoba:"",
+        selectedSort: ""
     }
 
     componentDidMount() {
@@ -23,6 +25,17 @@ class Hotels extends Component{
             })
         })
     }
+
+    handleChangeSort = (selectedSort) => { //za tip selcet
+        console.log(selectedSort);
+        this.setState({ selectedSort });
+        axios.get("http://localhost:8080/hotel/sort/" + selectedSort.value)
+        .then(res=>{
+            this.setState({
+                hoteli: res.data
+            })
+        })
+    };
 
     handleChange = (e) => { //za inpute
         this.setState({
@@ -59,6 +72,12 @@ class Hotels extends Component{
 
 
     render(){
+        const sorts = [
+            { label: "Nazivu", value: 1 },
+            { label: "Adresi", value: 2 },
+            { label: "Oceni", value: 3 }
+          ];
+          var { selectedSort } = this.state;
         const style = {
             width: '85%',
             height: '40%',
@@ -133,6 +152,14 @@ class Hotels extends Component{
                         <input type="number" id="brojSoba" onChange={this.handleChange}/>
                         <button className="btn waves-effect waves-light green">Pretrazi</button>
                     </form>
+                </div>
+                <div className="center container">
+                <label className="left black-text" htmlFor="brojSoba">Sortiraj po:</label>
+                    <Select 
+                                        value={selectedSort}
+                                        onChange={this.handleChangeSort}
+                                        options={ sorts } 
+                                        id="selectSort"/>
                 </div>
                 <br/>
                 <h3 className="left-align container">Hoteli:</h3>

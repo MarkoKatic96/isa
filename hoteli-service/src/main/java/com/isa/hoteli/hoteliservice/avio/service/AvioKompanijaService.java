@@ -22,6 +22,8 @@ import com.isa.hoteli.hoteliservice.avio.model.Let;
 import com.isa.hoteli.hoteliservice.avio.repository.AvioKompanijaRepository;
 import com.isa.hoteli.hoteliservice.avio.repository.DestinacijaRepository;
 import com.isa.hoteli.hoteliservice.avio.repository.KartaRepository;
+import com.isa.hoteli.hoteliservice.dto.HotelDTO;
+import com.isa.hoteli.hoteliservice.model.Hotel;
 
 @Service
 public class AvioKompanijaService 
@@ -94,6 +96,11 @@ public class AvioKompanijaService
 		{				
 			return avioRepo.save(avioKom);
 		}
+	}
+	
+	@Transactional(readOnly = false)//treba mi ovo, nemoj dirati
+	public AvioKompanija createAvio(AvioKompanija av) {
+		return avioRepo.save(av);
 	}
 	
 //	public boolean addDefaultDestination(Long id)

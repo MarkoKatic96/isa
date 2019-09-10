@@ -1,6 +1,7 @@
 package com.isa.hoteli.hoteliservice.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -141,6 +142,23 @@ public class HotelController {
 			if(!hotelskaSobaService.getAllFreeRoomsFromHotelWithDiscount(hotel.getId(), pretraga.getDatumOd(), pretraga.getDatumDo()).isEmpty()) {
 				hoteliDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), ocenaService.getMeanHotelRating(hotel.getId()), hotel.getLat(), hotel.getLng()));
 			}
+		}
+		return new ResponseEntity<List<HotelInfoDTO>>(hoteliDTO, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/sort/{nacin}", method = RequestMethod.GET)
+	public ResponseEntity<List<HotelInfoDTO>> getSortedHotelsInfo(@PathVariable("nacin") int nacin){
+		List<HotelInfoDTO> hoteliDTO = new ArrayList<>();
+		List<Hotel> hoteli = hotelService.getHotels();
+		for (Hotel hotel : hoteli) {
+			hoteliDTO.add(new HotelInfoDTO(hotel.getId(), hotel.getNaziv(), hotel.getAdresa(), hotel.getOpis(), ocenaService.getMeanHotelRating(hotel.getId()), hotel.getLat(), hotel.getLng()));
+		}
+		if(nacin==1) {
+			hoteliDTO.sort(Comparator.comparing(HotelInfoDTO::getNaziv));
+		}else if(nacin==2) {
+			hoteliDTO.sort(Comparator.comparing(HotelInfoDTO::getAdresa));
+		}else {
+			hoteliDTO.sort(Comparator.comparingDouble(HotelInfoDTO::getOcena).reversed());
 		}
 		return new ResponseEntity<List<HotelInfoDTO>>(hoteliDTO, HttpStatus.OK);
 	}

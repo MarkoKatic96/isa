@@ -47,6 +47,12 @@ class ReservationForm extends Component{
                     korisnik: res.data
                 })
             })
+
+            if(sessionStorage.getItem("flag")=="1"){
+                this.setState({
+                    popust: 5
+                })
+            }
     }
 
     handleChange = (e) => {
@@ -111,7 +117,7 @@ class ReservationForm extends Component{
                 if(servisi[h].id==e.target.value){
                     console.log("EVO ME")
                     cenaDodatne+=servisi[h].cena
-                    this.setState({
+                    this.setState({ 
                         popust: +this.state.popust - servisi[h].popust
                     })
                 }
@@ -156,7 +162,10 @@ class ReservationForm extends Component{
                         <input type="date" id="datumOd" onChange={this.handleChange}/>
                         <label className="left black-text" htmlFor="datumDo">Datum do:</label>
                         <input type="date" id="datumDo" onChange={this.handleChange}/>
-                        { services.map(service => {
+                        
+                        { 
+                            sessionStorage.getItem("flag")=="0" ? (
+                            services.map(service => {
                             return(
                                 <p key = {service.id}>
                                     <label>
@@ -165,7 +174,9 @@ class ReservationForm extends Component{
                                     </label>
                                 </p>
                             )
-                        })}
+                        })):(<p/>)
+                            
+                        }
                         <h5 id="ukupnaCena">Ukupna cena: {ukupnaCena} (popust {popust}%)</h5>
                         <button className="btn waves-effect waves-light green">Rezervisi</button>
                     </form>
