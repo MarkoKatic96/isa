@@ -73,6 +73,17 @@ public class AvioKompanijaController
 		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<AvioKompanijaDTO>>(listDto, HttpStatus.OK);
 	}
 	
+	//sortiranje po gradu ili nazivu
+	@GetMapping("/sort/{value}")
+	public ResponseEntity<List<AvioKompanijaDTO>> sortAvioKompanije(@PathVariable("value") int value)
+	{
+		System.out.println("sortAvioKompanije()");
+		
+		List<AvioKompanijaDTO> listDto = avioService.sortAvioKompanije(value);
+		
+		return (listDto == null) ? new ResponseEntity<>(null, HttpStatus.NOT_FOUND) : new ResponseEntity<List<AvioKompanijaDTO>>(listDto, HttpStatus.OK);
+	}
+	
 	
 	/*@PostMapping("/add/")
 	public ResponseEntity<AvioKompanijaDTO> addAvioKompanija(@RequestBody AvioKompanijaDTO dto)

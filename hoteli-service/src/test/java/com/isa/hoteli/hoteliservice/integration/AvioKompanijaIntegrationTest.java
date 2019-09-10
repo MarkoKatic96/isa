@@ -74,7 +74,7 @@ public class AvioKompanijaIntegrationTest {
 	@Rollback(true)
 	public void testupdateAvioKompanija() throws Exception {
 		when(korisnikService.zaTokene(Mockito.any(HttpServletRequest.class))).thenReturn(korisnik);
-		AvioKompanijaDTO kompanija = new AvioKompanijaDTO(1l, "a", "a", "a", null);
+		AvioKompanijaDTO kompanija = new AvioKompanijaDTO(1l, "a", "a", "a", 1.0f, 1.0f, null);
 		String s = objectMapper.writeValueAsString(kompanija);
 		this.mockMvc.perform(put(route + "/update/1").contentType(MediaType.APPLICATION_JSON).content(s)).andDo(print());
 	}

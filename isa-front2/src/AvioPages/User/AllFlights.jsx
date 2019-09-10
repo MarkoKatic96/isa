@@ -103,7 +103,8 @@ class AllFlights extends Component {
             <div>
                 <br />
                 <Link to="/flsearch"><button className="btn green center lighten-1 z-depth-0">Pretrazi letove</button></Link><br /><br />
-                <Link to="/expticket"><button className="btn orange center lighten-1 z-depth-0">Brza rezervacija</button></Link>
+                <Link to="/expticket"><button className="btn orange center lighten-1 z-depth-0">Brza rezervacija</button></Link><br /><br />
+                <Link to="/allcompanieslist"><button className="btn blue center lighten-1 z-depth-0">Spisak svih aviokompanija</button></Link>
                 <div className="center container">
                     <h3 className="left-align container">Spisak letova:</h3>
                 </div>

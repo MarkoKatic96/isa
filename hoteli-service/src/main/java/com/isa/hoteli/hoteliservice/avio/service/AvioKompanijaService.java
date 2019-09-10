@@ -66,6 +66,23 @@ public class AvioKompanijaService
 	}
 	
 	@Transactional(readOnly = true)
+	public List<AvioKompanijaDTO> sortAvioKompanije(int value)
+	{
+		List<AvioKompanija> kompanije = new ArrayList<AvioKompanija>();
+		List<AvioKompanijaDTO> retVal = new ArrayList<AvioKompanijaDTO>();
+		
+		if(value == 1)
+			kompanije = avioRepo.sortByNaziv(); 
+		else
+			kompanije = avioRepo.sortByGrad();
+		
+		for(AvioKompanija komp : kompanije)
+			retVal.add(avioConv.convertToDTO(komp));
+		
+		return retVal;
+	}
+	
+	@Transactional(readOnly = true)
 	public List<AvioKompanijaDTO> findAll()
 	{
 		List<AvioKompanija> list = avioRepo.findAll();
@@ -338,5 +355,7 @@ public class AvioKompanijaService
 		
 		return prihod;
 	}
+
+	
 	
 }

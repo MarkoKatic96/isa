@@ -108,6 +108,7 @@ class UserReservations extends Component {
                                         <p>Vreme poletanja: {ticket.let.vremePoletanja}</p>
                                         <p>Vreme sletanja: {ticket.let.vremeSletanja}</p>
                                         <p>Vreme rezervisanja: {ticket.vremeRezervisanja}</p>
+                                        <p>Cena rezervacije: {(ticket.cena - ticket.cena * ticket.popust*0.01).toFixed(2)} €</p>
                                     </div>
                                     <div className="divider white"></div>
                                     <div className="card-action">

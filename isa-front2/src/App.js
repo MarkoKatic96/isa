@@ -49,6 +49,7 @@ import RoomTypes from './HotelPages/Admin/RoomTypes';
 import FastRooms from './HotelPages/FastRooms';
 import SlowRooms from './HotelPages/SlowRooms';
 import EditBonus from './MasterAdminPages/EditBonus';
+import AvioCompaniesList from './AvioPages/User/AvioCompaniesList';
 
 class App extends Component {
 
@@ -140,6 +141,7 @@ class App extends Component {
           <Route path='/account' render={() => <Account />} />
           <Route path='/userinvitations' render={() => <UserInvitations />} />
           <Route path='/expticket' render={() => <ExpressTicket />} />
+          <Route path='/allcompanieslist' render={() => <AvioCompaniesList /> } />
         </div>
       </BrowserRouter>
     );

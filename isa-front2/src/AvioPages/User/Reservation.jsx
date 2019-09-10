@@ -24,7 +24,8 @@ class Reservation extends Component {
         passport: "",
         brojeviPasosa: [],
 
-        showUkupnaCena: false
+        showUkupnaCena: false,
+        ukupnoRezervisano: ""
     }
 
     componentDidMount() {
@@ -197,13 +198,19 @@ class Reservation extends Component {
         console.log(listaPrijatelja)
         console.log(brojeviPasosa)
 
+        this.setState({
+            ukupnoRezervisano: this.state.listaRezervisanihMesta.length
+        })
+
         axios.post('http://localhost:8080/ticket/reservemore/' + userid, {listaKarata, listaPrijatelja, brojeviPasosa}).then(res => { 
             if(res.data === "REZERVISANE")
             {
+                this.setState({
+                    showUkupnaCena: true
+                })
                 alert("Karte uspesno rezervisane");
                 this.setState({
-                    listaRezervisanihMesta: [],
-                    showUkupnaCena: true
+                    listaRezervisanihMesta: []
                 })
                 this.componentDidMount();
             }
@@ -221,7 +228,7 @@ class Reservation extends Component {
     render() {
         let i=1;
 
-        const ukupnaCena = (this.state.showUkupnaCena) ? (<div><h3>Ukupna cena rezervacije: {this.state.listaRezervisanihMesta.length * ((this.state.podaciOLetu.cena * this.state.karte[0]) + this.state.podaciOLetu.cena)}</h3></div>) : (<div></div>)
+        const ukupnaCena = (this.state.showUkupnaCena) ? (<div><h3>Ukupna cena rezervacije: {(this.state.ukupnoRezervisano * (this.state.podaciOLetu.cenaKarte - this.state.podaciOLetu.cenaKarte * this.state.karte[0].popust*0.01)).toFixed(2)} €</h3></div>) : (<div></div>)
 
         const raspored = this.state.karte.length ? (this.state.karte.map(karta => {
             

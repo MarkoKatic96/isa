@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class ExpressTicket extends Component {
     state = {
@@ -108,9 +109,9 @@ class ExpressTicket extends Component {
             )
 
         return (
-            <div><h3>Brza rezervacija</h3>
+            <div><br /> <Link to="/companies"><button className="btn red center lighten-1 z-depth-0">Nazad</button></Link>
+            <h3>Brza rezervacija</h3>
                 {reservationList}
-
             </div>
         );
     }

@@ -242,7 +242,7 @@ public class AvioKompanijaControllerTest
 		when(korisnikRepo.save(korisnik)).thenReturn(korisnik);
 		String s = objectMapper.writeValueAsString(kompanija1);
 		MvcResult result = this.mockMvc.
-				perform(post(this.route + "/1")
+				perform(post(this.route + "/2")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(s))
 						.andExpect(status().isOk())

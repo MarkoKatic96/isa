@@ -34,8 +34,8 @@ import com.isa.hoteli.hoteliservice.avio.service.AvioKompanijaService;
 public class AvioKompanijaServiceTest 
 {
 	private List<AvioKompanija> kompanije = new ArrayList<>();
-	private AvioKompanija kompanija1 = new AvioKompanija(1l, "a", "a", "a", null, null);
-	private AvioKompanija kompanija2 = new AvioKompanija(2l, "b", "b", "b", null, null);
+	private AvioKompanija kompanija1 = new AvioKompanija(1l, "a", "a", "a", 1.0f, 1.0f, null, null);
+	private AvioKompanija kompanija2 = new AvioKompanija(2l, "b", "b", "b", 1.0f, 1.0f, null, null);
 	private Float srednjaOcena = 1f;
 	
 	private List<Karta> karte = new ArrayList<>();
