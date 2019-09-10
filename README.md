@@ -6,5 +6,5 @@
 
 #FRONTEND
 1. Otvoriti folder isa-front2 u Visual Studio Code
-2. Otvoriti u direktorijumu gde je smesten projekat
+2. Otvoriti terminal u direktorijumu gde je smesten projekat
 3. Iskucati npm start i stisnuti enter
