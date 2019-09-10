@@ -10,7 +10,9 @@ class FlightInfo extends Component {
         let: "",
         aviokompanija: "",
         user: "",
-        showResBtn: ""
+        showResBtn: "",
+
+        popust: ""
     }
 
     componentDidMount() {
@@ -32,7 +34,20 @@ class FlightInfo extends Component {
         axios.get('http://localhost:8080/flight/getone/' + this.props.match.params.flightid).then(
             res => {
                 console.log(res);
+                let popust = 0;
+                if(res.data.duzinaPutovanja > 0 && res.data.duzinaPutovanja <= 200)
+                    popust = 5;
+                else if(res.data.duzinaPutovanja > 200 && res.data.duzinaPutovanja <=500)
+                    popust = 15;
+                else if(res.data.duzinaPutovanja > 500 && res.data.duzinaPutovanja <= 1000)
+                    popust = 25;
+                else if(res.data.duzinaPutovanja > 1000 && res.data.duzinaPutovanja < 2000)
+                    popust = 40;
+                else
+                    popust = 50;
+                    
                 this.setState({
+                    popust: popust,
                     let: res.data
                 })
             }
@@ -46,6 +61,10 @@ class FlightInfo extends Component {
                 })
             }
         )
+
+        
+       
+
     }
 
     showCompanyInfo = () => {
@@ -76,6 +95,8 @@ class FlightInfo extends Component {
                                     <p>Broj presedanja: {this.state.let.brojPresedanja}</p>
                                     <p>Duzina putovanja: {this.state.let.duzinaPutovanja} km</p>
                                     <p>Tip puta: {this.state.let.tipPuta}</p>
+                                    <p>Cena karte: {this.state.let.cenaKarte} €</p>
+                                    <p>Popust na duzinu puta: {this.state.popust}%</p>
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">

@@ -398,6 +398,20 @@ public class KartaService
 					card.setBrojPasosa(korisnik.get().getBrojPasosa());
 					card.setKorisnik(korisnik.get()); 
 					card.setVremeRezervisanja(date);
+					
+					int distanca = let.get().getDuzinaPutovanja();
+					float popust = 0;
+					if(distanca > 0 && distanca <= 200)
+						popust = 5;
+					else if(distanca > 200 && distanca <=500)
+						popust = 15;
+					else if(distanca > 500 && distanca <= 1000)
+						popust = 25;
+					else if(distanca > 1000 && distanca < 2000)
+						popust = 40;
+					else
+						popust = 50;
+					card.setPopust(popust);
 					kartaRepo.save(card);
 					flag = true;
 				}	

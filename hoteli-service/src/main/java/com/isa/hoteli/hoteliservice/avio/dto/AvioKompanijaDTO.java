@@ -17,6 +17,8 @@ public class AvioKompanijaDTO
 	private String naziv;
 	private String adresa;
 	private String opis;
+	private float lat;
+	private float lng;
 	
     private List<DestinacijaDTO> destinacijeNaKojimaPosluje;
 

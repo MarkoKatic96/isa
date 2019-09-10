@@ -151,7 +151,7 @@ public class KartaController
 	}
 	
 	/*
-	 * Rezervacija vise karata odjednom od strane korisnika (nije testirano)
+	 * Rezervacija vise karata odjednom od strane korisnika
 	 * Prima id korisnika koji rezervise sve to, prima listu karata koja je rezervisana kao i listu prijatelja koje je korisnik pozvao
 	 */
 	@PostMapping("/reservemore/{userid}")

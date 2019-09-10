@@ -30,6 +30,8 @@ public class AvioKompanijaConverter
 		dto.setNaziv(model.getNaziv());
 		dto.setAdresa(model.getAdresa());
 		dto.setOpis(model.getOpis());
+		dto.setLat(model.getLat());
+		dto.setLng(model.getLng());
 		
 		List<DestinacijaDTO> destList = new ArrayList<DestinacijaDTO>();
 		
@@ -52,6 +54,8 @@ public class AvioKompanijaConverter
 		model.setNaziv(dto.getNaziv());
 		model.setAdresa(dto.getAdresa());
 		model.setOpis(dto.getOpis());
+		model.setLat(dto.getLat());
+		model.setLng(dto.getLng());
 		
 		List<Destinacija> destList = new ArrayList<Destinacija>();
 		Optional<Destinacija> dest = destRepo.findById((long) 1);

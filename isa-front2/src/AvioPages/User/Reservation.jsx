@@ -22,7 +22,9 @@ class Reservation extends Component {
         listaPrijatelja: [], //ovo saljemo - lista objekata korisnika
 
         passport: "",
-        brojeviPasosa: []
+        brojeviPasosa: [],
+
+        showUkupnaCena: false
     }
 
     componentDidMount() {
@@ -200,7 +202,8 @@ class Reservation extends Component {
             {
                 alert("Karte uspesno rezervisane");
                 this.setState({
-                    listaRezervisanihMesta: []
+                    listaRezervisanihMesta: [],
+                    showUkupnaCena: true
                 })
                 this.componentDidMount();
             }
@@ -217,6 +220,9 @@ class Reservation extends Component {
 
     render() {
         let i=1;
+
+        const ukupnaCena = (this.state.showUkupnaCena) ? (<div><h3>Ukupna cena rezervacije: {this.state.listaRezervisanihMesta.length * ((this.state.podaciOLetu.cena * this.state.karte[0]) + this.state.podaciOLetu.cena)}</h3></div>) : (<div></div>)
+
         const raspored = this.state.karte.length ? (this.state.karte.map(karta => {
             
             return (
@@ -266,7 +272,7 @@ class Reservation extends Component {
 
                 <button className="btn waves-effect waves-light green" id="friendsbtn" onClick={() => { this.toggleFriends() }}>Pozovi prijatelje</button><br />
                 <button className="btn waves-effect waves-light red" id="reservationbtn" onClick={() => { this.confirmMoreTicketsReservation() }}>Potvrdi rezervaciju</button><br />
-                
+                {ukupnaCena}
                 {
                     (this.state.toggle) ? (
                         <div>

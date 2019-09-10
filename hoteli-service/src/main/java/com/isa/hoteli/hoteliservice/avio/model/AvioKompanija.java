@@ -35,6 +35,10 @@ public class AvioKompanija
 	
 	private String opis;
 	
+	private float lat;
+	
+	private float lng;
+	
 	
 	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(
