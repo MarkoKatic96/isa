@@ -1,6 +1,21 @@
 language: java
-services:
- -mysql
+
 before_install:
  - chmod +x mvnw
- - mysql -e 'CREATE DATABASE IF NOT EXISTS isa_hoteli;'
+
+services:
+ -mysql
+
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+
+dist: trusty
+
+sudo: required
+
+before_script:
+  - mysql -e 'create database isa_hoteli;'
