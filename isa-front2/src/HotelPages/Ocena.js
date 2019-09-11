@@ -47,6 +47,8 @@ class Ocena extends Component{
                 }).catch(error=>{
                     alert("Vec ste ocenili ovu rezervaciju.");
                 })
+            }).catch(error=>{
+                alert("Vec ste ocenili ovu rezervaciju.");
             })
         }
         

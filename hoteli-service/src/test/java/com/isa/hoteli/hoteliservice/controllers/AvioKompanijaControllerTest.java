@@ -237,8 +237,8 @@ public class AvioKompanijaControllerTest
 	public void createAvioAdminSuccess() throws Exception
 	{
 		when(korisnikService.zaTokene(Mockito.any(HttpServletRequest.class))).thenReturn(korisnik2);
-		when(avioService.saveOne(kompanija1)).thenReturn(kompanija1);
-		when(korisnikService.getUserById(1l)).thenReturn(korisnik);
+		when(avioService.createAvio(kompanija1)).thenReturn(kompanija1);
+		when(korisnikService.getUserById(2l)).thenReturn(korisnik);
 		when(korisnikRepo.save(korisnik)).thenReturn(korisnik);
 		String s = objectMapper.writeValueAsString(kompanija1);
 		MvcResult result = this.mockMvc.
@@ -252,8 +252,8 @@ public class AvioKompanijaControllerTest
 				.getContentAsString(), AvioKompanija.class);
 		assertEquals(dto, kompanija1);
 		verify(korisnikService, times(1)).zaTokene(Mockito.any(HttpServletRequest.class));
-		verify(avioService, times(1)).saveOne(kompanija1);
-		verify(korisnikService, times(1)).getUserById(1l);
+		verify(avioService, times(1)).createAvio(kompanija1);
+		verify(korisnikService, times(1)).getUserById(2l);
 		verify(korisnikRepo, times(1)).save(korisnik);
 		verifyNoMoreInteractions(avioService);
 		verifyNoMoreInteractions(korisnikService);

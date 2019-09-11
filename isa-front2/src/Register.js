@@ -44,7 +44,7 @@ class Registration extends Component{
                 <div className="center container">
                     <form onSubmit={this.handleSubmit}>
                         <label className="left black-text" htmlFor="username">Email:</label>
-                        <input type="text" id="username" onChange={this.handleChange} />
+                        <input type="email" id="username" onChange={this.handleChange} />
                         <label className="left black-text" htmlFor="password">Lozinka:</label>
                         <input type="password" id="password" onChange={this.handleChange} />
                         <label className="left black-text" htmlFor="passwordCheck">Ponovo unesite lozinku:</label>
@@ -56,7 +56,7 @@ class Registration extends Component{
                         <label className="left black-text" htmlFor="city">Grad:</label>
                         <input type="text" id="city" onChange={this.handleChange} />
                         <label className="left black-text" htmlFor="telefone">Telefon:</label>
-                        <input type="text" id="telefone" onChange={this.handleChange} />
+                        <input type="tel" pattern="[0-9]{5,20}" id="telefone" onChange={this.handleChange} />
                         <button className="btn waves-effect waves-light green">Registracija</button>
                     </form>
                 </div>

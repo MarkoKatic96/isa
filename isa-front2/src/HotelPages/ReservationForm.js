@@ -90,7 +90,7 @@ class ReservationForm extends Component{
                 sessionStorage.setItem("vremePoletanja", undefined);
                 sessionStorage.setItem("vremeSletanja", undefined);
                 sessionStorage.setItem("flag", 0);
-                console.log(res.data)
+                alert("Uspsno rezervisan smestaj.");
                 this.props.history.push("/hotels");
             }).catch(error=>{
                 alert("Doslo je do greske prilikom rezervacije.");

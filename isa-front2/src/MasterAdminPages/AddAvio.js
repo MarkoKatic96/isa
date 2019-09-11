@@ -11,6 +11,8 @@ class AddAvio extends Component{
         opis: "",
         admin:"",
         admini:[],
+        lat:"",
+        lng:"",
         selectedAdmin: "",
     }
 
@@ -47,10 +49,11 @@ class AddAvio extends Component{
                 adminZaSlanje = admini[i];
             }
         }
-        if(this.state.naziv!=="" && this.state.opis!=="" && this.state.adresa!=="" && this.state.selectedAdmin!=""){
-            axios.post("http://localhost:8080/aviocompany/" + this.state.selectedAdmin.value, {naziv: this.state.naziv, adresa:this.state.adresa, opis:this.state.opis}, { headers: { Authorization: `Bearer ${token}` } })
+        if(this.state.naziv!=="" && this.state.opis!=="" && this.state.adresa!=="" && this.state.selectedAdmin!="" && this.state.lat!="" && this.state.lng!=""){
+            axios.post("http://localhost:8080/aviocompany/" + this.state.selectedAdmin.value, {naziv: this.state.naziv, adresa:this.state.adresa, opis:this.state.opis, lat: this.state.lat, lng: this.state.lng}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res =>{
                 console.log(res.data)
+                alert("Uspesno kreirana nova avio kompanija.");
                 this.props.history.push("/");
             }).catch(error=>{
                 alert("Doslo je do greske prilikom kreiranja avio kompanije.");
@@ -81,6 +84,10 @@ class AddAvio extends Component{
                         <input type="text" id="adresa" onChange={this.handleChange} />
                         <label className="left black-text" htmlFor="opis">Opis:</label>
                         <input type="text" id="opis" onChange={this.handleChange} />
+                        <label className="left black-text" htmlFor="lat">Latituda:</label>
+                        <input type="number" step="any" id="lat" onChange={this.handleChange} />
+                        <label className="left black-text" htmlFor="lng">Longituda:</label>
+                        <input type="number" step="any" id="lng" onChange={this.handleChange} />
                         <Select 
                                     value={selectedAdmin}
                                     onChange={this.handleChangeAdmin}

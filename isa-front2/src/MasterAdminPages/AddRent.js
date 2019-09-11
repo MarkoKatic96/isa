@@ -51,6 +51,7 @@ class AddRent extends Component{
             axios.post("http://localhost:8080/rent/" + this.state.selectedAdmin.value, {naziv: this.state.naziv, adresa:this.state.adresa, opis:this.state.opis}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res =>{
                 console.log(res.data)
+                alert("Uspesno kreiran novi rent-a-car servis.");
                 this.props.history.push("/");
             }).catch(error=>{
                 alert("Doslo je do greske prilikom kreiranja rent-a-car servisa.");

@@ -29,7 +29,7 @@ class Hotels extends Component{
     handleChangeSort = (selectedSort) => { //za tip selcet
         console.log(selectedSort);
         this.setState({ selectedSort });
-        axios.get("http://localhost:8080/hotel/sort/" + selectedSort.value)
+        axios.put("http://localhost:8080/hotel/sort/" + selectedSort.value, this.state.hoteli)
         .then(res=>{
             this.setState({
                 hoteli: res.data

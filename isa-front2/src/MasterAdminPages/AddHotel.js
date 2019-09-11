@@ -53,6 +53,7 @@ class AddHotel extends Component{
             axios.post("http://localhost:8080/hotel/" + this.state.selectedAdmin.value, {naziv: this.state.naziv, adresa:this.state.adresa, opis:this.state.opis, lat:this.state.lat, lng:this.state.lng}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res =>{
                 console.log(res.data)
+                alert("Uspesno kreiran novi hotel.");
                 this.props.history.push("/");
             }).catch(error=>{
                 alert("Doslo je do greske prilikom kreiranja hotela.");
