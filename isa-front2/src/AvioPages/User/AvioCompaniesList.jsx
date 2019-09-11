@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link, withRouter } from 'react-router-dom';
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+
 
 class AvioCompaniesList extends Component {
     state = {
@@ -74,6 +76,11 @@ class AvioCompaniesList extends Component {
         //         <h3>Nema destinacija</h3>
         //     )
 
+        const style = {
+            width: '85%',
+            height: '40%',
+            border: 'solid 3px whitesmoke'
+        }
             const letovi = (this.state.sveAviokompanije.length) ? (this.state.sveAviokompanije.map(kompanija => {
                 return(
                 <div>
@@ -89,6 +96,18 @@ class AvioCompaniesList extends Component {
                                     <p>Adresa: &nbsp;&nbsp;{kompanija.adresa}</p>
                                     <p>Opis: &nbsp;&nbsp;{kompanija.opis}</p>
                                     <p>Destinacije na kojima posluje: &nbsp;&nbsp;</p> {/*{destinacijeNaKojimaPosluje}*/}
+                                </div>
+                                <div id="mapa">
+                                    <Map google={this.props.google}  style={style} zoom={1}>
+                                        <Marker onClick={this.onMarkerClick}
+                                                name={kompanija.naziv}
+                                                position={{lat: kompanija.lat, lng: kompanija.lng}}
+                                                />
+                                        <InfoWindow onClose={this.onInfoWindowClose}>
+                                            <div>
+                                            </div>
+                                        </InfoWindow>
+                                    </Map>
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
@@ -118,4 +137,6 @@ class AvioCompaniesList extends Component {
     }
 }
 
-export default withRouter(AvioCompaniesList);
+export default GoogleApiWrapper({
+    apiKey: ("API KEY")
+  })(withRouter(AvioCompaniesList))

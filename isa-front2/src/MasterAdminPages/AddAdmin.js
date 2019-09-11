@@ -48,6 +48,7 @@ class Registration extends Component{
             axios.post("http://localhost:8080/korisnik/admin", {email: this.state.username, lozinka: this.state.password, ime: this.state.firstname, prezime: this.state.lastname, grad: this.state.city, telefon: this.state.telefone, rola: tip}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res =>{
                 console.log(res.data)
+                alert("Uspesno kreiran novi admin.");
                 this.props.history.push("/");
             }).catch(error=>{
                 alert("Nalog sa unetim email-om vec postoji.");

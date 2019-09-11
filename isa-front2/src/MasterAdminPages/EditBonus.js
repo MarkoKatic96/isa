@@ -34,6 +34,7 @@ class EditBonus extends Component{
             axios.put("http://localhost:8080/bonus/", {popust: this.state.popust}, { headers: { Authorization: `Bearer ${token}` } })
             .then(
                 res=>{
+                    alert("Uspesno izmenjen popust.");
                     this.props.history.push("/");
                 }
             )
