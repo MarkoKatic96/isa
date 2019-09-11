@@ -8,4 +8,5 @@
 #FRONTEND
 1. Otvoriti folder isa-front2 u Visual Studio Code
 2. Otvoriti terminal u direktorijumu gde je smesten projekat
-3. Iskucati npm start u konzoli i stisnuti enter
+3. npm install u konzoli (potreban prethodno instaliran nodeJS)
+4. npm start u konzoli, radi na http://localhost:3000
