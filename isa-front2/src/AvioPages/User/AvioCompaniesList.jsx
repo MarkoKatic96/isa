@@ -18,38 +18,6 @@ class AvioCompaniesList extends Component {
                     sveAviokompanije: res.data
                 })
             })
-
-        // axios.get('http://localhost:8080/aviocompany/getone/' + this.props.match.params.flightid).then(
-        //     res => {
-        //         this.setState({
-        //             kompanija: res.data
-        //         })
-
-        //         let kompanija = this.state.kompanija.idAvioKompanije;
-        //         axios.get('http://localhost:8080/destination/getalldestsbycompany/' + kompanija).then(
-        //             res => {
-        //                 console.log("DESTINACIJE: ")
-        //                 console.log(res.data)
-        //                 this.setState({
-        //                     destinacijeNaKojimaPosluje: res.data
-        //                 })
-        //             }
-
-
-        //         )
-        //     }
-
-
-        // )
-        //za prosecnu ocenu
-        // axios.get('http://localhost:8080/aviocompany/getavgrating/' + this.props.match.params.flightid).then(
-        //     res => {
-        //         console.log(res.data);
-        //         this.setState({
-        //             avgrating: res.data
-        //         })
-        //     }
-        // )
     }
 
     sortCompanies = (e) =>
@@ -63,17 +31,11 @@ class AvioCompaniesList extends Component {
             })
     }
 
-    render() {
-        // const destinacijeNaKojimaPosluje = this.state.destinacijeNaKojimaPosluje.length ? (this.state.destinacijeNaKojimaPosluje.map(dest => {
-        //     return (
-        //         <div key={dest.idDestinacije}>
-        //             <div><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{dest.naziv}</i></div>
-        //         </div>
-        //     );
-        // })) : (
-        //         <h3>Nema destinacija</h3>
-        //     )
+    showCompanyInfo = (id) => {
+        this.props.history.push('/companyinfo/' + id);
+    }
 
+    render() {
             const letovi = (this.state.sveAviokompanije.length) ? (this.state.sveAviokompanije.map(kompanija => {
                 return(
                 <div>
@@ -87,11 +49,10 @@ class AvioCompaniesList extends Component {
                                     <br />
                                     <p>Naziv: &nbsp;&nbsp; {kompanija.naziv}</p>
                                     <p>Adresa: &nbsp;&nbsp;{kompanija.adresa}</p>
-                                    <p>Opis: &nbsp;&nbsp;{kompanija.opis}</p>
-                                    <p>Destinacije na kojima posluje: &nbsp;&nbsp;</p> {/*{destinacijeNaKojimaPosluje}*/}
                                 </div>
                                 <div className="divider white"></div>
                                 <div className="card-action">
+                                <button className="btn waves-effect waves-light green" id="avioinfo-btn" onClick={() => { this.showCompanyInfo(kompanija.idAvioKompanije) }}>Informacije o aviokompaniji</button>
                                 </div>
                             </div>
                         </div>
