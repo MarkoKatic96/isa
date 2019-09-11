@@ -14,7 +14,10 @@ class ReservationForm extends Component{
         selectedUsluge:[],
         ukupnaCena:"",
         popust:"",
-        hotel:""
+        hotel:"",
+
+        idRezervacije: "",
+        karta: ""
     }
 
     componentDidMount(){
@@ -48,7 +51,15 @@ class ReservationForm extends Component{
                 })
             })
 
+            
+
             if(sessionStorage.getItem("flag")=="1"){
+                axios.get("http://localhost:8080/ticket/getone/" + sessionStorage.getItem('ticketid'))
+                .then(res => {
+                    this.setState({
+                        karta: res.data
+                    })
+                })
                 this.setState({
                     popust: 5
                 })
@@ -87,10 +98,25 @@ class ReservationForm extends Component{
             console.log(iznos);
             axios.post("http://localhost:8080/rezervacija/", {datumDo: this.state.datumDo, datumOd: this.state.datumOd, hotelskaSoba:this.state.soba, korisnik: this.state.korisnik, ukupnaCena: iznos, hotel: this.state.hotel, brojOsoba:1}, { headers: { Authorization: `Bearer ${token}` } })
             .then(res =>{
+                this.setState({
+                    idRezervacije: res.data.id
+                })
                 sessionStorage.setItem("vremePoletanja", undefined);
                 sessionStorage.setItem("vremeSletanja", undefined);
-                sessionStorage.setItem("flag", 0);
+                
                 alert("Uspsno rezervisan smestaj.");
+                if(sessionStorage.getItem('flag') == '1')
+                {
+                    let karta = this.state.karta;
+                    karta.idHotelRezervacije = res.data.id;
+
+                    axios.put("http://localhost:8080/ticket/update/" + sessionStorage.getItem('ticketid'), karta)
+                        .then(res => {
+                            sessionStorage.setItem("flag", 0);
+                            sessionStorage.setItem("ticketid", undefined);
+                        })
+                }
+                
                 this.props.history.push("/hotels");
             }).catch(error=>{
                 alert("Doslo je do greske prilikom rezervacije.");
@@ -98,6 +124,9 @@ class ReservationForm extends Component{
         }else{
             alert("Morate ispravno popuniti sva polja da bi uspesno rezervisali sobu.");
         }
+
+        
+
     }
 
     handleCBChange = (e) =>{

@@ -25,6 +25,7 @@ public class KartaConverter
 		dto.setBrzaRezervacija(model.isBrzaRezervacija());
 		dto.setPopust(model.getPopust());
 		dto.setBrojPasosa(model.getBrojPasosa());
+		dto.setIdHotelRezervacije(model.getIdHotelRezervacije());
 		dto.setLet(letConv.convertToDTO(model.getLet()));
 		dto.setVremeRezervisanja(model.getVremeRezervisanja());
 		dto.setKorisnik(korConv.convertToDTO(model.getKorisnik()));
@@ -43,6 +44,7 @@ public class KartaConverter
 		model.setBrzaRezervacija(dto.isBrzaRezervacija());
 		model.setPopust(dto.getPopust());
 		model.setBrojPasosa(dto.getBrojPasosa());
+		model.setIdHotelRezervacije(dto.getIdHotelRezervacije());
 		model.setLet(letConv.convertFromDTO(dto.getLet()));
 		model.setVremeRezervisanja(dto.getVremeRezervisanja());
 		model.setKorisnik(korConv.convertFromDTO(dto.getKorisnik()));

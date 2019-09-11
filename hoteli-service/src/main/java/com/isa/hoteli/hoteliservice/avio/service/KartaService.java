@@ -24,6 +24,7 @@ import com.isa.hoteli.hoteliservice.avio.model.Let;
 import com.isa.hoteli.hoteliservice.avio.repository.KartaRepository;
 import com.isa.hoteli.hoteliservice.avio.repository.KorisnikRepository;
 import com.isa.hoteli.hoteliservice.avio.repository.LetRepository;
+import com.isa.hoteli.hoteliservice.service.RezervacijeService;
 
 @Service
 public class KartaService
@@ -45,6 +46,9 @@ public class KartaService
 	
 	@Autowired
 	private MailService mailService;
+	
+	@Autowired
+	private RezervacijeService rezService;
 	
 	
 	@Transactional(readOnly = true)
@@ -135,6 +139,9 @@ public class KartaService
 			karta.get().setOcena(kartaConv.convertFromDTO(dto).getOcena());
 			karta.get().setBrzaRezervacija(kartaConv.convertFromDTO(dto).isBrzaRezervacija());
 			karta.get().setPopust(kartaConv.convertFromDTO(dto).getPopust());
+			karta.get().setBrojPasosa(kartaConv.convertFromDTO(dto).getBrojPasosa());
+			karta.get().setIdHotelRezervacije(kartaConv.convertFromDTO(dto).getIdHotelRezervacije());
+			karta.get().setKorisnikKojiSaljePozivnicu(kartaConv.convertFromDTO(dto).getKorisnikKojiSaljePozivnicu());
 			karta.get().setLet(kartaConv.convertFromDTO(dto).getLet());
 			karta.get().setVremeRezervisanja(kartaConv.convertFromDTO(dto).getVremeRezervisanja());
 			karta.get().setKorisnik(kartaConv.convertFromDTO(dto).getKorisnik());
@@ -597,6 +604,13 @@ public class KartaService
 		Optional<Karta> karta = kartaRepo.findById(idKarte);
 		
 		LocalDateTime date = LocalDateTime.now().minusHours(3);
+		
+		if(karta.get().getIdHotelRezervacije() != null)
+		{
+			this.rezService.deleteReservation(karta.get().getIdHotelRezervacije());
+			
+			karta.get().setIdHotelRezervacije(null);
+		}
 		
 			if(karta.get().getLet().getVremePoletanja().isAfter(date))
 			{

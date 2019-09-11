@@ -88,6 +88,7 @@ class UserReservations extends Component {
         sessionStorage.setItem("vremePoletanja", karta.let.vremePoletanja.substring(0, 10));
         sessionStorage.setItem("vremeSletanja", karta.let.vremeSletanja.substring(0, 10));
         sessionStorage.setItem("flag", "1");
+        sessionStorage.setItem("ticketid", karta.idKarte);
         this.props.history.push('/hotels');
     } 
 

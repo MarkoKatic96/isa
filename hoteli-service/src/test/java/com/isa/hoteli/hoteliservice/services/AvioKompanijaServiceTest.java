@@ -39,7 +39,7 @@ public class AvioKompanijaServiceTest
 	private Float srednjaOcena = 1f;
 	
 	private List<Karta> karte = new ArrayList<>();
-	private Karta karta1 = new Karta(1l, 100, 5, false, 0, "a", null, LocalDateTime.now(), null, null);
+	private Karta karta1 = new Karta(1l, 100, 5, false, 0, "a", null, null, LocalDateTime.now(), null, null);
 	
 	private LocalDate datumOd = LocalDate.now();
 	private LocalDate datumDo = LocalDate.now();

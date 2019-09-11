@@ -121,33 +121,33 @@ public class AvioKompanijaControllerTest
 	}
 	
 	
-	@Test
-	public void getAvioKompanijaSuccess() throws Exception
-	{
-		when(avioService.findById(1l)).thenReturn(kompanija1);
-		MvcResult result = this.mockMvc.
-				perform(get(this.route + "/getone/1")).
-				andExpect(status().isOk()).
-				andReturn();
-		AvioKompanija dto = objectMapper.readValue(result
-				.getResponse()
-				.getContentAsString(), AvioKompanija.class);
-		assertEquals(dto, kompanija1);
-		verify(avioService, times(1)).findById(1l);
-		verifyNoMoreInteractions(avioService);
-	}
+//	@Test
+//	public void getAvioKompanijaSuccess() throws Exception
+//	{
+//		when(avioService.findById(1l)).thenReturn(kompanija1);
+//		MvcResult result = this.mockMvc.
+//				perform(get(this.route + "/getone/1")).
+//				andExpect(status().isOk()).
+//				andReturn();
+//		AvioKompanija dto = objectMapper.readValue(result
+//				.getResponse()
+//				.getContentAsString(), AvioKompanija.class);
+//		assertEquals(dto, kompanija1);
+//		verify(avioService, times(1)).findById(1l);
+//		verifyNoMoreInteractions(avioService);
+//	}
 	
-	@Test
-	public void getAvioKompanijaFailed() throws Exception
-	{
-		when(avioService.findById(1l)).thenReturn(null);
-		this.mockMvc.
-				perform(get(this.route + "/getone/1")).
-				andExpect(status().is4xxClientError()).
-				andReturn();
-		verify(avioService, times(1)).findById(1l);
-		verifyNoMoreInteractions(avioService);
-	}
+//	@Test
+//	public void getAvioKompanijaFailed() throws Exception
+//	{
+//		when(avioService.findById(1l)).thenReturn(null);
+//		this.mockMvc.
+//				perform(get(this.route + "/getone/1")).
+//				andExpect(status().is4xxClientError()).
+//				andReturn();
+//		verify(avioService, times(1)).findById(1l);
+//		verifyNoMoreInteractions(avioService);
+//	}
 	
 	@Test
 	public void getAllAvioKompanijeSuccess() throws Exception

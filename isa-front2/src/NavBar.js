@@ -12,6 +12,7 @@ class NavBar extends Component{
         sessionStorage.setItem("vremePoletanja", undefined);
         sessionStorage.setItem("vremeSletanja", undefined);
         sessionStorage.setItem("flag", "0");
+        sessionStorage.setItem("ticketid", undefined);
         this.props.logOut();  
         this.props.history.push("/");    
     }

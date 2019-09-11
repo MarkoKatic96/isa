@@ -20,6 +20,7 @@ public class KartaDTO
 	private boolean brzaRezervacija;
 	private float popust;
 	private String brojPasosa;
+	private Long idHotelRezervacije;
 
 	private LetDTO let;
 	

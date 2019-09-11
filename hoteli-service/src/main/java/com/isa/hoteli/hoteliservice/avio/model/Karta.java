@@ -44,6 +44,8 @@ public class Karta
 	
 	private String brojPasosa;
 	
+	private Long idHotelRezervacije;
+	
 	@ManyToOne
     @JoinColumn(name="id_leta", nullable=false)
     private Let let;
