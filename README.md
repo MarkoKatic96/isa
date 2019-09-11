@@ -2,7 +2,8 @@
 
 #BACKEND
 1. Importati hoteli-service projekat kao maven project u STS
-2. Desni klik na projekat -> Run as -> SpringBoot App 
+2. Napraviti bazu pod nazivom isa_hoteli u MySql-u
+3. Desni klik na projekat -> Run as -> SpringBoot App 
 
 #FRONTEND
 1. Otvoriti folder isa-front2 u Visual Studio Code
