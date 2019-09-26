@@ -28,6 +28,7 @@ public class KorisnikDTO
 	private String brojPasosa;
 	private List<KorisnikDTO> prijateljiKorisnika;
 	private List<KorisnikDTO> zahteviKorisnika;
+	private Integer bodovi;
 	
 	public KorisnikDTO(Korisnik korisnik) {
 		super();

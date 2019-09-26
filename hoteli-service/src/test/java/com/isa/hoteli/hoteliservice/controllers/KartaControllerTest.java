@@ -73,7 +73,7 @@ public class KartaControllerTest
 	private LocalDateTime vremeRez = LocalDateTime.now();
 	
 	private List<Karta> karte = new ArrayList<>();
-	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null, 0);
 
 	private Karta karta1 = new Karta(1l, 10, 5, false, 0, "a", null, null, vremeRez, korisnik, null, 0);
 	private Karta karta2 = new Karta(2l, 20, 1, false, 0, "b", null, null, vremeRez, korisnik, null, 0);
@@ -88,7 +88,7 @@ public class KartaControllerTest
 
 	
 	//DTO
-	private Korisnik korisnikDto = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik korisnikDto = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null, 0);
 	private List<KartaDTO> karteDto = new ArrayList<>();
 	private KartaDTO karta1Dto = new KartaDTO(1l, 10, 5, false, 0, "a", null, null, vremeRez, null, null, 0);
 	private KartaDTO karta2Dto = new KartaDTO(karta2);
@@ -96,8 +96,8 @@ public class KartaControllerTest
 	
 	//ZA REZERVISANJE
 	private String rezervisane = "REZERVISANE";
-	private KorisnikDTO korisnikUser = new KorisnikDTO(3l, "r", "r", "r", "r", "r", "r", true, Rola.KORISNIK, 1l, false, "a", null, null);
-	private KorisnikDTO korisnikFriend = new KorisnikDTO(4l, "rr", "rr", "rr", "rr", "rr", "rr", true, Rola.KORISNIK, 1l, false, "a", null, null);
+	private KorisnikDTO korisnikUser = new KorisnikDTO(3l, "r", "r", "r", "r", "r", "r", true, Rola.KORISNIK, 1l, false, "a", null, null, 0);
+	private KorisnikDTO korisnikFriend = new KorisnikDTO(4l, "rr", "rr", "rr", "rr", "rr", "rr", true, Rola.KORISNIK, 1l, false, "a", null, null, 0);
 	private SlanjePozivniceZaRezervacijuDTO pozivnica = new SlanjePozivniceZaRezervacijuDTO();
 	private String pasos1 = "aaa";
 	private List<String> brojeviPasosa = new ArrayList<>();

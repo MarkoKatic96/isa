@@ -64,8 +64,8 @@ public class AvioKompanijaControllerTest
 	private AvioKompanija kompanija2 = new AvioKompanija(2l, "b", "b", "b");
 	private Float srednjaOcena = 2f;
 	private Float prihod = 100f;
-	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
-	private Korisnik korisnik2 = new Korisnik(2l, "a", "a", "a", "a", "a", "a", true, Rola.MASTER_ADMIN, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null, 0);
+	private Korisnik korisnik2 = new Korisnik(2l, "a", "a", "a", "a", "a", "a", true, Rola.MASTER_ADMIN, 1l, true, "a", null, null, null, null, null, null, 0);
 	
 	private LocalDate datumOd = LocalDate.now();
 	private LocalDate datumDo = LocalDate.now();

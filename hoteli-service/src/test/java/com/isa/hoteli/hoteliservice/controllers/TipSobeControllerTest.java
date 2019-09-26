@@ -56,7 +56,7 @@ public class TipSobeControllerTest {
 	private TipSobe tipSobe2 = new TipSobe(2l, "b", hotel1);
 	private TipSobeDTO tipSobe1DTO = new TipSobeDTO(1l, "a", hotel1);
 	private TipSobeDTO tipSobe2DTO = new TipSobeDTO(2l, "b", hotel1);
-	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_HOTELA, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_HOTELA, 1l, true, "a", null, null, null, null, null, null, 0);
 
 	
 	@MockBean

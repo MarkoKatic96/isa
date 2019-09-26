@@ -38,7 +38,7 @@ public class KartaServiceTest
 	private Karta karta1 = new Karta(1l, 100, 5, false, 0, "a", null, null, LocalDateTime.now(), null, null, 0);
 	private Karta karta2 = new Karta(2l, 200, 1, true, 0, "b", null, null, LocalDateTime.now(), null, null, 0);
 	private List<Karta> karte = new ArrayList<>();
-	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.KORISNIK, null, true, "a", null, null, null, null, null, null);
+	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.KORISNIK, null, true, "a", null, null, null, null, null, null, 0);
 	private Let let1 = new Let(1l, 1l, LocalDateTime.now(), LocalDateTime.now(), 10, 10, 5, "a", 10, 10, 10, 10, null, null, null, null, null, null, null, null);
 	private LocalDateTime datumZaRezervisanje = LocalDateTime.now();
 	
@@ -48,8 +48,8 @@ public class KartaServiceTest
 	
 	//ZA REZERVISANJE
 	private String rezervisane = "REZERVISANE";
-	private KorisnikDTO korisnikUser = new KorisnikDTO(3l, "r", "r", "r", "r", "r", "r", true, Rola.KORISNIK, 1l, false, "a", null, null);
-	private KorisnikDTO korisnikFriend = new KorisnikDTO(4l, "rr", "rr", "rr", "rr", "rr", "rr", true, Rola.KORISNIK, 1l, false, "a", null, null);
+	private KorisnikDTO korisnikUser = new KorisnikDTO(3l, "r", "r", "r", "r", "r", "r", true, Rola.KORISNIK, 1l, false, "a", null, null, 0);
+	private KorisnikDTO korisnikFriend = new KorisnikDTO(4l, "rr", "rr", "rr", "rr", "rr", "rr", true, Rola.KORISNIK, 1l, false, "a", null, null, 0);
 	private SlanjePozivniceZaRezervacijuDTO pozivnica = new SlanjePozivniceZaRezervacijuDTO();
 	private String pasos1 = "aaa";
 	private List<String> brojeviPasosa = new ArrayList<>();

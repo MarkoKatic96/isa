@@ -34,7 +34,7 @@ import com.isa.hoteli.hoteliservice.model.TipSobe;
 @RunWith(SpringRunner.class)
 public class TipSobeIntegrationTest {
 	
-	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_HOTELA, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_HOTELA, 1l, true, "a", null, null, null, null, null, null, 0);
 	
 	private MockMvc mockMvc;
 	

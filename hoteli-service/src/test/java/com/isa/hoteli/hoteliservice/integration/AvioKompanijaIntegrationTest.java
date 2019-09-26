@@ -39,7 +39,7 @@ import com.isa.hoteli.hoteliservice.avio.service.KorisnikService;
 @RunWith(SpringRunner.class)
 public class AvioKompanijaIntegrationTest {
 	
-	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null, 0);
 	private String route = "/aviocompany";
 	
 	private MockMvc mockMvc;

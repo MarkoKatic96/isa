@@ -28,6 +28,7 @@ public class KorisnikConverter
 		dto.setZaduzenZaId(model.getZaduzenZaId());
 		dto.setPrviPutLogovan(model.isPrviPutLogovan());
 		dto.setBrojPasosa(model.getBrojPasosa());
+		dto.setBodovi(model.getBodovi());
 		
 		List<KorisnikDTO> korList = new ArrayList<KorisnikDTO>();
 		
@@ -67,6 +68,7 @@ public class KorisnikConverter
 		model.setZaduzenZaId(dto.getZaduzenZaId());
 		model.setPrviPutLogovan(dto.isPrviPutLogovan());
 		model.setBrojPasosa(dto.getBrojPasosa());
+		model.setBodovi(dto.getBodovi());
 		
 		
 		List<Korisnik> korList = new ArrayList<Korisnik>();

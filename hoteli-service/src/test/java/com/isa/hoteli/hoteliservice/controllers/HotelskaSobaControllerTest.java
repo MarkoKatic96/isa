@@ -66,7 +66,7 @@ public class HotelskaSobaControllerTest {
 	private HotelskaSoba soba2 = new HotelskaSoba(2l, 2, 2, 2, 400, hotel1, null);
 	private HotelskaSobaDTO soba1DTO = new HotelskaSobaDTO(1l, 1, 1, 1, 200, hotel1, null);
 	private HotelskaSobaDTO soba2DTO = new HotelskaSobaDTO(2l, 2, 2, 2, 400, hotel1, null);
-	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_HOTELA, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_HOTELA, 1l, true, "a", null, null, null, null, null, null, 0);
 	private Rezervacije r = new Rezervacije(1l, datumOd, datumDo, 200, 2, soba1, k, hotel1);
 	private CenaNocenja cena1 = new CenaNocenja(1l, 20, datumOd, datumDo, soba1);
 	private HotelskaSobaInfoDTO sobaInfo1 = new HotelskaSobaInfoDTO(1l, 1, 1, 1, 200, hotel1, null, 20f, 3f);

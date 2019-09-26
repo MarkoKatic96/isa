@@ -38,7 +38,7 @@ import com.isa.hoteli.hoteliservice.service.OcenaService;
 @RunWith(SpringRunner.class)
 public class OcenaServiceTest {
 	
-	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.MASTER_ADMIN, null, true, "a", null, null, null, null, null, null);
+	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.MASTER_ADMIN, null, true, "a", null, null, null, null, null, null, 0);
 	private Date datumOd = new Date(System.currentTimeMillis());
 	private Date datumDo = new Date(System.currentTimeMillis());
 	private Hotel hotel1 = new Hotel(1l, "a", "a", "a", "a", 1f, 1f);

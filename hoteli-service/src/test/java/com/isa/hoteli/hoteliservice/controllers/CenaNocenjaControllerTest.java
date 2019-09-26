@@ -67,7 +67,7 @@ public class CenaNocenjaControllerTest {
 	private List<CenaNocenjaDTO> ceneDTO = new ArrayList<>();
 	private CenaNocenjaDTO cena1DTO = new CenaNocenjaDTO(1l, 20, datumOd, datumDo, soba1);
 	private CenaNocenjaDTO cena2DTO = new CenaNocenjaDTO(1l, 40, datumOd, datumDo, soba1);
-	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_HOTELA, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_HOTELA, 1l, true, "a", null, null, null, null, null, null, 0);
 
 	
 	@MockBean

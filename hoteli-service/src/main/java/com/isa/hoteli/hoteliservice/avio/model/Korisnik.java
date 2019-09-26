@@ -71,6 +71,7 @@ public class Korisnik
 	@ManyToMany(mappedBy = "zahteviKorisnika")
 	private List<Korisnik> korisniciZaht;
 	
+	private int bodovi;
 
 	
 	public Korisnik(KorisnikDTO korisnik) {
@@ -301,6 +302,14 @@ public class Korisnik
 	@JsonIgnore
 	public void setKorisniciZaht(List<Korisnik> korisniciZaht) {
 		this.korisniciZaht = korisniciZaht;
+	}
+	
+	public int getBodovi() {
+		return this.bodovi;
+	}
+	
+	public void setBodovi(int bodovi) {
+		this.bodovi = bodovi;
 	}
 	
 	

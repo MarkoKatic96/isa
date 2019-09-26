@@ -34,7 +34,7 @@ import com.isa.hoteli.hoteliservice.model.Hotel;
 @RunWith(SpringRunner.class)
 public class HotelIntegrationTest {
 
-	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.MASTER_ADMIN, null, true, "a", null, null, null, null, null, null);
+	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.MASTER_ADMIN, null, true, "a", null, null, null, null, null, null, 0);
 	
 	private MockMvc mockMvc;
 	

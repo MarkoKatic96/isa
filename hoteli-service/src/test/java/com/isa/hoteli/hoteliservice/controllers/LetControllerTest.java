@@ -55,7 +55,7 @@ public class LetControllerTest
 	private AvioKompanija kompanija1 = new AvioKompanija();
 	private Let let1 = new Let(1l, 1l, LocalDateTime.now(), LocalDateTime.now(), 10, 10, 5, "a", 10, 10, 10, 10, kompanija1, null, null, null, null, null, null, null);
 	private Let let2 = new Let(2l, 2l, LocalDateTime.now(), LocalDateTime.now(), 20, 20, 1, "b", 20, 20, 20, 20, null, null, null, null, null, null, null, null);
-	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null, 0);
 	private Boolean created = true;
 	
 	private MockHttpServletRequest request = new MockHttpServletRequest();

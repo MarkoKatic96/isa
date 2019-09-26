@@ -47,11 +47,11 @@ import com.isa.hoteli.hoteliservice.security.JwtTokenUtils;
 @WebMvcTest(KorisnikController.class)
 public class KorisnikControllerTest {
 	
-	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.KORISNIK, null, true, "a", null, null, null, null, null, null);
-	private Korisnik k1 = new Korisnik(2l, "b", "b", "b", "b", "b", "b", true, Rola.KORISNIK, null, true, "a", null, null, null, null, null, null);
+	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.KORISNIK, null, true, "a", null, null, null, null, null, null, 0);
+	private Korisnik k1 = new Korisnik(2l, "b", "b", "b", "b", "b", "b", true, Rola.KORISNIK, null, true, "a", null, null, null, null, null, null, 0);
 	private List<Korisnik> korisnici = new ArrayList<>();
-	private KorisnikDTO kDTO = new KorisnikDTO(1l, "a", "a", "a", "a", "a", "a", true, Rola.KORISNIK, null, true, "a", null, null);
-	private KorisnikDTO k1DTO = new KorisnikDTO(2l, "b", "b", "b", "b", "b", "b", true, Rola.KORISNIK, null, true, "a", null, null);
+	private KorisnikDTO kDTO = new KorisnikDTO(1l, "a", "a", "a", "a", "a", "a", true, Rola.KORISNIK, null, true, "a", null, null, 0);
+	private KorisnikDTO k1DTO = new KorisnikDTO(2l, "b", "b", "b", "b", "b", "b", true, Rola.KORISNIK, null, true, "a", null, null, 0);
 	private List<KorisnikDTO> korisniciDTO = new ArrayList<>();
 	
 	@MockBean

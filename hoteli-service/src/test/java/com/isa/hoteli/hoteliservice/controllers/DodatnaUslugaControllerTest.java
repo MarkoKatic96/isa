@@ -56,7 +56,7 @@ public class DodatnaUslugaControllerTest {
 	private List<DodatnaUslugaDTO> uslugeDTO = new ArrayList<>();
 	private DodatnaUslugaDTO usluga1DTO = new DodatnaUslugaDTO(1l, "a", 50, 2, hotel1);
 	private DodatnaUslugaDTO usluga2DTO = new DodatnaUslugaDTO(1l, "b", 100, 5, hotel1);
-	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_HOTELA, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_HOTELA, 1l, true, "a", null, null, null, null, null, null, 0);
 
 	@MockBean
 	private DodatnaUslugaService dus;

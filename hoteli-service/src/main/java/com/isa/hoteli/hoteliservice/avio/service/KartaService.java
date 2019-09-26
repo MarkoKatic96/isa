@@ -372,18 +372,6 @@ public class KartaService
 								e.printStackTrace();
 							}
 							
-							
-							//slanje mail-a sa linkom
-//							try {
-//								mailService.sendNotificaitionAsync(korisnik.get(), korisnikConv.convertFromDTO(prijatelj), "FR_INV");
-//							} catch (MailException e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							} catch (InterruptedException e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							}
-							
 							prijatelji.remove(prijatelj);
 							if(prijatelji.isEmpty())
 							{
@@ -423,6 +411,22 @@ public class KartaService
 					card.setKorisnik(korisnik.get()); 
 					card.setVremeRezervisanja(date);
 					
+					
+					card.setPopust(korisnik.get().getBodovi() * 3);
+						
+						try {
+							kartaRepo.save(card);
+							letRepo.save(let.get());
+						}
+						catch (HibernateOptimisticLockingFailureException | StaleObjectStateException e) {
+							e.printStackTrace();
+						}
+					
+					flag = true;
+				}	
+				else
+				{
+					Optional<Let> let = letRepo.findById(dto.getLet().getIdLeta());
 					int distanca = let.get().getDuzinaPutovanja();
 					float popust = 0;
 					if(distanca > 0 && distanca <= 200)
@@ -435,18 +439,13 @@ public class KartaService
 						popust = 40;
 					else
 						popust = 50;
+					
 					card.setPopust(popust);
-					
-						kartaRepo.save(card);
-						letRepo.save(let.get());
-					
-					flag = true;
-				}	
-				else
-				{
 					card.setKorisnik(korisnik.get()); 
 					card.setVremeRezervisanja(date);
-					card.setPopust(6);
+					if(korisnik.get().getBodovi() < 20) {
+						korisnik.get().setBodovi(korisnik.get().getBodovi() + 2);
+					}
 					
 					for(String pasos : brojeviPasosa)
 					{
@@ -457,6 +456,7 @@ public class KartaService
 					
 					try {
 						kartaRepo.save(card);
+						korisnikRepo.save(korisnik.get());
 					}
 					catch (HibernateOptimisticLockingFailureException | StaleObjectStateException e) {
 						e.printStackTrace();
@@ -644,6 +644,7 @@ public class KartaService
 				karta.get().setKorisnik(korisnikRepo.findById((long) 1).get());
 				karta.get().setVremeRezervisanja(LocalDateTime.of(2000, 10, 10, 10, 10));
 				karta.get().getLet().setBrojOsoba(karta.get().getLet().getBrojOsoba()-1);
+				karta.get().setBrojPasosa("0");
 				kartaRepo.save(karta.get());
 				
 				return true;

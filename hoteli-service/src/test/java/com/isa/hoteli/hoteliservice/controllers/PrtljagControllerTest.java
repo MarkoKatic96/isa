@@ -66,7 +66,7 @@ public class PrtljagControllerTest
 	private List<Prtljag> prtljazi = new ArrayList<>();
 	private Prtljag prtljag1 = new Prtljag(1l, 1, "a", null);
 	private Prtljag prtljag2 = new Prtljag(1l, 2, "b", null);
-	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null, 0);
 
 	private MockHttpServletRequest request = new MockHttpServletRequest();
 

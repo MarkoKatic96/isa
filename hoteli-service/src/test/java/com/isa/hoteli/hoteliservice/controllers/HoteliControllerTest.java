@@ -69,7 +69,7 @@ public class HoteliControllerTest {
 	private MockHttpServletRequest request = new MockHttpServletRequest();
 	private List<HotelskaSoba> sobe = new ArrayList<>();
 	private HotelskaSoba hotelskaSoba1= new HotelskaSoba(1l, 1, 1, 1, 1, hotel1, null);
-	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.MASTER_ADMIN, 1l, true, "a", null, null, null, null, null, null);
+	private Korisnik k = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.MASTER_ADMIN, 1l, true, "a", null, null, null, null, null, null, 0);
 
 	
 	@MockBean
