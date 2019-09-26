@@ -35,15 +35,15 @@ import com.isa.hoteli.hoteliservice.avio.service.KartaService;
 @RunWith(SpringRunner.class)
 public class KartaServiceTest
 {
-	private Karta karta1 = new Karta(1l, 100, 5, false, 0, "a", null, null, LocalDateTime.now(), null, null);
-	private Karta karta2 = new Karta(2l, 200, 1, true, 0, "b", null, null, LocalDateTime.now(), null, null);
+	private Karta karta1 = new Karta(1l, 100, 5, false, 0, "a", null, null, LocalDateTime.now(), null, null, 0);
+	private Karta karta2 = new Karta(2l, 200, 1, true, 0, "b", null, null, LocalDateTime.now(), null, null, 0);
 	private List<Karta> karte = new ArrayList<>();
 	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.KORISNIK, null, true, "a", null, null, null, null, null, null);
 	private Let let1 = new Let(1l, 1l, LocalDateTime.now(), LocalDateTime.now(), 10, 10, 5, "a", 10, 10, 10, 10, null, null, null, null, null, null, null, null);
 	private LocalDateTime datumZaRezervisanje = LocalDateTime.now();
 	
-	private KartaDTO karta1Dto = new KartaDTO(1l, 100, 5, false, 0, "a", null, null, LocalDateTime.now(), null, null);
-	private KartaDTO karta2Dto = new KartaDTO(2l, 200, 1, true, 0, "b", null, null, LocalDateTime.now(), null, null);
+	private KartaDTO karta1Dto = new KartaDTO(1l, 100, 5, false, 0, "a", null, null, LocalDateTime.now(), null, null, 0);
+	private KartaDTO karta2Dto = new KartaDTO(2l, 200, 1, true, 0, "b", null, null, LocalDateTime.now(), null, null, 0);
 	private List<KartaDTO> karteDto = new ArrayList<>();
 	
 	//ZA REZERVISANJE

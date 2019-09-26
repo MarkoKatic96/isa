@@ -42,7 +42,7 @@ public class LetServiceTest
 	private Float srednjaOcena = 1f;
 	
 	private LocalDateTime vremeRezervisanja;
-	private Karta karta1 = new Karta(0l, 10, 0, false, 0, "0", null, null, vremeRezervisanja, null, null);
+	private Karta karta1 = new Karta(0l, 10, 0, false, 0, "0", null, null, vremeRezervisanja, null, null, 0);
 	
 	@Mock
 	private KartaRepository kartaRepo;

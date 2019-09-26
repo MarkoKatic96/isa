@@ -28,6 +28,8 @@ public class KartaDTO
 	private KorisnikDTO korisnik;
 	private KorisnikDTO korisnikKojiSaljePozivnicu;
 	
+	private int version;
+	
 	public KartaDTO(Karta karta)
 	{
 		this.idKarte = karta.getIdKarte();

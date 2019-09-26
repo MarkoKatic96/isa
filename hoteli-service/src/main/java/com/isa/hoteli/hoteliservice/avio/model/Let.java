@@ -11,6 +11,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NotFound;
@@ -59,6 +60,8 @@ public class Let
 	private float cenaKarte;
 	
 	private float ukupanPrihod;
+	
+	
 	
 	
 	

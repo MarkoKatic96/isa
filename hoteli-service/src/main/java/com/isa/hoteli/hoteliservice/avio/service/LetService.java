@@ -143,6 +143,7 @@ public class LetService
 				karta.setPopust(0);
 				karta.setBrojPasosa("0");
 				karta.setVremeRezervisanja(LocalDateTime.of(2000, 10, 10, 10, 10));
+				karta.setVersion(0);
 				karta.setLet(lett);
 				kartaRepo.save(karta);
 			}
@@ -172,6 +173,7 @@ public class LetService
 				karta.setPopust(0);
 				karta.setBrojPasosa("0");
 				karta.setVremeRezervisanja(LocalDateTime.of(2000, 10, 10, 10, 10));
+				karta.setVersion(0);
 				karta.setLet(lett);
 				kartaRepo.save(karta);
 			}

@@ -60,6 +60,7 @@ import com.isa.hoteli.hoteliservice.avio.repository.KorisnikRepository;
 import com.isa.hoteli.hoteliservice.avio.service.AvioKompanijaService;
 import com.isa.hoteli.hoteliservice.avio.service.KartaService;
 import com.isa.hoteli.hoteliservice.avio.service.KorisnikService;
+import com.isa.hoteli.hoteliservice.avio.service.MailService;
 import com.isa.hoteli.hoteliservice.controller.HotelController;
 import com.isa.hoteli.hoteliservice.security.JwtTokenUtils;
 
@@ -74,8 +75,8 @@ public class KartaControllerTest
 	private List<Karta> karte = new ArrayList<>();
 	private Korisnik korisnik = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
 
-	private Karta karta1 = new Karta(1l, 10, 5, false, 0, "a", null, null, vremeRez, korisnik, null);
-	private Karta karta2 = new Karta(2l, 20, 1, false, 0, "b", null, null, vremeRez, korisnik, null);
+	private Karta karta1 = new Karta(1l, 10, 5, false, 0, "a", null, null, vremeRez, korisnik, null, 0);
+	private Karta karta2 = new Karta(2l, 20, 1, false, 0, "b", null, null, vremeRez, korisnik, null, 0);
 
 	private MockHttpServletRequest request = new MockHttpServletRequest();
 	
@@ -89,7 +90,7 @@ public class KartaControllerTest
 	//DTO
 	private Korisnik korisnikDto = new Korisnik(1l, "a", "a", "a", "a", "a", "a", true, Rola.ADMIN_AVIO_KOMPANIJE, 1l, true, "a", null, null, null, null, null, null);
 	private List<KartaDTO> karteDto = new ArrayList<>();
-	private KartaDTO karta1Dto = new KartaDTO(1l, 10, 5, false, 0, "a", null, null, vremeRez, null, null);
+	private KartaDTO karta1Dto = new KartaDTO(1l, 10, 5, false, 0, "a", null, null, vremeRez, null, null, 0);
 	private KartaDTO karta2Dto = new KartaDTO(karta2);
 	
 	
@@ -106,6 +107,12 @@ public class KartaControllerTest
 
 	@MockBean
 	private KartaService kartaService;
+	
+	@MockBean
+	private KorisnikService korisnikService;
+	
+	@MockBean
+	private MailService mailService;
 	
 	@MockBean
 	private JwtTokenUtils jwt;

@@ -3,9 +3,11 @@ package com.isa.hoteli.hoteliservice.avio.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.StaleObjectStateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.isa.hoteli.hoteliservice.avio.dto.KartaDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.SlanjePozivniceZaRezervacijuDTO;
+import com.isa.hoteli.hoteliservice.avio.exception.ConcurrentException;
+import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
 import com.isa.hoteli.hoteliservice.avio.service.KartaService;
+import com.isa.hoteli.hoteliservice.avio.service.KorisnikService;
+import com.isa.hoteli.hoteliservice.avio.service.MailService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -27,6 +33,12 @@ public class KartaController
 {
 	@Autowired
 	private KartaService kartaService;
+	
+	@Autowired
+	private KorisnikService korisnikService;
+	
+	@Autowired
+	private MailService mailService;
 	
 	
 	@GetMapping("/getone/{id}")
@@ -99,21 +111,37 @@ public class KartaController
 	 * BRZA REZERVACIJA
 	 */
 	@PostMapping("/expressreservation/{userid}/{ticketid}")
-	public ResponseEntity<Boolean> brzaRezervacijaJedneKarte(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte)
+	public ResponseEntity<Boolean> brzaRezervacijaJedneKarte(@PathVariable("userid") Long idKorisnika, @PathVariable("ticketid") Long idKarte) throws ConcurrentException
 	{
-		System.out.println("brzaRezervacijaJedneKarte()");
+			System.out.println("brzaRezervacijaJedneKarte()");
 		
-//		Long idKorisnika, idKarte;
-		
-//		Object[] rezz = rezervacija.toArray();
-		
-//		idKorisnika = (Long) rezz[0];
-//		idKarte = (Long) rezz[1];
-		
-		System.out.println("ID_KORISNIK: " + idKorisnika + "\nID_KARTE: " + idKarte);
-		
-		return (!kartaService.brzaRezervacijaJedneKarte(idKorisnika, idKarte)) ? new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST) : new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
-	}
+			Korisnik korisnik = korisnikService.getUserById(idKorisnika);
+			
+	//		Long idKorisnika, idKarte;
+			
+	//		Object[] rezz = rezervacija.toArray();
+			
+	//		idKorisnika = (Long) rezz[0];
+	//		idKarte = (Long) rezz[1];
+			
+	//		if(!kartaService.brzaRezervacijaJedneKarte(idKorisnika, idKarte))
+	//			throw new TicketReservedException("Izabrana karta je upravo rezervisana od strane drugog korisnika");
+			
+			System.out.println("ID_KORISNIK: " + idKorisnika + "\nID_KARTE: " + idKarte);
+			
+			if(!kartaService.brzaRezervacijaJedneKarte(idKorisnika, idKarte)) {
+				return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+			}
+			else{
+				try {
+					mailService.sendNotificaitionAsync(korisnik, null, "RESERVATION");
+				} catch (MailException | InterruptedException | StaleObjectStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+			}
+		}
 	
 	/*
 	 * POSTAVLJANJE KARTE NA BRZU REZERVACIJU OD STRANE ADMINA
@@ -155,13 +183,25 @@ public class KartaController
 	 * Prima id korisnika koji rezervise sve to, prima listu karata koja je rezervisana kao i listu prijatelja koje je korisnik pozvao
 	 */
 	@PostMapping("/reservemore/{userid}")
-	public ResponseEntity<String> rezervisiViseKarata(@PathVariable("userid") Long idKorisnika, @RequestBody SlanjePozivniceZaRezervacijuDTO pozivnica)
+	public ResponseEntity<String> rezervisiViseKarata(@PathVariable("userid") Long idKorisnika, @RequestBody SlanjePozivniceZaRezervacijuDTO pozivnica) throws ConcurrentException
 	{
 		System.out.println("rezervisiViseKarata()");
 	
 		String retVal = kartaService.rezervisiViseKarata(idKorisnika, pozivnica);
 		
-		return (retVal.equals("REZERVISANE")) ? new ResponseEntity<String>(retVal, HttpStatus.CREATED) : new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST);
+		if(retVal.equals("REZERVISANE")) {
+			try {
+				mailService.sendNotificaitionAsync(korisnikService.getUserById(idKorisnika), null, "RESERVATION");
+			} catch (MailException | InterruptedException | StaleObjectStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return new ResponseEntity<String>(retVal, HttpStatus.CREATED);
+		}
+		else{
+			
+			return new ResponseEntity<String>(retVal, HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 //	/*

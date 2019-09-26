@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NotFound;
@@ -46,6 +47,8 @@ public class Karta
 	
 	private Long idHotelRezervacije;
 	
+	
+	
 	@ManyToOne
     @JoinColumn(name="id_leta", nullable=false)
     private Let let;
@@ -62,6 +65,9 @@ public class Karta
 	@ManyToOne
     @JoinColumn(name="id_korisnika_koji_salje_poz", nullable=true)
     private Korisnik korisnikKojiSaljePozivnicu;
+	
+	@Version
+	private int version;
 	
 	
 }

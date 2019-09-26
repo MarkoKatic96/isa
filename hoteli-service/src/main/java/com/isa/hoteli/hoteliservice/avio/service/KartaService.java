@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.hibernate.StaleObjectStateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
+import org.springframework.orm.hibernate5.HibernateOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,7 @@ import com.isa.hoteli.hoteliservice.avio.converter.KorisnikConverter;
 import com.isa.hoteli.hoteliservice.avio.dto.KartaDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.KorisnikDTO;
 import com.isa.hoteli.hoteliservice.avio.dto.SlanjePozivniceZaRezervacijuDTO;
+import com.isa.hoteli.hoteliservice.avio.exception.ConcurrentException;
 import com.isa.hoteli.hoteliservice.avio.model.Karta;
 import com.isa.hoteli.hoteliservice.avio.model.Korisnik;
 import com.isa.hoteli.hoteliservice.avio.model.Let;
@@ -221,12 +225,12 @@ public class KartaService
 				karta.get().setBrojPasosa(korisnik.get().getBrojPasosa());
 				karta.get().getLet().setBrojOsoba(karta.get().getLet().getBrojOsoba()+1);
 				karta.get().getLet().setUkupanPrihod(karta.get().getLet().getUkupanPrihod() + karta.get().getCena() - (karta.get().getCena() * karta.get().getPopust()/100));
-				try {
-					mailService.sendNotificaitionAsync(korisnik.get(), null, "RESERVATION");
-				} catch (MailException | InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					mailService.sendNotificaitionAsync(korisnik.get(), null, "RESERVATION");
+//				} catch (MailException | InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				
 				kartaRepo.save(karta.get());
 			}
@@ -268,7 +272,13 @@ public class KartaService
 //					e.printStackTrace();
 //				}
 				
-				kartaRepo.save(karta);
+				try {
+					kartaRepo.save(karta);
+				}
+				catch (HibernateOptimisticLockingFailureException e) {
+					System.out.println("USAO U EKSEPSN");
+					e.printStackTrace();
+				}
 		}
 		else
 			return false;
@@ -310,8 +320,8 @@ public class KartaService
 	/*
 	 * Rezervacija vise karata 
 	 */
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public String rezervisiViseKarata(Long idKorisnika, SlanjePozivniceZaRezervacijuDTO pozivnica)
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor=ConcurrentException.class)
+	public String rezervisiViseKarata(Long idKorisnika, SlanjePozivniceZaRezervacijuDTO pozivnica) throws HibernateOptimisticLockingFailureException
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
 		
@@ -354,18 +364,25 @@ public class KartaService
 							karta.setKorisnikKojiSaljePozivnicu(korisnikConv.convertToDTO(korisnik.get()));
 							//necemo ovde rezervisati vreme, to cemo tek kad prijatelj prihvati rezervaciju
 							//karta.setVremeRezervisanja(date); 
-							kartaRepo.save(kartaConv.convertFromDTO(karta));
 							
-							//slanje mail-a sa linkom
 							try {
-								mailService.sendNotificaitionAsync(korisnik.get(), korisnikConv.convertFromDTO(prijatelj), "FR_INV");
-							} catch (MailException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
+								kartaRepo.save(kartaConv.convertFromDTO(karta));
+							}
+							catch (HibernateOptimisticLockingFailureException | StaleObjectStateException e) {
 								e.printStackTrace();
 							}
+							
+							
+							//slanje mail-a sa linkom
+//							try {
+//								mailService.sendNotificaitionAsync(korisnik.get(), korisnikConv.convertFromDTO(prijatelj), "FR_INV");
+//							} catch (MailException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							} catch (InterruptedException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
 							
 							prijatelji.remove(prijatelj);
 							if(prijatelji.isEmpty())
@@ -399,7 +416,7 @@ public class KartaService
 					//postavljamo broj zauzetih mesta za konkretan let
 					Optional<Let> let = letRepo.findById(dto.getLet().getIdLeta());
 					let.get().setBrojOsoba(let.get().getBrojOsoba() + karte.size());
-					letRepo.save(let.get());
+					
 					
 					//prvi broj pasosa ide na korisnika
 					card.setBrojPasosa(korisnik.get().getBrojPasosa());
@@ -419,7 +436,17 @@ public class KartaService
 					else
 						popust = 50;
 					card.setPopust(popust);
-					kartaRepo.save(card);
+					
+					try {
+						kartaRepo.save(card);
+						letRepo.save(let.get());
+					}
+					catch (HibernateOptimisticLockingFailureException | StaleObjectStateException e) {
+						
+						e.printStackTrace();
+					}
+					
+					
 					flag = true;
 				}	
 				else
@@ -434,21 +461,26 @@ public class KartaService
 						break;
 					}
 					
-					kartaRepo.save(card);
+					try {
+						kartaRepo.save(card);
+					}
+					catch (HibernateOptimisticLockingFailureException | StaleObjectStateException e) {
+						e.printStackTrace();
+					}
 				}
 				
 				
 			}
 			
-			try {
-				mailService.sendNotificaitionAsync(korisnik.get(), null, "RESERVATION");
-			} catch (MailException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				mailService.sendNotificaitionAsync(korisnik.get(), null, "RESERVATION");
+//			} catch (MailException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			
 			return "REZERVISANE";
 	}
