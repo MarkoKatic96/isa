@@ -220,8 +220,7 @@ class Reservation extends Component {
                 alert("Rezervacija nije uspela")
             this.componentDidUpdate();
         }).catch(error => {
-            console.log(error);
-            alert("Osoba koju pozivate nije u prijateljima")
+            alert("GRESKA: Neko je upravo rezervisao neku od karata koju vi pokusavate rezervisati")
         })
     }
 
@@ -247,7 +246,7 @@ class Reservation extends Component {
             const listaPrijatelja = this.state.listaPrijatelja.length ? (this.state.listaPrijatelja.map(prijatelj =>
                 {
                     return(
-                        <div>{prijatelj.ime} {prijatelj.prezime}, Email adresa: {prijatelj.email}
+                        <div key={prijatelj.id}>{prijatelj.ime} {prijatelj.prezime}, Email adresa: {prijatelj.email}
                         <button className="btn-floating btn-small waves-effect waves-light red" id="destsinfobtn" onClick={() => { this.deleteFriendFromList(prijatelj.id) }}>X</button>
                         </div>
                     )
@@ -256,7 +255,7 @@ class Reservation extends Component {
                 const listaRezervisanihMesta = this.state.listaRezervisanihMesta.length ? (this.state.listaRezervisanihMesta.map(mesto =>
                     {
                         return(
-                            <div>{mesto.idKarte}
+                            <div key={mesto.idKarte}>{mesto.idKarte}
                             <button className="btn-floating btn-small waves-effect waves-light red" id="destsinfobtn" onClick={() => { this.deleteTicketFromList(mesto.idKarte) }}>X</button>
                             </div>
                         )
@@ -265,7 +264,7 @@ class Reservation extends Component {
                     const listaBrojeva = this.state.brojeviPasosa.length ? (this.state.brojeviPasosa.map(broj =>
                         {
                             return(
-                                <div>Pasos: {broj}
+                                <div key={broj}>Pasos: {broj}
                                 <button className="btn-floating btn-small waves-effect waves-light red" id="destsinfobtn" onClick={() => { this.deletePassportFromList(broj) }}>X</button>
                                 </div>
                             )

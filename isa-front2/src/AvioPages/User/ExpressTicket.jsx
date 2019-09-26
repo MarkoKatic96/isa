@@ -52,6 +52,8 @@ class ExpressTicket extends Component {
                     this.componentDidMount();
                 }
                     
+            }).catch(error => {
+                alert("Izabrana karta je upravo rezervisana od strane drugog korisnika")
             })
       }
 

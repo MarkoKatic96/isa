@@ -45,9 +45,9 @@ class AvioCompaniesList extends Component {
         }
             const letovi = (this.state.sveAviokompanije.length) ? (this.state.sveAviokompanije.map(kompanija => {
                 return(
-                <div>
+                <div key={kompanija.idAvioKompanije}>
                 <div className="center container">
-                    <div className="row" key={kompanija.idAvioKompanije}>
+                    <div className="row" >
                         <div className="col s12 m12">
                             <div className="card grey darken-2 card-panel hoverable">
                                 <div className="card-content white-text left-align">
@@ -99,5 +99,5 @@ class AvioCompaniesList extends Component {
 }
 
 export default GoogleApiWrapper({
-    apiKey: ("API KEY")
+    apiKey: ("AIzaSyC4EEa685SDSWi2LamKQUpU30rUF4GkHtA")
   })(withRouter(AvioCompaniesList))
