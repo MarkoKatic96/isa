@@ -320,8 +320,8 @@ public class KartaService
 	/*
 	 * Rezervacija vise karata 
 	 */
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor=ConcurrentException.class)
-	public String rezervisiViseKarata(Long idKorisnika, SlanjePozivniceZaRezervacijuDTO pozivnica) throws HibernateOptimisticLockingFailureException
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public String rezervisiViseKarata(Long idKorisnika, SlanjePozivniceZaRezervacijuDTO pozivnica)
 	{
 		Optional<Korisnik> korisnik = korisnikRepo.findById(idKorisnika);
 		
@@ -437,15 +437,8 @@ public class KartaService
 						popust = 50;
 					card.setPopust(popust);
 					
-					try {
 						kartaRepo.save(card);
 						letRepo.save(let.get());
-					}
-					catch (HibernateOptimisticLockingFailureException | StaleObjectStateException e) {
-						
-						e.printStackTrace();
-					}
-					
 					
 					flag = true;
 				}	
@@ -453,6 +446,7 @@ public class KartaService
 				{
 					card.setKorisnik(korisnik.get()); 
 					card.setVremeRezervisanja(date);
+					card.setPopust(6);
 					
 					for(String pasos : brojeviPasosa)
 					{
