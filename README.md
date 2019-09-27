@@ -1,9 +1,10 @@
 # Pokretanje projekta
 
 #BACKEND
-1. Importati hoteli-service projekat kao maven project u STS
+1. Importovati hoteli-service projekat kao maven projekat u STS (eclipse)
 2. Napraviti bazu pod nazivom isa_hoteli u MySql-u
 3. Desni klik na projekat -> Run as -> SpringBoot App 
+4. Importovati data.sql koji se nalazi u src->main->resources u mysql (ctrl+shift+o iz workbenc-a nakon sto je konektovano na bazu)
 
 #FRONTEND
 1. Otvoriti folder isa-front2 u Visual Studio Code
