@@ -68,7 +68,7 @@ public class LetControllerTest
 	private LetDTO let2Dto = new LetDTO(2l, 2l, LocalDateTime.now(), LocalDateTime.now(), 20, 20, 1, "b", 20, 20, 20, 20, null, null, null, null, null, null, null);
 
 	//PRETRAGA//
-	private PretragaDTO pretraga = new PretragaDTO(LocalDateTime.now(), LocalDateTime.now(), 1l, 1l, "a", 1, null, null, null);
+	private PretragaDTO pretraga = new PretragaDTO(LocalDateTime.now(), LocalDateTime.now(), 1l, 1l, "a", 1, null, null);
 	
 	
 	
